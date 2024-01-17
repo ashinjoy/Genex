@@ -1,0 +1,122 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from htmldemo.net/braga/braga/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Dec 2023 13:21:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Braga - login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=/public/assets/img/favicon.ico>
+    
+    <!-- CSS 
+    ========================= -->
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="/public/assets/css/owl.carousel.min.css">
+    <!--slick min css-->
+    <link rel="stylesheet" href="/public/assets/css/slick.css">
+    <!--magnific popup min css-->
+    <link rel="stylesheet" href="/public/assets/css/magnific-popup.css">
+    <!--font awesome css-->
+    <link rel="stylesheet" href="/public/assets/css/font.awesome.css">
+    <!--ionicons css-->
+    <link rel="stylesheet" href="/public/assets/css/ionicons.min.css">
+    <!--7 stroke icons css-->
+    <link rel="stylesheet" href="/public/assets/css/pe-icon-7-stroke.css">
+    <!--animate css-->
+    <link rel="stylesheet" href="/public/assets/css/animate.css">
+    <!--jquery ui min css-->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <!--plugins css-->
+    <link rel="stylesheet" href="/public/assets/css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    
+    <!--modernizr min js here-->
+    <script src="/public/assets/js/vendor/modernizr-3.7.1.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="main_header sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
+                    <div class="logo">
+                        <a href="index.html"><img src="/public/assets/img/logo/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">                
+                    <!--main menu start-->
+                    <div class="main_menu menu_position"> 
+                        <nav>  
+                            <ul>
+                                <li><a  href="index.html">Home</a>
+                                </li>
+                                <li class="mega_items"><a href="shop.html">Shop</a> 
+                                </li>
+                               
+                                <li><a href="contact.html"> Contact Us</a></li>
+                                <li><a href="about.html"> About us</a></li>
+                                
+                            </ul>  
+                        </nav> 
+                    </div>
+                    <!--main menu end-->
+                </div> 
+                <div class="col-lg-2 col-md-4 col-sm-4 col-4">
+                    <div class="header_account_area">
+                        <div class="header_account_list search_list">
+                            <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
+                            <div class="dropdown_search">
+                                <form action="#">
+                                    <input placeholder="Search entire store here ..." type="text">
+                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header_account_list  mini_cart_wrapper">
+                            <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
+                                <span class="item_count">2</span>
+                            </a>
+                            
+                       </div>
+                        <div class="language_currency header_account_list ">
+                            <a href="#"> <span class="pe-7s-user"></span></a>
+                            <ul class="dropdown_currency">
+                                <li><a href="#">My account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div> 
+</header>
+<div class="body-otp">
+ <%if(locals.otperror){%>
+<div class="alert alert-danger"><%=locals.otperror%></div>
+<%}%>
+  <form class="form-otp" action="/email-verification" method="post">
+    <h3>GEN-Z CLOTHING EMAIL VERIFICATION</h3>
+    <label class="label-otp" for="otpInput">Enter 6-digit OTP:</label>
+    <input class="input-otp" type="text" id="otpInput" maxlength="6" placeholder="Enter OTP" name="otp" required>
+    <input type="hidden" value="<%=locals.user_id%>" id="userid" name="userid">
+
+    <div id="timer" style="display: none;" class="timertext"></div>
+    <button class="button-otp" id="sendOtpBtn" type="button">Send OTP</button>
+    <button class="button-otp" id="verifyBtn-otp" type="submit">Verify OTP</button>
+  </form>
+
+</div>
+<script src="/public/assets/js/client js/otpgenerator.js"></script>
+<%-include("./userlayout/footer.ejs")%>
+
+
+

@@ -1,0 +1,201 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from htmldemo.net/braga/braga/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Dec 2023 13:21:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Braga - login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=/public/assets/img/favicon.ico">
+    
+    <!-- CSS 
+    ========================= -->
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="/public/assets/css/owl.carousel.min.css">
+    <!--slick min css-->
+    <link rel="stylesheet" href="/public/assets/css/slick.css">
+    <!--magnific popup min css-->
+    <link rel="stylesheet" href="/public/assets/css/magnific-popup.css">
+    <!--font awesome css-->
+    <link rel="stylesheet" href="/public/assets/css/font.awesome.css">
+    <!--ionicons css-->
+    <link rel="stylesheet" href="/public/assets/css/ionicons.min.css">
+    <!--7 stroke icons css-->
+    <link rel="stylesheet" href="/public/assets/css/pe-icon-7-stroke.css">
+    <!--animate css-->
+    <link rel="stylesheet" href="/public/assets/css/animate.css">
+    <!--jquery ui min css-->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <!--plugins css-->
+    <link rel="stylesheet" href="/public/assets/css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    
+    <!--modernizr min js here-->
+    <script src="/public/assets/js/vendor/modernizr-3.7.1.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="main_header sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
+                    <div class="logo">
+                        <a href="index.html"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">                
+                    <!--main menu start-->
+                    <div class="main_menu menu_position"> 
+                        <nav>  
+                            <ul>
+                                <li><a  href="">Home</a>
+                                </li>
+                                <li class="mega_items"><a href="">Shop</a> 
+                                </li>
+                               
+                                <li><a href=""> Contact Us</a></li>
+                                <li><a href=""> About us</a></li>
+                                
+                            </ul>  
+                        </nav> 
+                    </div>
+                    <!--main menu end-->
+                </div> 
+                <div class="col-lg-2 col-md-4 col-sm-4 col-4">
+                    <div class="header_account_area">
+                        <div class="header_account_list search_list">
+                            <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
+                            <div class="dropdown_search">
+                                <form action="#">
+                                    <input placeholder="Search entire store here ..." type="text">
+                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header_account_list  mini_cart_wrapper">
+                            <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
+                                <span class="item_count">2</span>
+                            </a>
+                            
+                       </div>
+                        <div class="language_currency header_account_list ">
+                            <a href="#"> <span class="pe-7s-user"></span></a>
+                            <ul class="dropdown_currency">
+                                <li><a href="#">My account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div> 
+</header>
+<div class="customer_login" class="cenetred_login">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 mx-auto">
+        <div class="account_form">
+          
+          <div class="login_headings"><h2>login</h2></div>
+          
+          <%if(locals.error){%>
+            <div class="alert alert-danger"><%=locals.error%></div>
+            <%}%>
+            <%if(locals.not_verified) {%>
+            <div class="alert alert-danger"><%=locals.not_verified%></div>
+            <%}%>
+          <form action="/login" method="post" id="regform">
+            <p>
+              <label>Email</label>
+              <input type="text" name="email" id="email_inp"/>
+             <p><div class="alert alert-danger" id="error1"  style="display: none;"></div></p> 
+            </p>
+            <p>
+              <label>Password</label>
+              <input type="password" name="password" id="pwd_inp"/>
+             <p><div class="alert alert-danger" id="error2" style="display: none;"></div></p> 
+            </p>
+            
+            <div class="login_submit">
+              <a href="#">Lost your password?</a>
+              <div class="reg"><a href="/signup" class="register_genz">Signup</a></div>
+
+             
+              <button type="submit">login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+  const emailtag =document.getElementById("email_inp")
+  const pwdtag =document.getElementById("pwd_inp")
+  const emailerror =document.getElementById("error1")
+  const pwderror=document.getElementById("error2")
+ const registerform=document.getElementById("regform")
+  
+
+  function emailvalidate(){
+  const emailpattern=/^[a-zA-Z0-9_]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/
+  const email=emailtag.value
+  if(!emailpattern.test(email.trim())){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Enter valid email"
+
+  }
+  else if(email.trim()==""){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Please enter your email"
+
+  }
+  else{
+    emailerror.style.display= "none";
+    emailerror.innerHTML=""
+    
+  }
+}
+
+function passwordvalidate(){
+  const pwd=pwdtag.value;
+  
+  if(pwd.trim() === ""){
+    pwderror.style.display="block";
+    pwderror.innerHTML="please enter password"
+  }
+  else if(pwd.length<8){
+    pwderror.style.display="block";
+    pwderror.innerHTML="Please enter a Strong password"
+    
+  }
+  else{
+    pwderror.style.display="none";
+    pwderror.innerHTML=""
+  }
+}
+
+emailtag.addEventListener("blur",emailvalidate);
+pwdtag.addEventListener("blur",passwordvalidate);
+
+
+registerform.addEventListener("submit",(event)=>{
+  
+  emailvalidate()
+  passwordvalidate()
+  if(emailerror.innerHTML||pwderror.innerHTML){
+    event.preventDefault()
+  }
+})
+</script>
+<%- include("./userlayout/footer.ejs")%>

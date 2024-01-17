@@ -1,0 +1,302 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from htmldemo.net/braga/braga/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Dec 2023 13:21:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Braga - login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=/public/assets/img/favicon.ico">
+    
+    <!-- CSS 
+    ========================= -->
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="/public/assets/css/owl.carousel.min.css">
+    <!--slick min css-->
+    <link rel="stylesheet" href="/public/assets/css/slick.css">
+    <!--magnific popup min css-->
+    <link rel="stylesheet" href="/public/assets/css/magnific-popup.css">
+    <!--font awesome css-->
+    <link rel="stylesheet" href="/public/assets/css/font.awesome.css">
+    <!--ionicons css-->
+    <link rel="stylesheet" href="/public/assets/css/ionicons.min.css">
+    <!--7 stroke icons css-->
+    <link rel="stylesheet" href="/public/assets/css/pe-icon-7-stroke.css">
+    <!--animate css-->
+    <link rel="stylesheet" href="/public/assets/css/animate.css">
+    <!--jquery ui min css-->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <!--plugins css-->
+    <link rel="stylesheet" href="/public/assets/css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    
+    <!--modernizr min js here-->
+    <script src="/public/assets/js/vendor/modernizr-3.7.1.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="main_header sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
+                    <div class="logo">
+                        <a href="index.html"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">                
+                    <!--main menu start-->
+                    <div class="main_menu menu_position"> 
+                        <nav>  
+                            <ul>
+                                <li><a  href="">Home</a>
+                                </li>
+                                <li class="mega_items"><a href="">Shop</a> 
+                                </li>
+                               
+                                <li><a href=""> Contact Us</a></li>
+                                <li><a href=""> About us</a></li>
+                                
+                            </ul>  
+                        </nav> 
+                    </div>
+                    <!--main menu end-->
+                </div> 
+                <div class="col-lg-2 col-md-4 col-sm-4 col-4">
+                    <div class="header_account_area">
+                        <div class="header_account_list search_list">
+                            <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
+                            <div class="dropdown_search">
+                                <form action="#">
+                                    <input placeholder="Search entire store here ..." type="text">
+                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header_account_list  mini_cart_wrapper">
+                            <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
+                                <span class="item_count">2</span>
+                            </a>
+                            
+                       </div>
+                        <div class="language_currency header_account_list ">
+                            <a href="#"> <span class="pe-7s-user"></span></a>
+                            <ul class="dropdown_currency">
+                                <li><a href="#">My account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div> 
+</header>
+<div class="customer_login" >
+  <div class="container">
+    <div class="row"></div><div class="col-lg-6 col-md-6 mx-auto">
+  <div class="account_form register">
+    <div class="login_headings"><h2>Register</h2></div>
+    <% if(locals.email_err) { %>
+      <div class="alert alert-danger"><%= locals.email_err%></div>
+      <% } %>
+      <% if(locals.confirm) { %>
+      <div class="alert alert-danger"><%= locals.confirm%></div>
+      <%}%>
+      <%if(locals.combined_err){%>
+        <div class="alert alert-danger"><%= locals.combined_err%></div>
+      <%}%>
+      
+    <form action="/signup" method="post" id="regform">
+      <p>
+        <label>Name</label>
+        <input type="text" name="name" id="inp_name" />
+        <div id="error1"  style="display: none;" class="alert alert-danger"></div>
+      </p>
+      <p>
+        <label>Email</label>
+        <input type="email" name="email" id="inp_email"/>
+        <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+      </p>
+      <p>
+        <label>Phone Number</label>
+        <%if(locals.phone_err){%>
+          <div class="alert alert-danger"><%= locals.phone_err %></div>
+        <%}%>
+        <input type="tel" name="phone" id="inp_phone">
+        <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+      </p>
+      <p>
+        <label>Password</label>
+        <input type="password" name="password"id="inp_pwd" />
+        <div id="error4"  style="display: none;" class="alert alert-danger"></div>
+      </p>
+      <p>
+        <label>Confirm Password</label>
+        <div></div>
+        <input type="password" name="confirm_password"id="inp_confirmpwd" />
+        <div id="error5" style="display: none;" class="alert alert-danger"></div>
+      </p>
+      <div class="login_submit">
+        <button type="submit">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+<script>
+ const nametag=document.getElementById("inp_name");
+ const emailtag=document.getElementById("inp_email");
+ const phonetag=document.getElementById("inp_phone");
+ const pwdtag=document.getElementById("inp_pwd");
+ const confirm_pwdtag=document.getElementById("inp_confirmpwd")
+ const nameerror=document.getElementById("error1")
+ const emailerror=document.getElementById("error2")
+ const phoneerror=document.getElementById("error3")
+ const pwderror=document.getElementById("error4")
+ const confirm_pwderror=document.getElementById("error5")
+
+ const registerform=document.getElementById("regform")
+
+function namevalidate(){
+const name=nametag.value
+const namepattern=/^[A-Za-z]+$/
+
+if(name.trim() === ""){
+  nameerror.style.display="block";
+  nameerror.innerHTML="Please enter a valid name"
+}
+else if(name.length<=1)
+{
+  nameerror.style.display="block";
+  nameerror.innerHTML="name should contain more than a letter"
+}
+else if(!namepattern.test(name)){
+  nameerror.style.display="block"
+  nameerror.innerHTML="Name should only conatin Alphabets only"
+}
+
+else {
+  nameerror.style.display="none";
+  nameerror.innerHTML=""
+}
+
+}
+
+
+function emailvalidate(){
+  const emailpattern=/^[a-zA-Z0-9_]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/
+  const email=emailtag.value
+  if(!emailpattern.test(email)){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Enter valid email"
+
+  }
+  else if(email.trim()==""){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Please enter your email"
+
+  }
+  else{
+    emailerror.style.display= "none";
+    emailerror.innerHTML=""
+    
+  }
+}
+
+function phonevalidate(){
+  const phone=phonetag.value;
+  const phonepattern=/\d/
+  if(phone.trim()==""){
+    phoneerror.style.display="block";
+    phoneerror.innerHTML="Please enter a valid phonenumber"
+
+  }
+  
+  else if(phone.length>10||phone.length<10||!phonepattern.test(phone))
+  {
+    phoneerror.style.display="block";
+    phoneerror.innerHTML="Please enter a valid phonenumber"
+
+  }
+  else {
+    phoneerror.style.display="none";
+    phoneerror.innerHTML=""
+
+  }
+}
+function passwordvalidate(){
+  const pwd=pwdtag.value;
+const pwdpattern=/^(?=.*[a-z])(?=.*[A-Z])(?=.*[ *@#$%])(?=.*\d).{8,}$/
+  if(pwd === ""){
+    pwderror.style.display="block";
+    pwderror.innerHTML="please enter password"
+  }
+  else if(!pwdpattern.test(pwd)){
+    pwderror.style.display="block";
+    pwderror.innerHTML="Password should contain Uppercase,Lowercase,Special characters and Digits"
+    
+  }
+  else{
+    pwderror.style.display="none";
+    pwderror.innerHTML=""
+  }
+}
+
+function confirm_passwordvalidate(){
+  const conf_pwd=confirm_pwdtag.value;
+  
+  if(conf_pwd === ""){
+    confirm_pwderror.style.display="block";
+    confirm_pwderror.innerHTML="please enter password"
+  }
+  else if(conf_pwd.length<8){
+    confirm_pwderror.style.display="block";
+    confirm_pwderror.innerHTML="Please Enter a valid password"
+    
+  }
+  else{
+    confirm_pwderror.style.display="none";
+    confirm_pwderror.innerHTML=""
+  }
+}
+
+
+nametag.addEventListener("blur",namevalidate);
+emailtag.addEventListener("blur",emailvalidate);
+phonetag.addEventListener("blur",phonevalidate);
+pwdtag.addEventListener("blur",passwordvalidate);
+confirm_pwdtag.addEventListener("blur",confirm_passwordvalidate);
+
+
+regform.addEventListener("submit",(event)=>{
+  namevalidate()
+  emailvalidate()
+  phonevalidate()
+  passwordvalidate()
+  confirm_passwordvalidate()
+  if(nameerror.innerHTML||emailerror.innerHTML||phoneerror.innerHTML||pwderror.innerHTML||confirm_pwderror.innerHTML){
+    event.preventDefault()
+  }
+})
+
+
+
+
+
+
+
+
+ 
+</script>
+<%- include("./userlayout/footer.ejs")%>
+
+
