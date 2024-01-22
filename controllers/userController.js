@@ -130,8 +130,9 @@ const login = async (req, res) => {
   try {
     console.log("entered login");
     const { email, password } = req.body;
+    console.log(email)
     const loggeduser = await userModel.findOne({ email: email });
-
+console.log(loggeduser)
     if (loggeduser) {
       const userpassword = await bcrypt.compare(password, loggeduser.password);
       if (userpassword) {
@@ -148,6 +149,10 @@ const login = async (req, res) => {
       } else {
         res.render("user/userLogin", { error: "Invalid Credentials" });
       }
+    }
+    else{
+      console.log('Please Signup')
+    
     }
   } catch (err) {
     console.error(err);
