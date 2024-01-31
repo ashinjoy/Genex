@@ -4,6 +4,8 @@ const adminAuthController=require("../controllers/adminAuthController")
 const userManagementController=require("../controllers/userManagementController")
 const categoryController=require("../controllers/categoryController")
 const productController=require("../controllers/productController")
+const orderController=require("../controllers/adminorderManagement")
+
 
 const session=require("../middleware/session")
 const multer=require("../utils/multer")
@@ -32,5 +34,10 @@ adminRouter.get("/products/blockproduct",session.admin_islogin,productController
 adminRouter.get("/products/unblockproduct",session.admin_islogin,productController.product_unblock)
 adminRouter.get("/products/editproduct",session.admin_islogin,productController.load_editproduct)
 adminRouter.post("/products/editproduct",session.admin_islogin,multer.array('Images',4,),productController.editproduct)
+
+adminRouter.get("/listorders",session.admin_islogin,orderController.load_orderslist)
+adminRouter.get("/ordersummary",session.admin_islogin,orderController.load_Ordersummary)
+adminRouter.get("/change-orderstatus",session.admin_islogin,orderController.changestatus)
+
 
 module.exports=adminRouter

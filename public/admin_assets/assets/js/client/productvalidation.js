@@ -174,7 +174,7 @@ productform.addEventListener("submit",function(event){
     validate_largequantity(),
     // validteImg()
     compareprice()
-    if(producterror.innerHTML||desc_error.innerHTML||regprice_error.innerHTML|| saleprice_error.innerHTML||small_error.innerHTML ||medium_error.innerHTML ||large_error.innerHTML ||image_error.innerHTML ||pricecompare.innerHTML)
+    if(producterror.innerHTML||desc_error.innerHTML||regprice_error.innerHTML|| saleprice_error.innerHTML||small_error.innerHTML ||medium_error.innerHTML ||large_error.innerHTML ||pricecompare.innerHTML)
     {
         event.preventDefault()
     }

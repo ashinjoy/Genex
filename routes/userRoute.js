@@ -6,6 +6,10 @@ const session=require("../middleware/session")
 const otp=require("../middleware/userotp")
 const cart=require("../controllers/cartManagement")
 const checkout=require("../controllers/checkout")
+const address=require("../controllers/addressManagement")
+const userProfile=require("../controllers/userProfileManagement")
+const orders=require("../controllers/orderMangement")
+
 
 userRouter.get("/",userController.logredirect)
 
@@ -22,11 +26,37 @@ userRouter.post("/email-verification",otp,userController.verifyotp)
 // userRouter.get("/userhome",session.user_islogin,userController.load_userhome)
 userRouter.get("/usershop",session.user_islogin,userController.load_usershop)
 userRouter.get("/productdetail",session.user_islogin,userController.load_productdetail)
+
 userRouter.get("/add-to-cart",session.user_islogin,cart.addtocart)
 userRouter.get("/loadcart",session.user_islogin,cart.loadcart)
 userRouter.get("/edit-qty",session.user_islogin,cart.editquantity)
 userRouter.get("/delete-cartitems",session.user_islogin,cart.deleteCart)
+
 userRouter.get("/checkout",session.user_islogin,checkout.loadCheckout)
+userRouter.post("/checkout",session.user_islogin,checkout.postCheckout)
+
+userRouter.get("/add-address",session.user_islogin,address.load_addAddress)
+userRouter.post("/add-address",session.user_islogin,address.addAddress)
+userRouter.get("/edit-address",session.user_islogin,address.load_editAddress)
+userRouter.post("/edit-address",session.user_islogin,address.editAddress)
+userRouter.get("/listaddress",session.user_islogin,address.listAddress)
+userRouter.get("/remove-address/",session.user_islogin,address.deleteAddress)
+
+
+
+userRouter.get("/myaccount",session.user_islogin,userProfile.loadUserProfile)
+
+userRouter.get("/edituser",session.user_islogin,userProfile.load_edituser)
+userRouter.post("/edituser",session.user_islogin,userProfile.edituser)
+
+userRouter.get("/orders",session.user_islogin,orders.load_orderpage)
+userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
+
+userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
+
+
+
+
 
 
 

@@ -5,7 +5,7 @@ const addtocart = async (req, res) => {
   try {
     const { id, qty, size } = req.query;
     const qtySelected = parseInt(qty);
-    console.log(id);
+    console.log("productid",id);
     const { userid } = req.session;
     console.log(userid);
     const productDetail = await productModel.findById(
@@ -25,13 +25,14 @@ const addtocart = async (req, res) => {
       },
     ]);
     console.log(itemExist);
+   
     if (stocksAvailable > 0 && itemExist.length===0 && stocksAvailable>=qtySelected) {
       const user = await userModel.findByIdAndUpdate(
         { _id: userid },
         { $push: { cart: { productid: id, size: size, qty: qtySelected } } }
       );
-      const stockUpdate=await productModel.updateOne({_id:id,'size.label':size},{$inc:{"size.$.quantity":-qtySelected}})
-      console.log("stock"+stockUpdate)
+      //  const stockUpdate=await productModel.updateOne({_id:id,'size.label':size},{$inc:{"size.$.quantity":-qtySelected}})
+      // console.log("stock"+stockUpdate)
       res.status(200).json({ data: "success" });
     } else if (itemExist.length > 0) {
       console.log("item already exist in cart");
@@ -49,9 +50,9 @@ const loadcart=async(req,res)=>{
     const {userid}=req.session
     const cartProducts=await userModel.findById({_id:userid},{cart:1,_id:0}).populate('cart.productid')
     let carts=cartProducts.cart
-console.log(carts)
+    console.log(carts)
 
-     res.render("user/cart",{carts})
+     res.render("user/cart",carts.length>0 ?{carts}:{message:"your cart is empty"})
 
  
   } catch (error) {

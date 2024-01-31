@@ -7549,7 +7549,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   }
 }
 .account_form form {
-  border: 1px solid #ededed;
+  border: 3px solid #ededed;
   padding: 23px 20px 29px;
   border-radius: 5px;
 
@@ -7565,7 +7565,8 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   color: #ff4545;
 }
 .account_form input {
-  border: 1px solid #ededed;
+  border: 3px solid #ededed;
+  border-radius: 7px;
   height: 40px;
   max-width: 100%;
   padding: 0 20px;
@@ -10713,6 +10714,26 @@ align-items: center;
   background-color: #2ecc71;
 }
 
+/* address card */
+#addressRadio{
+  width:10px;
+  margin-left: 10px;
+}
+#addaddress{
+  margin-left: 10px;
+}
+#changeaddress{
+  margin-right: 10px;
+}
 /*privacy policy css end*/
+
+
+
+
+/* user details card view */
+
+.useredit{
+  float: right;
+}
 
 /*# sourceMappingURL=style.css.map */

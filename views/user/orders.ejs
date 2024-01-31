@@ -1,0 +1,84 @@
+<%-include("userlayout/header.ejs")%>
+<div class="container">  
+<div class="row">
+    <%if(locals.orders.length>0){%>
+        <% orders.forEach((order)=>{%>
+            <div class="card text-left my-4">
+                <div class="card-header">
+                  <h4><b>OrderId:<%=order._id%></b></h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th scope="col">Date</th>
+                            <th scope="col">ProductName</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit price</th>
+                            <th scope="col">Status</th>  
+                            <th scope="col">Total price</th>
+                            <th scope="col">Action</th>          
+                          </tr>
+                        </thead>
+                        <tbody>
+                                
+                              <% for(i=0;i<order.products.length;i++){ %>
+                                    <tr>
+                                        <td><img src="/assets/<%=order.products[i].productid.img[0]%>" alt="" width="80px" height="80px"></td>
+                                        <td><%=order.createdAt%></td>
+                                        <td><%=order.products[i].productid.name%></td>
+                                       <td><%=order.products[i].qty%></td>
+                                       <td><%=order.products[i].productid.salesprice%></td>
+                                       
+                                       <td><span class="badge rounded-pill bg-success"><%=order.products[i].status%></span></td>
+                                        
+                                       
+                                       <td><%=order.products[i].qty*order.products[i].productid.salesprice%></td> 
+                                       <%if(order.products[i].status !== 'canceled'){%>
+                                <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="cancelorder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Cancel</button></td>
+                                       <%}%>
+                                </tr> 
+                               
+                              <%}%>
+                                   
+                                 
+                                
+                          </tbody>
+                          </table>
+                </div>
+                <div class="card-footer text-muted">
+                  <h4>Total Amount:<%=order.totalprice%></h4>
+                  <h4>Payment Method:<%=order.paymentMethod%></h4>
+
+                </div>
+            </div>
+        <%})%>
+       
+        <%}%>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  async function cancelorder(pid,oid){
+    try {
+      console.log(pid)
+    url=`/cancelorders?pid=${pid}&oid=${oid}`
+    const res=await fetch(url)
+if(res.ok){
+  await Swal.fire({
+    title:"Item canceled Successfully",
+    icon:"success"
+  })
+  window.location.reload()
+}
+  }
+      
+     catch (error) {
+      console.error(error)
+    }
+  }
+    
+</script>
+<%-include("userlayout/footer.ejs")%>
+ 

@@ -88,6 +88,7 @@
                 </div>
             </header> <!-- card-header end// -->
             <div class="card-body">
+              
                 <%filteredproducts.forEach((data)=>{%>
                     <article class="itemlist">
                         <div class="row align-items-center">
@@ -107,7 +108,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span><%=data.salesprice%></span> </div>
+                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>RS. <%=data.salesprice%></span> </div>
                             <%if(data.is_active === true){%>
                                 <div class="col-lg-2 col-sm-2 col-4 col-status">
                                     <span class="badge rounded-pill alert-success">Active</span>

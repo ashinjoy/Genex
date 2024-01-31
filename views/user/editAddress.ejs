@@ -1,0 +1,451 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from htmldemo.net/braga/braga/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Dec 2023 13:21:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Braga - login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=/public/assets/img/favicon.ico">
+    
+    <!-- CSS 
+    ========================= -->
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="/public/assets/css/owl.carousel.min.css">
+    <!--slick min css-->
+    <link rel="stylesheet" href="/public/assets/css/slick.css">
+    <!--magnific popup min css-->
+    <link rel="stylesheet" href="/public/assets/css/magnific-popup.css">
+    <!--font awesome css-->
+    <link rel="stylesheet" href="/public/assets/css/font.awesome.css">
+    <!--ionicons css-->
+    <link rel="stylesheet" href="/public/assets/css/ionicons.min.css">
+    <!--7 stroke icons css-->
+    <link rel="stylesheet" href="/public/assets/css/pe-icon-7-stroke.css">
+    <!--animate css-->
+    <link rel="stylesheet" href="/public/assets/css/animate.css">
+    <!--jquery ui min css-->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <!--plugins css-->
+    <link rel="stylesheet" href="/public/assets/css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    
+    <!--modernizr min js here-->
+    <script src="/public/assets/js/vendor/modernizr-3.7.1.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="main_header sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
+                    <div class="logo">
+                        <a href="index.html"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">                
+                    <!--main menu start-->
+                    <div class="main_menu menu_position"> 
+                        <nav>  
+                            <ul>
+                                <li><a  href="">Home</a>
+                                </li>
+                                <li class="mega_items"><a href="">Shop</a> 
+                                </li>
+                               
+                                <li><a href=""> Contact Us</a></li>
+                                <li><a href=""> About us</a></li>
+                                
+                            </ul>  
+                        </nav> 
+                    </div>
+                    <!--main menu end-->
+                </div> 
+                <div class="col-lg-2 col-md-4 col-sm-4 col-4">
+                    <div class="header_account_area">
+                        <div class="header_account_list search_list">
+                            <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
+                            <div class="dropdown_search">
+                                <form action="#">
+                                    <input placeholder="Search entire store here ..." type="text">
+                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header_account_list  mini_cart_wrapper">
+                            <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
+                                <span class="item_count">2</span>
+                            </a>
+                            
+                       </div>
+                        <div class="language_currency header_account_list ">
+                            <a href="#"> <span class="pe-7s-user"></span></a>
+                            <ul class="dropdown_currency">
+                                <li><a href="#">My account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div> 
+</header>
+<div class="customer_login" >
+  <div class="container">
+    <div class="row"></div><div class="col-lg-6 col-md-6 mx-auto">
+  <div class="account_form register">
+  
+
+    <form action="/edit-address" method="post" id="addform">
+      <p>
+        <%if(locals.address){%>
+            <label> Name <span>*</span></label>
+            <input type="text" name="name" value="<%=address.name%>" id="name">    
+            <div id="error1"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Street Address</label>
+            <input placeholder="House number and street name" type="text" name="houseno" value="<%=address.houseno%>" id="street">     
+            <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Landmark</label>
+            <input placeholder="landmark or Area" type="text" name="landmark"  value="<%=address.landmark%>" id="landmark">     
+            <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Pincode</label>
+            <input  type="number" name="pincode"  value="<%=address.pincode%>" id="pincode">     
+            <div id="error4"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Town / City</label>
+            <input  type="text" name="city"  value="<%=address.city%>" id="city">   
+            <div id="error5"  style="display: none;" class="alert alert-danger"></div>
+
+          </p>
+          <p>
+            <label>State  <span>*</span></label>
+            <input type="text" name="state"  value="<%=address.state%>" id="state">        
+            <div id="error6"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Phone<span>*</span></label>
+            <input type="text" name="phone"  value="<%=address.phone%>" id="phone">    
+            <div id="error7"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label> Email Address <span>*</span></label>
+            <input type="text" name="email"  value="<%=address.email%>" id="email">     
+            <div id="error8"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <p>
+                <label for="country">country <span>*</span></label>
+                <input type="text" name="country"  value="<%=address.country%>" id="country">                                    
+    
+                <div id="error9"  style="display: none;" class="alert alert-danger"></div>
+              </p> 
+            
+          </p>
+          <input type="text" name="addressid" value="<%=address._id%>" >
+        <%}%>
+
+
+      <div class="login_submit">
+        <button type="submit">Edit Address</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+ 
+  const nametag=document.getElementById("name");
+  const streettag=document.getElementById("street");
+  const landmarktag=document.getElementById("landmark");
+  const pincodetag=document.getElementById("pincode");
+  const citytag=document.getElementById("city")
+  const statetag=document.getElementById("state")
+  const phonetag=document.getElementById("phone")
+  const emailtag=document.getElementById("email")
+  const countrytag=document.getElementById("country")
+  const addressform=document.getElementById("addform")
+ 
+  const nameerror=document.getElementById("error1")
+  const streeterror=document.getElementById("error2")
+  const landmarkerror=document.getElementById("error3")
+  const pincodeerror=document.getElementById("error4")
+  const cityerror=document.getElementById("error5")
+  const stateerror=document.getElementById("error6")
+  const phoneerror=document.getElementById("error7")
+  const emailerror=document.getElementById("error8")
+  const countryerror=document.getElementById("error9")
+ 
+ 
+ 
+ function namevalidate(){
+ const name=nametag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(name.trim() === ""){
+   nameerror.style.display="block";
+   nameerror.innerHTML="Please enter a valid name"
+ }
+ else if(name.length<=1)
+ {
+   nameerror.style.display="block";
+   nameerror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(name)){
+   nameerror.style.display="block"
+   nameerror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   nameerror.style.display="none";
+   nameerror.innerHTML=""
+ }
+ 
+ }
+ 
+ function streetvalidate(){
+ const streets=streettag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(streets.trim() === ""){
+   streeterror.style.display="block";
+   streeterror.innerHTML="Please enter a valid name"
+ }
+ else if(streets.length<=1)
+ {
+   streeterror.style.display="block";
+   streeterror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(streets)){
+   streeterror.style.display="block"
+   streeterror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   streeterror.style.display="none";
+   streeterror.innerHTML=""
+ }
+ 
+ }
+ 
+ function landmarkvalidate(){
+ const landmark=landmarktag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(landmark.trim() === ""){
+   landmarkerror.style.display="block";
+   landmarkerror.innerHTML="Please enter a valid name"
+ }
+ else if(landmark.length<=1)
+ {
+   landmarkerror.style.display="block";
+   landmarkerror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(landmark)){
+   landmarkerror.style.display="block"
+   landmarkerror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   landmarkerror.style.display="none";
+   landmarkerror.innerHTML=""
+ }
+ 
+ }
+ 
+ 
+ function cityvalidate(){
+ const city=citytag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(city.trim() === ""){
+   cityerror.style.display="block";
+   cityerror.innerHTML="Please enter a valid name"
+ }
+ else if(city.length<=1)
+ {
+   cityerror.style.display="block";
+   cityerror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(city)){
+   cityerror.style.display="block"
+   cityerror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   cityerror.style.display="none";
+   cityerror.innerHTML=""
+ }
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ function pincodevalidate(){
+   const pincode=pincodetag.value;
+   const phonepattern=/\d/
+   if(pincode.trim()==""){
+     pincodeerror.style.display="block";
+     pincodeerror.innerHTML="Please enter a valid phonenumber"
+ 
+   }
+   
+   else if(pincode.length>6||pincode.length<6||!phonepattern.test(pincode))
+   {
+     pincodeerror.style.display="block";
+     pincodeerror.innerHTML="Please enter a valid phonenumber"
+ 
+   }
+   else {
+     pincodeerror.style.display="none";
+     pincodeerror.innerHTML=""
+ 
+   }
+ }
+ 
+ 
+ function emailvalidate(){
+   const emailpattern=/^[a-zA-Z0-9_]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/
+   const email=emailtag.value
+   if(!emailpattern.test(email)){
+     emailerror.style.display="block";
+     emailerror.innerHTML="Enter valid email"
+ 
+   }
+   else if(email.trim()==""){
+     emailerror.style.display="block";
+     emailerror.innerHTML="Please enter your email"
+ 
+   }
+   else{
+     emailerror.style.display= "none";
+     emailerror.innerHTML=""
+     
+   }
+ }
+ 
+ function phonevalidate(){
+   const phone=phonetag.value;
+   const phonepattern=/\d/
+   if(phone.trim()==""){
+     phoneerror.style.display="block";
+     phoneerror.innerHTML="Please enter a valid phonenumber"
+ 
+   }
+   
+   else if(phone.length>10||phone.length<10||!phonepattern.test(phone))
+   {
+     phoneerror.style.display="block";
+     phoneerror.innerHTML="Please enter a valid phonenumber"
+ 
+   }
+   else {
+     phoneerror.style.display="none";
+     phoneerror.innerHTML=""
+ 
+   }
+ }
+ 
+ 
+ function statevalidate(){
+ const state=statetag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(state.trim() === ""){
+   stateerror.style.display="block";
+   stateerror.innerHTML="Please enter a valid name"
+ }
+ else if(state.length<=1)
+ {
+   stateerror.style.display="block";
+   stateerror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(state)){
+   stateerror.style.display="block"
+   stateerror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   stateerror.style.display="none";
+   stateerror.innerHTML=""
+ }
+ 
+ }
+ 
+ function countryvalidate(){
+ const country=countrytag.value
+ var namepattern=/^[A-Za-z]+$/
+ 
+ if(country.trim() === ""){
+   countryerror.style.display="block";
+   countryerror.innerHTML="Please enter a valid name"
+ }
+ else if(country.length<=1)
+ {
+   countryerror.style.display="block";
+   countryerror.innerHTML="name should contain more than a letter"
+ }
+ else if(!namepattern.test(country)){
+   countryerror.style.display="block"
+   countryerror.innerHTML="Name should only conatin Alphabets only"
+ }
+ 
+ else {
+   countryerror.style.display="none";
+   countryerror.innerHTML=""
+ }
+ 
+ }
+ 
+ 
+ 
+ 
+ nametag.addEventListener("blur",namevalidate);
+ streettag.addEventListener("blur",streetvalidate);
+ landmarktag.addEventListener("blur",landmarkvalidate);
+ pincodetag.addEventListener("blur",pincodevalidate);
+ citytag.addEventListener("blur",cityvalidate);
+ statetag.addEventListener("blur",statevalidate);
+ phonetag.addEventListener("blur",phonevalidate);
+ emailtag.addEventListener("blur",emailvalidate);
+ countrytag.addEventListener("blur",countryvalidate);
+ 
+ 
+ 
+ 
+ addressform.addEventListener("submit",(event)=>{
+   namevalidate()
+   streetvalidate()
+   landmarkvalidate()
+   pincodevalidate()
+   cityvalidate()
+   statevalidate
+   emailvalidate()
+   phonevalidate()
+   countryvalidate()
+   if(nameerror.innerHTML||streeterror.innerHTML||landmarkerror.innerHTML||pincodeerror.innerHTML||cityerror.innerHTML||stateerror.innerHTML||emailerror.innerHTML|| phoneerror.innerHTML||countryerror.innerHTML){
+     event.preventDefault()
+   }
+ })
+ 
+ </script>
+ 
