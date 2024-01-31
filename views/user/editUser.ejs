@@ -1,0 +1,136 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from htmldemo.net/braga/braga/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Dec 2023 13:21:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Braga - login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=/public/assets/img/favicon.ico">
+    
+    <!-- CSS 
+    ========================= -->
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="/public/assets/css/owl.carousel.min.css">
+    <!--slick min css-->
+    <link rel="stylesheet" href="/public/assets/css/slick.css">
+    <!--magnific popup min css-->
+    <link rel="stylesheet" href="/public/assets/css/magnific-popup.css">
+    <!--font awesome css-->
+    <link rel="stylesheet" href="/public/assets/css/font.awesome.css">
+    <!--ionicons css-->
+    <link rel="stylesheet" href="/public/assets/css/ionicons.min.css">
+    <!--7 stroke icons css-->
+    <link rel="stylesheet" href="/public/assets/css/pe-icon-7-stroke.css">
+    <!--animate css-->
+    <link rel="stylesheet" href="/public/assets/css/animate.css">
+    <!--jquery ui min css-->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <!--plugins css-->
+    <link rel="stylesheet" href="/public/assets/css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    
+    <!--modernizr min js here-->
+    <script src="/public/assets/js/vendor/modernizr-3.7.1.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="main_header sticky-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
+                    <div class="logo">
+                        <a href="index.html"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">                
+                    <!--main menu start-->
+                    <div class="main_menu menu_position"> 
+                        <nav>  
+                            <ul>
+                                <li><a  href="">Home</a>
+                                </li>
+                                <li class="mega_items"><a href="">Shop</a> 
+                                </li>
+                               
+                                <li><a href=""> Contact Us</a></li>
+                                <li><a href=""> About us</a></li>
+                                
+                            </ul>  
+                        </nav> 
+                    </div>
+                    <!--main menu end-->
+                </div> 
+                <div class="col-lg-2 col-md-4 col-sm-4 col-4">
+                    <div class="header_account_area">
+                        <div class="header_account_list search_list">
+                            <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
+                            <div class="dropdown_search">
+                                <form action="#">
+                                    <input placeholder="Search entire store here ..." type="text">
+                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header_account_list  mini_cart_wrapper">
+                            <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
+                                <span class="item_count">2</span>
+                            </a>
+                            
+                       </div>
+                        <div class="language_currency header_account_list ">
+                            <a href="#"> <span class="pe-7s-user"></span></a>
+                            <ul class="dropdown_currency">
+                                <li><a href="#">My account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div> 
+</header>
+<div class="customer_login" >
+  <div class="container">
+    <div class="row"></div><div class="col-lg-6 col-md-6 mx-auto">
+  <div class="account_form register">
+  
+
+    <form action="/edituser" method="post" id="regform">
+      <p>
+        <%if(locals.edituser){%>
+            <label> Name <span>*</span></label>
+            <input type="text" name="name" value="<%=edituser.uname%>">    
+            <div id="error1"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Street Address</label>
+            <input  type="text" name="email" value="<%=edituser.email%>">     
+            <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            <label>Landmark</label>
+            <input  type="text" name="phone"  value="<%=edituser.phone%>">     
+            <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+          </p>
+          <p>
+            
+          <input type="hidden" name="uid" value="<%=edituser._id%>" >
+        <%}%>
+      <div class="login_submit">
+        <button type="submit">Edit Address</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>

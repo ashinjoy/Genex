@@ -1,0 +1,57 @@
+<%-include("userlayout/header.ejs")%>
+
+<div class="breadcrumbs_area">
+    <div class="container">   
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <h3>My account</h3>
+                    <ul>
+                        <li><a href="index.html">home</a></li>
+                        <li>My account</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>         
+</div>
+<!--breadcrumbs area end-->
+
+<!-- my account start  -->
+<section class="main_content_area">
+    <div class="container">   
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <!-- Nav tabs -->
+                    <div class="dashboard_tab_button">
+                        <ul role="tablist" class="nav flex-column dashboard-list">
+                            <li><a href="#dashboard"  class="nav-link active">Dashboard</a></li>
+                            <li><a href="/orders"  class="nav-link">Orders</a></li>
+                            <li><a href="#downloads"  class="nav-link">Downloads</a></li>
+                            <li><a href="/listaddress"  class="nav-link">Addresses</a></li>
+                            <li><a href="/accountdetails"  class="nav-link">Account details</a></li>
+                            <li><a href="login.html" class="nav-link">logout</a></li>
+                        </ul>
+                    </div>    
+                </div>
+                   <%if(locals.user){%>
+                    <div class="card col-sm-12 col-md-7 col-lg-7 card border-dark mb-3 mx-auto">
+                        <div class="card-header">Hi <%=user.uname%></div>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title">User Information</h5>
+                            <p class="card-text">Name: <%=user.uname%></p>
+                            <p class="card-text">Email: <%=user.email%></p>
+                            <p class="card-text">PhoneNumber: <%=user.phone%></p>
+                        <a href="/edituser?uid=<%=user._id%>" class="useredit">Edit userdetails</a>
+                        </div>
+                    </div>
+                   <%}%>
+                    </div>
+
+                </div>
+            </div>
+        </div>  
+    </div>        	
+</section>
+<%-include("userlayout/footer.ejs")%>

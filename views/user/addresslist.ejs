@@ -1,0 +1,34 @@
+<%-include("userlayout/header.ejs")%>
+<%if(locals.userAdrress){%>
+    <%userAdrress.forEach((address)=>{%>
+        <div class="container">
+            <div class="row">
+                <div class="card col-md-12 w-75 mx-auto">
+                    <div class="card-head p-3"><h3 class="fw-bold">Addresses</h3></div>
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Name:<%=address.name%></h5>
+                                <h6>Phone:<%=address.phone%></h6>
+                                <h6>Email:<%=address.email%></h6>
+                                <h6>houseno:<%=address.houseno%></h6>
+                                <h6>Landmark:<%=address.landmark%></h6>
+                                <h6>city:<%=address.city%></h6>
+                                <h6>state:<%=address.state%></h6>
+                                <h6>pincode:<%=address.pincode%></h6>
+                                <h6>country:<%=address.country%></h6>      
+                                <a href="/add-address"><button class="btn ">Add Address</button></a>
+                                <div class="float-end"><a href="/edit-address/?id=<%=address._id%>"><button class="btn ">Edit </button></a><a href="/remove-address/?id=<%=address._id%>"><button class="btn">Remove</button></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+   <% })%>
+<%}%>
+
+
+
+<%-include("userlayout/footer.ejs")%>

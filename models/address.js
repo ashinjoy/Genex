@@ -8,15 +8,15 @@ const addressSchema= new mongoose.Schema({
     type:String,
     required:true
  },
+ email:{
+    type:String,
+    required:true
+ },
  pincode:{
     type:Number,
     required:true
  },
 houseno:{
-    type:String,
-    required:true
-},
-area:{
     type:String,
     required:true
 },
@@ -31,6 +31,14 @@ city:{
 state:{
 type:String,
 required:true
+},
+country:{
+type:String,
+required:true
+},
+userid:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'user'
 }
 })
 const addressModel=mongoose.model("address",addressSchema)

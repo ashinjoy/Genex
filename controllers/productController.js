@@ -3,9 +3,11 @@ const categoryModel = require("../models/category");
 const productModel =require("../models/productModel")
 const sharp=require("sharp");
 const path=require("path")
+const fs=require("fs")
 
 const load_addproduct=async(req,res)=>{
     try {
+      console.log(req.originalUrl)
     const catdetail=await categoryModel.find({status:true})
       res.render("admin/addproduct",{catdetail})
     } catch (error) {
@@ -22,16 +24,17 @@ const add_product = async(req,res)=>{
         const imgPath = img.path;
         const outputpath = path.join(__dirname, "../assets","crop"+ img.filename); 
         await sharp(imgPath)
-          .resize({width: 500, height: 500 ,fit:"cover"})
+          .resize({width:650, height:500 ,fit:"outside"})
           .toFile(outputpath);
     
         return outputpath;
       });
-  
+    
       const croppedImgPaths = await Promise.all(imgPromises);
       const croppedImgfilename=croppedImgPaths.map((img)=>{
        return path.basename(img)
       })
+      
       console.log(croppedImgfilename)
 
    console.log(req.files)
@@ -64,12 +67,16 @@ const add_product = async(req,res)=>{
       const products=await productModel.find({}).populate("category")
       console.log(products)
       const filteredproducts=products.filter((data)=>{
-        if(data.category.status === true){
+        if(data.category.status === true)
+        {
           return data
         }
       })
-     console.log(filteredproducts)
+     
+    
       res.render("admin/productlist",{filteredproducts})
+
+    
       
     } catch (error) {
       console.log(error)
@@ -110,17 +117,21 @@ const add_product = async(req,res)=>{
   const editproduct=async(req,res)=>{
     try {
       const {pname,description,reg_price,sales_price,cat,small_qty,medium_qty,large_qty,pid}=req.body
-      const images=req.files
+      const images=req.files  
       console.log("files"+images)
-      if(!images && images.length===0){
+     
+
+      if(req.files.length === 0){
         const editedproduct=await productModel.findByIdAndUpdate({_id:pid},{$set:{
           name:pname,
           description:description,
           category:cat,
           regularprice:reg_price,
           salesprice:sales_price,
-          size:[{label:"small",quantity:small_qty},{label:"medium",quantity:medium_qty},{label:"large",quantity:large_qty}]
+          size:[{label:"small",quantity:small_qty},{label:"medium",quantity:medium_qty},{label:"large",quantity:large_qty}],
+          
         }})
+        console.log(editedproduct,"editedproduct")
       }
       else{
         const imgfilename=images.map((img)=>{
@@ -137,10 +148,9 @@ const add_product = async(req,res)=>{
             img:imgfilename
                         
           }},{new:true})
-          console.log("edited"+editedproduct)
-          
+          console.log("edited"+editedproduct)     
       }
-   
+   res.redirect("/admin/products/productlist")
 
   }
   catch (error) {
