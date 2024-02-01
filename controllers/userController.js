@@ -97,7 +97,7 @@ const sendotp = async (req, res) => {
     console.log(userdoc);
     const useremail = userdoc.email;
     console.log(useremail);
-    nodemailer(otp, useremail);
+    nodemailer.sendMail(otp, useremail);
   } catch (err) {
     console.error(err);
   }
