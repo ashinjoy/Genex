@@ -9,6 +9,8 @@ const checkout=require("../controllers/checkout")
 const address=require("../controllers/addressManagement")
 const userProfile=require("../controllers/userProfileManagement")
 const orders=require("../controllers/orderMangement")
+const changepassword=require("../controllers/changepassword")
+
 
 
 userRouter.get("/",userController.logredirect)
@@ -53,6 +55,9 @@ userRouter.get("/orders",session.user_islogin,orders.load_orderpage)
 userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
 
 userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
+
+userRouter.get("/change-password",session.user_islogin,changepassword.load_ChangePassword)
+userRouter.post("/change-password",session.user_islogin,changepassword.changePassword)
 
 
 
