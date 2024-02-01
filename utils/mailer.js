@@ -26,7 +26,24 @@ async function sendMail(otp,email){
  }
 
 }
-module.exports=sendMail
+async function sendLink(link,mail){
+try {
+  const options={
+    from:process.env.mail,
+    to:mail,
+    subject:"Password Assistance",
+    html:`<a href=${link}>click to change password</a>`
+
+  }
+  const passwordchange=await transport.sendMail(options)
+  if(passwordchange){
+    console.log("link reached email")
+  }
+} catch (error) {
+  console.error(error)
+}
+}
+module.exports={sendMail,sendLink}
 
 
 

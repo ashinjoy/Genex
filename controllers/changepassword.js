@@ -1,5 +1,7 @@
 const userModel=require("../models/userModel")
 const bcrypt=require("bcrypt")
+const nodemailer=require("../utils/mailer")
+const jwt=require("jsonwebtoken")
  const load_ChangePassword=async(req,res)=>{
     try {
         res.render("user/changepassword")
@@ -29,4 +31,57 @@ const changePassword=async(req,res)=>{
     }
 
 }
-module.exports={load_ChangePassword,changePassword}
+
+const load_forgotPassword = async(req,res)=>{
+    try {
+        res.render("user/forgotpassword")
+    } catch (error) {
+        console.error(error)
+    }
+}
+const forgotPassword=async(req,res)=>{
+    try {
+        const {email}=req.body
+        const is_userRegistered=await userModel.findOne({email:email})
+       if(is_userRegistered){
+        const newSecret=process.env.jwt_secret+is_userRegistered.password
+        const payload={
+            userid:is_userRegistered._id,
+            email:is_userRegistered.email
+        }
+        const jwt_token=jwt.sign(payload,newSecret,{expiresIn:'15m'})
+        const link=`http://localhost:3000/reset-password?id=${is_userRegistered._id}&token=${jwt_token}`
+        nodemailer.sendLink(link,email)
+        res.redirect("/login")
+
+       }
+    } catch (error) {
+        console.error(error)
+    }
+}
+const load_resetPassword=async(req,res)=>{
+    try {
+        const {id}=req.query
+        res.render("user/resetpassword",{id})
+    } catch (error) {
+        console.error(error)
+    }
+}
+const resetPassword=async(req,res)=>{
+    try {
+
+        const {new_pwd,confirm_newpwd,id}=req.body
+        if(new_pwd ===confirm_newpwd ){
+            const hashpwd=await bcrypt.hash(new_pwd,13)
+            const pwdUpdate=await userModel.findByIdAndUpdate({_id:id},{$set:{password:hashpwd}})
+            res.redirect("/login")
+        }
+        else{
+            console.log("password Incorrect")
+        }
+        
+    } catch (error) {
+        console.error(error)
+    }
+}
+module.exports={load_ChangePassword,changePassword,load_forgotPassword , forgotPassword,load_resetPassword,resetPassword}

@@ -13,6 +13,7 @@ const changepassword=require("../controllers/changepassword")
 
 
 
+
 userRouter.get("/",userController.logredirect)
 
 userRouter.get("/login",session.user_islogout,userController.Loadlogin)
@@ -59,10 +60,11 @@ userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage
 userRouter.get("/change-password",session.user_islogin,changepassword.load_ChangePassword)
 userRouter.post("/change-password",session.user_islogin,changepassword.changePassword)
 
+userRouter.get("/forgot-password",changepassword.load_forgotPassword)
+userRouter.post("/forgot-password",changepassword.forgotPassword)
 
-
-
-
+userRouter.get("/reset-password",changepassword.load_resetPassword)
+userRouter.post("/reset-password",changepassword.resetPassword)
 
 
 
