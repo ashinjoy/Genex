@@ -155,6 +155,7 @@ async function changeTotal(index,cartid,pid){
     
 }
 async function deleteitem(cartproductid){
+    console.log(cartproductid)
     url=`/delete-cartitems?id=${cartproductid}`
     const res = await fetch(url)
     const data= await res.json({})
