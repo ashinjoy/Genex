@@ -54,7 +54,7 @@ userRouter.post("/edituser",session.user_islogin,userProfile.edituser)
 
 userRouter.get("/orders",session.user_islogin,orders.load_orderpage)
 userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
-
+userRouter.get("/ordersummary",session.user_islogin,orders.load_OrderSummary)
 userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
 
 userRouter.get("/change-password",session.user_islogin,changepassword.load_ChangePassword)

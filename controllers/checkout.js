@@ -20,6 +20,7 @@ const loadCheckout=async(req,res)=>{
 }
 const postCheckout=async(req,res)=>{
 try {
+   let ordersave
    console.log("entered post ")
    const {userid}=req.session
 const userAddresssAvailable=await addressModel.find({userid:userid})
@@ -40,7 +41,8 @@ if(userAddresssAvailable.length == 0){
       country:country,
       userid:userid
    }
-   const userAddress=await addressModel.create(Address) 
+   const userAddress=await addressModel.create(Address)
+
    console.log("useradd"+userAddress)
    const orders={
       userid:userid,
@@ -55,7 +57,7 @@ if(userAddresssAvailable.length == 0){
       paymentMethod:check_method
       
    }
-   const ordersave=await orderModel.create(orders)
+    ordersave=await orderModel.create(orders)
    console.log("order",ordersave)
    // console.log("before")
    // const productsArray= ordersave.products
@@ -65,11 +67,12 @@ if(userAddresssAvailable.length == 0){
    if(ordersave){
       const deletefomCart=await userModel.findById({_id:userid},{$pull:{cart:{}}})
       console.log(deletefomCart)
-      // for(i=0;i<productsArray.length;i++){
-      //    productsArray[i].si
-      // }
-
-      // const orderNum=await orderModel.
+      for(i=0;i<productArray.length;i++){
+         console.log("pid",productArray[i].productid,"size",productArray[i].size ,"qty",productArray[i].qty)
+         const stockUpdate=await productModel.findOneAndUpdate({_id:productArray[i].productid,'size.label':productArray[i].size},{$inc:{'size.$.quantity':-productArray[i].qty}})
+         
+       }
+           
    }
    console.log("order"+ordersave)
 
@@ -91,11 +94,11 @@ else{
       paymentMethod:check_method
       
    }
-   const ordersave=await orderModel.create(orders)
+    ordersave=await orderModel.create(orders)
    console.log("order"+ordersave)
    const productArray=ordersave.products
    if(ordersave){
-      const deletefomCart=await userModel.findByIdAndUpdate({_id:userid},{$pull:{cart:{}}})   
+      const deletefomCart=await userModel.findByIdAndUpdate({_id:userid},{$pull:{cart:{}}})
       console.log(deletefomCart,"delete")
       console.log('entered loop')
     for(i=0;i<productArray.length;i++){
@@ -105,7 +108,10 @@ else{
     }
    }
    
+
+   
 }
+
 res.redirect("/ordersuccess")
 
 } catch (error) {

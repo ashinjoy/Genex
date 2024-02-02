@@ -36,5 +36,15 @@ const load_orderSuccessPage=async(req,res)=>{
         console.error(error)
     }
 }
+const load_OrderSummary=async(req,res)=>{
+    try{
+        const {id}=req.query
+        const orderDetail=await orderModel.findById({_id:id}).populate('userid').populate('products.productid').populate('addressid')
+    res.render("user/orderSummary",{orderDetail})
+    }
+    catch(error){
+console.error(error)
+    }
+}
 
-module.exports={load_orderpage,cancelorder,load_orderSuccessPage}
+module.exports={load_orderpage,cancelorder,load_orderSuccessPage,load_OrderSummary}

@@ -1,0 +1,26 @@
+<%-include("userlayout/header.ejs")%>
+<div class="container">
+    <div class="row">
+        <%if(locals.orderDetail){%>
+            <%if(locals.orderDetail.products){%>
+                <%orderDetail.products.forEach((product)=>{%>
+                  
+                      <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="/assets/<%=product.productid.img[0]%>" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title"><%=product.productid.name%></h5>
+                            <p class="card-text"><%=product.size%></p>
+                            <p class="card-text"><%=product.qty%></p>
+                        </div>
+                      </div>
+              <%})%>
+        
+          <%}%>
+        <%}%>
+    </div>
+</div>
+
+
+
+<%-include("userlayout/footer.ejs")%>
+
