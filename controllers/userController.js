@@ -7,7 +7,7 @@ const productModel = require("../models/productModel");
 const categoryModel = require("../models/category");
 const logredirect = async (req, res) => {
   try {
-    res.redirect("/login");
+    res.redirect("/userhome");
   } catch (err) {
     console.log(err.message);
   }
@@ -158,13 +158,17 @@ console.log(loggeduser)
     console.error(err);
   }
 };
-// const load_userhome=async(req,res)=>{
-//   try {
-//     res.render("user/userhome")
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
+const load_userhome=async(req,res)=>{
+  try {
+    const categoryAvailable=await categoryModel.find({status:true})
+
+    const productAvailable=await productModel.find({is_active:true})
+    
+    res.render("user/userhome",{categoryAvailable,productAvailable})
+  } catch (error) {
+    console.error(error)
+  }
+}
 const load_usershop = async (req, res) => {
   try {
     const product = await productModel
@@ -200,5 +204,5 @@ module.exports = {
   load_usershop,
   load_productdetail,
 
-  // load_userhome
+  load_userhome
 };

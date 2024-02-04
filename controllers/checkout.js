@@ -2,6 +2,7 @@ const addressModel=require("../models/address")
 const userModel=require("../models/userModel")
 const orderModel=require("../models/order")
 const productModel=require("../models/productModel")
+const razorpay=require("../utils/razorpay")
 
 const { default: mongoose } = require("mongoose")
 const loadCheckout=async(req,res)=>{
@@ -103,16 +104,28 @@ else{
       console.log('entered loop')
     for(i=0;i<productArray.length;i++){
       console.log("pid",productArray[i].productid,"size",productArray[i].size ,"qty",productArray[i].qty)
-      const stockUpdate=await productModel.findOneAndUpdate({_id:productArray[i].productid,'size.label':productArray[i].size},{$inc:{'size.$.quantity':-productArray[i].qty}})
+      // const stockUpdate=await productModel.findOneAndUpdate({_id:productArray[i].productid,'size.label':productArray[i].size},{$inc:{'size.$.quantity':-productArray[i].qty}})
       
     }
    }
-   
+     
+}
+console.log(ordersave.paymentMethod)
 
+if(ordersave.paymentMethod === "cod"){
+
+   res.status(200).json({codSucess:"sucess"})
+ 
+}
+else{
+console.log("entered razorpay")
+ const razorpayOrder=await razorpay.generate_razorpayOrder(ordersave._id,ordersave.totalprice)
+ console.log("razorpayOrder",razorpayOrder)
+   res.json(razorpayOrder)
    
 }
 
-res.redirect("/ordersuccess")
+
 
 } catch (error) {
    console.log(error)

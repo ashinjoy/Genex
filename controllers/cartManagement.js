@@ -50,7 +50,7 @@ const loadcart=async(req,res)=>{
     const {userid}=req.session
     const cartProducts=await userModel.findById({_id:userid},{cart:1,_id:0}).populate('cart.productid')
     let carts=cartProducts.cart
-    console.log(carts)
+    console.log("carts",carts)
 
      res.render("user/cart",carts.length>0 ?{carts}:{message:"your cart is empty"})
 
@@ -75,9 +75,6 @@ const editquantity=async(req,res)=>{
     console.error(error)
   }
 
-
-  
-
 }
 
 const deleteCart=async(req,res)=>{
@@ -92,4 +89,4 @@ try {
   console.error(error)
 }
 }
-module.exports = { addtocart ,loadcart, deleteCart,editquantity};
+module.exports = { addtocart ,loadcart, deleteCart , editquantity};

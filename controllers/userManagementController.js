@@ -1,8 +1,17 @@
 const userModel = require("../models/userModel");
+const productModel=require("../models/productModel")
+const orderModel=require("../models/order");
+const categoryModel = require("../models/category");
+const utils=require("../utils/filter")
 
 const load_admindashboard = async (req, res) => {
     try{
-        res.render("admin/admindashboard");
+      const productsCount=await productModel.countDocuments({is_active:true})
+      const ordersCount=await orderModel.countDocuments({})
+      const categoryCount=await categoryModel.countDocuments({status:true})
+      utils.weeklyData()
+      console.log(productsCount,ordersCount)
+        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount});
     }
     catch(error){
 console.error(error)

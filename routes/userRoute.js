@@ -15,6 +15,7 @@ const changepassword=require("../controllers/changepassword")
 
 
 userRouter.get("/",userController.logredirect)
+userRouter.get("/userhome",userController.load_userhome)
 
 userRouter.get("/login",session.user_islogout,userController.Loadlogin)
 userRouter.post("/login",session.user_islogout,userController.login)
@@ -26,9 +27,8 @@ userRouter.get("/email-verification",otp,userController.Load_otppage)
 userRouter.get("/generate-otp",otp,userController.sendotp)
 userRouter.post("/email-verification",otp,userController.verifyotp)
 
-// userRouter.get("/userhome",session.user_islogin,userController.load_userhome)
-userRouter.get("/usershop",session.user_islogin,userController.load_usershop)
-userRouter.get("/productdetail",session.user_islogin,userController.load_productdetail)
+userRouter.get("/usershop",userController.load_usershop)
+userRouter.get("/productdetail",userController.load_productdetail)
 
 userRouter.get("/add-to-cart",session.user_islogin,cart.addtocart)
 userRouter.get("/loadcart",session.user_islogin,cart.loadcart)
@@ -47,12 +47,15 @@ userRouter.get("/remove-address/",session.user_islogin,address.deleteAddress)
 
 
 
+
+
 userRouter.get("/myaccount",session.user_islogin,userProfile.loadUserProfile)
 
 userRouter.get("/edituser",session.user_islogin,userProfile.load_edituser)
 userRouter.post("/edituser",session.user_islogin,userProfile.edituser)
 
 userRouter.get("/orders",session.user_islogin,orders.load_orderpage)
+userRouter.post("/verifyPayment",session.user_islogin,orders.verifyPayment)
 userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
 userRouter.get("/ordersummary",session.user_islogin,orders.load_OrderSummary)
 userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
