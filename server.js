@@ -21,10 +21,22 @@ app.use(session({
   saveUninitialized:false
 }))
 app.use(nocache())
-app.use("/", userRoute)
 
 app.use("/admin",adminRoute)
 
+app.use("/", userRoute)
+
+
+
+app.use("*", (req, res, next) => {
+  
+  res.status(404).render("user/404");
+});
+
+app.use((err,req,res,next)=>{
+  console.log(err.stack)
+  res.status(500).send("internal server error")
+})
 
 app.listen(process.env.PORT, () => {
   console.log("server is started at http://localhost:3000");

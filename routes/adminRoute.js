@@ -14,7 +14,7 @@ const multer=require("../utils/multer")
 adminRouter.get("/",session.admin_islogout,adminAuthController.load_adminlogin)
 adminRouter.post("/",session.admin_islogout,adminAuthController.adminlogin)
 
-adminRouter.get("/home",session.admin_islogin,userManagementController.load_admindashboard)
+adminRouter.get("/home",userManagementController.load_admindashboard)
 adminRouter.get("/users",session.admin_islogin,userManagementController.load_usermanagement)
 adminRouter.get("/users/block",session.admin_islogin,userManagementController.blockuser)
 adminRouter.get("/users/unblock",session.admin_islogin,userManagementController.unblockuser)
@@ -34,6 +34,8 @@ adminRouter.get("/products/blockproduct",session.admin_islogin,productController
 adminRouter.get("/products/unblockproduct",session.admin_islogin,productController.product_unblock)
 adminRouter.get("/products/editproduct",session.admin_islogin,productController.load_editproduct)
 adminRouter.post("/products/editproduct",session.admin_islogin,multer.array('Images',4,),productController.editproduct)
+
+
 
 adminRouter.get("/listorders",session.admin_islogin,orderController.load_orderslist)
 adminRouter.get("/ordersummary",session.admin_islogin,orderController.load_Ordersummary)

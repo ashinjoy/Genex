@@ -5,6 +5,7 @@ const sharp=require("sharp");
 const path=require("path")
 const fs=require("fs")
 
+
 const load_addproduct=async(req,res)=>{
     try {
       console.log(req.originalUrl)
@@ -158,4 +159,8 @@ const add_product = async(req,res)=>{
       
     }
   }
+
+
+
+  
 module.exports={load_addproduct,add_product,load_productlist,product_block,product_unblock,load_editproduct,editproduct}
