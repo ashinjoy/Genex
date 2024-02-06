@@ -65,6 +65,7 @@ const load_OrderSummary = async (req, res) => {
       .populate("userid")
       .populate("products.productid")
       .populate("addressid");
+      console.log(orderDetail)
     res.render("user/orderSummary", { orderDetail });
   } catch (error) {
     console.error(error);

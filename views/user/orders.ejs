@@ -27,7 +27,7 @@
                               <% for(i=0;i<order.products.length;i++){ %>
                                     <tr>
                                         <td><img src="/assets/<%=order.products[i].productid.img[0]%>" alt="" width="80px" height="80px"></td>
-                                        <td><%=order.createdAt%></td>
+                                        <td><%=order.createdAt.toUTCString()%></td>
                                         <td><%=order.products[i].productid.name%></td>
                                        <td><%=order.products[i].qty%></td>
                                        <td><%=order.products[i].productid.salesprice%></td>

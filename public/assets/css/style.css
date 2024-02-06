@@ -10741,3 +10741,74 @@ align-items: center;
   width:50%;
   height:50%;
 } */
+
+
+
+
+/* order Summary css */
+
+/* @media (min-width: 1025px) {
+  .h-custom {
+  height: 100vh !important;
+  }
+  }
+  
+  .horizontal-timeline .items {
+  border-top: 2px solid #ddd;
+  }
+  
+  .horizontal-timeline .items .items-list {
+  position: relative;
+  margin-right: 0;
+  }
+  
+  .horizontal-timeline .items .items-list:before {
+  content: "";
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: #ddd;
+  top: 0;
+  margin-top: -5px;
+  }
+  
+  .horizontal-timeline .items .items-list {
+  padding-top: 15px;
+  } */
+.sumtitle{
+  border-bottom: 1px solid #ff4545;
+}
+.sumimgdet{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sumimgdet p{
+  padding: 0;
+  margin: 0;
+}
+  .orderproimg{
+    height: 200px;
+  }
+  .orderproimg img{
+    height: 100%
+  }
+  .custom{
+    height: auto;
+  }
+  .ordercommon{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .proimg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20rem;
+  }
+  .proimg img{
+    height: 100%;
+  }

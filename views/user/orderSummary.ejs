@@ -1,24 +1,46 @@
 <%-include("userlayout/header.ejs")%>
-<div class="container">
-    <div class="row">
-        <%if(locals.orderDetail){%>
-            <%if(locals.orderDetail.products){%>
-                <%orderDetail.products.forEach((product)=>{%>
-                  
-                      <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="/assets/<%=product.productid.img[0]%>" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><%=product.productid.name%></h5>
-                            <p class="card-text"><%=product.size%></p>
-                            <p class="card-text"><%=product.qty%></p>
+<section class="custom">
+    <%if(locals.orderDetail){%>
+    <div class="container">
+        <div class="row my-4">
+            <div class="card p-0">
+                <div class="card-title sumtitle p-4">
+                    
+                    <h3 class="fw-bold">ORDER SUMMARY</h3>
+                    <div class="ordercommon fw-normal"><h4>ORDER ID:M<%=locals.orderDetail._id%></h4>
+                    <h4>Rs.<%=locals.orderDetail.totalprice%></h4></div>
+                </div>
+                <%if(locals.orderDetail.products){%>
+                    <%orderDetail.products.forEach((product)=>{%>
+                        <div class="card-body sumimgdet">
+                            <div class="proimg">
+                                <img src="/assets/<%=product.productid.img[0]%>" alt="">
+                            </div>
+                            <p>Size:<%=product.size%></p>
+                            <p>Quantity:<%=product.qty%></p>
+                            <p>Status:<%=product.status%></p>
+
                         </div>
-                      </div>
-              <%})%>
-        
-          <%}%>
-        <%}%>
+                    <%})%>
+                
+               <% }%>
+             
+                <div class="card-title sumfoot p-4">
+                    <h3>Address</h3>
+                    <div class="footdat fw-normal">
+                        <h4><%=locals.orderDetail.addressid.name%></h4>
+                        <h4><%=locals.orderDetail.addressid.phone%></h4>
+                        <h4><%=locals.orderDetail.addressid.email%></h4>
+                        <h4><%=locals.orderDetail.addressid.houseno%>,<%=locals.orderDetail.addressid.landmark%>,<%=locals.orderDetail.addressid.city%>,<%=locals.orderDetail.addressid.pincode%></h4>
+                        <h4><%=locals.orderDetail.addressid.state%></h4>
+                        <h4><%=locals.orderDetail.addressid.country%></h4>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <%}%>
+</section>
 
 
 

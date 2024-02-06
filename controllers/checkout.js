@@ -104,7 +104,7 @@ else{
       console.log('entered loop')
     for(i=0;i<productArray.length;i++){
       console.log("pid",productArray[i].productid,"size",productArray[i].size ,"qty",productArray[i].qty)
-      // const stockUpdate=await productModel.findOneAndUpdate({_id:productArray[i].productid,'size.label':productArray[i].size},{$inc:{'size.$.quantity':-productArray[i].qty}})
+      const stockUpdate=await productModel.findOneAndUpdate({_id:productArray[i].productid,'size.label':productArray[i].size},{$inc:{'size.$.quantity':-productArray[i].qty}})
       
     }
    }
@@ -124,6 +124,7 @@ console.log("entered razorpay")
    res.json(razorpayOrder)
    
 }
+
 
 
 
