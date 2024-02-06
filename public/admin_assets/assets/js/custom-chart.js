@@ -1,24 +1,23 @@
 
 
-window.onload=function weeklychart1(){
-
-  const data = [
-    { week: "week1", count: 10 },
-    { week: "week", count: 20 },
-    { week: "week", count: 15 },
-    { week: "week", count: 25 },
-    
-  ];
+window.onload=async function weeklychart1(){
+      console.log("fetch");
+  const url = '/admin/weekly-report'
+  const res = await fetch(url)
+  const detail=await res.json()
+  console.log(detail)
+  
+  const data =detail
 
 const chart = new Chart(
-    document.getElementById('myChart2'),
+    document.getElementById('myChart'),
     {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: data.map(row => row.week),
         datasets: [
           {
-            label: 'Acquisitions by year',
+            label: 'Total Orders per week',
             data: data.map(row => row.count)
           }
         ]
@@ -26,3 +25,4 @@ const chart = new Chart(
     }
   );
 }
+

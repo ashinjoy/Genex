@@ -5,6 +5,7 @@ const userManagementController=require("../controllers/userManagementController"
 const categoryController=require("../controllers/categoryController")
 const productController=require("../controllers/productController")
 const orderController=require("../controllers/adminorderManagement")
+const dashboardController =require("../controllers/dashboardController")
 
 
 const session=require("../middleware/session")
@@ -14,7 +15,12 @@ const multer=require("../utils/multer")
 adminRouter.get("/",session.admin_islogout,adminAuthController.load_adminlogin)
 adminRouter.post("/",session.admin_islogout,adminAuthController.adminlogin)
 
-adminRouter.get("/home",userManagementController.load_admindashboard)
+
+
+adminRouter.get("/weekly-report",dashboardController.weeklyReport)
+// adminRouter.get("/monthly-report",dashboardController.monthlyReport)
+
+adminRouter.get("/home",session.admin_islogin,userManagementController.load_admindashboard)
 adminRouter.get("/users",session.admin_islogin,userManagementController.load_usermanagement)
 adminRouter.get("/users/block",session.admin_islogin,userManagementController.blockuser)
 adminRouter.get("/users/unblock",session.admin_islogin,userManagementController.unblockuser)

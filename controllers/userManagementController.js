@@ -9,9 +9,10 @@ const load_admindashboard = async (req, res) => {
       const productsCount=await productModel.countDocuments({is_active:true})
       const ordersCount=await orderModel.countDocuments({})
       const categoryCount=await categoryModel.countDocuments({status:true})
-      utils.weeklyData()
+      const orderDetail=await orderModel.find({}).populate('userid')
+      console.log(orderDetail)
       console.log(productsCount,ordersCount)
-        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount});
+        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount,orderDetail});
     }
     catch(error){
 console.error(error)
@@ -47,5 +48,6 @@ const load_usermanagement = async (req, res) => {
       console.error(err);
     }
   };
+
 
   module.exports={load_admindashboard,load_usermanagement,blockuser,unblockuser}
