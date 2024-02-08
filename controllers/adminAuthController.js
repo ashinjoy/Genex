@@ -33,5 +33,17 @@ const load_adminlogin=async(req,res)=>{
     }
 }
 
+const adminlogout=async(req,res)=>{
+  try {
+    req.session.adminid = null
+    res.redirect("/admin")
+  } catch (error) {
+    console.log(error)
+  }
+ 
+}
 
-module.exports={load_adminlogin,adminlogin}
+
+
+
+module.exports={load_adminlogin,adminlogin,adminlogout}

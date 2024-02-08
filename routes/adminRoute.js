@@ -15,7 +15,7 @@ const multer=require("../utils/multer")
 adminRouter.get("/",session.admin_islogout,adminAuthController.load_adminlogin)
 adminRouter.post("/",session.admin_islogout,adminAuthController.adminlogin)
 
-
+adminRouter.get("/logout",session.admin_islogin,adminAuthController.adminlogout)
 
 adminRouter.get("/weekly-report",dashboardController.weeklyReport)
 // adminRouter.get("/monthly-report",dashboardController.monthlyReport)

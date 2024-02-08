@@ -23,6 +23,8 @@ userRouter.post("/login",session.user_islogout,userController.login)
 userRouter.get("/signup",userController.Loadsignup)
 userRouter.post("/signup",emailpresent,userController.signup)
 
+userRouter.get('/logout',session.user_islogin,userController.logout)
+
 userRouter.get("/email-verification",otp,userController.Load_otppage)
 userRouter.get("/generate-otp",otp,userController.sendotp)
 userRouter.post("/email-verification",otp,userController.verifyotp)

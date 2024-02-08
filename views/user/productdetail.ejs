@@ -28,7 +28,8 @@
                 src="/assets/<%=product.img[0]%>"
                 data-zoom-image="/assets/<%=product.img[0]%>"
                 alt="big-1"
-              style="aspect-ratio: 2/3"/>
+                style="aspect-ratio: 2/3"
+              />
             </a>
           </div>
           <div class="single-zoom-thumb">
@@ -137,16 +138,34 @@
             <div class="product_variant color">
               <h3>Available Options</h3>
               <label>Size</label>
-              <select name="size" id="size" onchange="fetchsize()">               
-                <option value="<%=product.size[0].quantity%>,<%=product.size[0].label%>">S</option>
-                <option value="<%=product.size[1].quantity%>,<%=product.size[1].label%>">M</option>
-                <option value="<%=product.size[2].quantity%>,<%=product.size[2].label%>">L</option>
+              <select name="size" id="size" onchange="fetchsize()">
+                <option
+                  value="<%=product.size[0].quantity%>,<%=product.size[0].label%>"
+                >
+                  S
+                </option>
+                <option
+                  value="<%=product.size[1].quantity%>,<%=product.size[1].label%>"
+                >
+                  M
+                </option>
+                <option
+                  value="<%=product.size[2].quantity%>,<%=product.size[2].label%>"
+                >
+                  L
+                </option>
               </select>
             </div>
             <div class="product_variant quantity">
+              <input type="hidden" id="prodid" value="<%=product._id%>">
               <label>quantity</label>
-              <input min="1" max="100" value="1" type="number"  id="qty"/>
-              <button class="button" type="button" id="addtocart_btn" onclick="addtocart('<%=product.id%>')">
+              <input min="1" max="100" value="1" type="number" id="qty" />
+              <button
+                class="button"
+                type="button"
+                id="addtocart_btn"
+                onclick="addtocart('<%=product.id%>')"
+              >
                 add to cart
               </button>
             </div>
@@ -161,7 +180,9 @@
             <div class="product_meta">
               <span>Category: <a href="#"><%=product.category.name%></a></span>
             </div>
-            <div id="prdtqty" class="text-success"><%=product.size[0].quantity%> item are remaining</div>
+            <div id="prdtqty" class="text-success">
+              <%=product.size[0].quantity%> item are remaining
+            </div>
           </form>
           <div class="priduct_social">
             <ul>
@@ -617,7 +638,7 @@
                   </div>
                 </div>
                 <div class="add_to_cart">
-                  <a href="" >Add to cart</a>
+                  <a href="">Add to cart</a>
                 </div>
               </figcaption>
             </figure>
@@ -740,57 +761,48 @@
 </section>
 <!--product area end-->
 <script>
+  const size = document.getElementById("size");
+  let stock = document.getElementById("prdtqty");
+  let quantity = document.getElementById("qty");
 
-const size=document.getElementById('size');
-let stock=document.getElementById('prdtqty')
-let quantity=document.getElementById('qty')
-
-
-  function fetchsize(){
-    const selectedsize=size.value
-    const selected=selectedsize.split(",")[0]
-    stock.innerHTML=selected+" items remaining";   
- }
-
-async function addtocart(productid){
-  try {
-    console.log("entered cart")
-    console.log(productid)
-    console.log(size.value)
-    const selectedSize= size.value.split(",")[1]
+  function fetchsize() {
+    const selectedsize = size.value;
     
-    const url=`/add-to-cart?id=${productid}&qty=${quantity.value}&size=${selectedSize}`
-    const res=await fetch(url)
-    const data=await res.json()
-    console.log(data.error)
-    console.log(res)
-    if(res.ok){
-      const result=await Swal.fire({title:"Added to cart",
-      icon:"success"
-      
-    })
-    if(result.isConfirmed){
-      window.location.reload()
+    const selected = selectedsize.split(",")[0];
+    stock.innerHTML = selected + " items remaining";
+  }
 
-  
+  async function addtocart(productid) {
+    try {
+      console.log("entered cart");
+      console.log(productid);
+      console.log(size.value);
+      const selectedSize = size.value.split(",")[1];
+      const selectedStock = size.value.split(",")[0];
+      const productId=document.getElementById("prodid").value
+      document.cookie =`${productId+selectedSize}=${selectedStock}`
+      const url = `/add-to-cart?id=${productid}&qty=${quantity.value}&size=${selectedSize}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log(data.error);
+      console.log(res);
+      if (res.ok) {
+        const result = await Swal.fire({
+          title: "Added to cart",
+          icon: "success",
+        });
+        if (result.isConfirmed)
+        {
+          window.location.reload();
+        }
+      } else if (res.status === 409) {
+        Swal.fire({ title: data.error, icon: "error" });
+      }
+    } catch (error) {
+      console.error(error);
     }
-    }
-    else if(res.status === 409){
-      Swal.fire({title:data.error,
-      icon:"error"
-    })
-    }
-    
-  } catch (error) {
-  console.error(error)
-
-}
-}
-
-
-
+  }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 <%-include("./userlayout/footer.ejs")%>

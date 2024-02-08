@@ -15,7 +15,8 @@ const logredirect = async (req, res) => {
 
 const Loadlogin = async (req, res) => {
   try {
-    res.render("user/userLogin");
+  const successMsg=  req.query ? req.query.message : null
+    res.render("user/userLogin",{successMsg});
   } catch (err) {
     console.log(err.message);
   }
@@ -46,7 +47,7 @@ const signup = async (req, res) => {
 
       console.log(userDetails);
       const userid = userDetails._id;
-      req.session.otp=userid
+      req.session.otp = userid;
       res.redirect("/email-verification");
     } else {
       res.render("user/userSignup", {
@@ -105,21 +106,21 @@ const sendotp = async (req, res) => {
 
 const verifyotp = async (req, res) => {
   try {
-    const {otp } = req.body;
-    const userid=req.session.otp
+    const { otp } = req.body;
+    const userid = req.session.otp;
     const otpverify = await otpModel.findOne({ userid: userid, otp: otp });
     if (otpverify) {
       const verified_user = await userModel.findByIdAndUpdate(
         { _id: userid },
         { is_verified: 1 }
       );
-      req.session.otp=null
-      res.redirect("/login");
+      req.session.otp = null;
+      const success = "User Successfully verified";
+      res.status(200).json(success)
     } else {
-      res.render("user/otp_page", { otperror: "THIS OTP IS INVALID" });
-      // setTimeout(async () => {
-      //   await userModel.findByIdAndDelete({ _id: userid });
-      // }, 120000);
+      const error = "Invalid OTP"
+      res.status(403).json(error)
+      
     }
   } catch (err) {
     console.error(err);
@@ -130,9 +131,9 @@ const login = async (req, res) => {
   try {
     console.log("entered login");
     const { email, password } = req.body;
-    console.log(email)
+    console.log(email);
     const loggeduser = await userModel.findOne({ email: email });
-console.log(loggeduser)
+    console.log(loggeduser);
     if (loggeduser) {
       const userpassword = await bcrypt.compare(password, loggeduser.password);
       if (userpassword) {
@@ -149,26 +150,24 @@ console.log(loggeduser)
       } else {
         res.render("user/userLogin", { error: "Invalid Credentials" });
       }
-    }
-    else{
-      console.log('Please Signup')
-    
+    } else {
+      console.log("Please Signup");
     }
   } catch (err) {
     console.error(err);
   }
 };
-const load_userhome=async(req,res)=>{
+const load_userhome = async (req, res) => {
   try {
-    const categoryAvailable=await categoryModel.find({status:true})
+    const categoryAvailable = await categoryModel.find({ status: true });
 
-    const productAvailable=await productModel.find({is_active:true})
-    
-    res.render("user/userhome",{categoryAvailable,productAvailable})
+    const productAvailable = await productModel.find({ is_active: true });
+
+    res.render("user/userhome", { categoryAvailable, productAvailable });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 const load_usershop = async (req, res) => {
   try {
     const product = await productModel
@@ -188,8 +187,13 @@ const load_usershop = async (req, res) => {
 const load_productdetail = async (req, res) => {
   const { id } = req.query;
   const product = await productModel.findById({ _id: id }).populate("category");
-  console.log(product)
+  console.log(product);
   res.render("user/productdetail", { product });
+};
+
+const logout = async (req, res) => {
+  req.session.userid = null;
+  res.redirect("/userhome");
 };
 
 module.exports = {
@@ -203,6 +207,6 @@ module.exports = {
   login,
   load_usershop,
   load_productdetail,
-
-  load_userhome
+  load_userhome,
+  logout,
 };

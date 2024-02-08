@@ -10812,3 +10812,9 @@ align-items: center;
   .proimg img{
     height: 100%;
   }
+
+  /* success Message */
+  .successborder{
+    border-color: green;
+    text-align: center;
+  }

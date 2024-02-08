@@ -103,7 +103,7 @@
  <%if(locals.otperror){%>
 <div class="alert alert-danger"><%=locals.otperror%></div>
 <%}%>
-  <form class="form-otp" action="/email-verification" method="post">
+  <form class="form-otp" >
     <h3>GEN-Z CLOTHING EMAIL VERIFICATION</h3>
     <label class="label-otp" for="otpInput">Enter 6-digit OTP:</label>
     <input class="input-otp" type="text" id="otpInput" maxlength="6" placeholder="Enter OTP" name="otp" required>
@@ -111,11 +111,32 @@
 
     <div id="timer" style="display: none;" class="timertext"></div>
     <button class="button-otp" id="sendOtpBtn" type="button">Send OTP</button>
-    <button class="button-otp" id="verifyBtn-otp" type="submit">Verify OTP</button>
+    <button class="button-otp" id="verifyBtn-otp" type="button" onclick="verifyOtp()">Verify OTP</button>
   </form>
 
 </div>
 <script src="/public/assets/js/client js/otpgenerator.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script> 
+
+    const otpField= document.getElementById('otpInput')
+    async function verifyOtp (){
+        console.log("Entered  Button click")
+        const otpInputValue=otpField.value
+        const url="/email-verification"
+        const data= {otp:otpInputValue}
+        const res= await fetch(url,{method:'post',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+        console.log(res)
+        if(res.ok){
+            await Swal.fire({icon:"success",title:"Verified"})
+            window.location.href ='/login'
+        }
+        else{
+            await Swal.fire({icon:"error",title:"Invalid OTP"})
+        }
+    }
+    
+</script>
 <%-include("./userlayout/footer.ejs")%>
 
 

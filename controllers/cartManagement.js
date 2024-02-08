@@ -63,14 +63,25 @@ const editquantity=async(req,res)=>{
   try {
 
     const {id,qty,pid}=req.query
+    console.log("cartid",id ,"Quantity:",qty ,"pid :",pid)
     let parsedqty=parseInt(qty)
     console.log(id)
     const {userid}=req.session
     const cartqty=await userModel.aggregate([{$match:{_id:new mongoose.Types.ObjectId(userid)}},{$unwind:"$cart"},{$match:{'cart._id':new mongoose.Types.ObjectId(id)}}])
     const cartProductSize=cartqty[0].cart.size
-    const editqty=await userModel.findOneAndUpdate({_id:userid,'cart._id':id},{$set:{'cart.$.qty':parsedqty}},{new:true})
-    console.log(editqty)
-   res.status(200).json({data:"success"})
+
+    const verifyQuantityStock=await productModel.aggregate([{$match:{_id:new mongoose.Types.ObjectId(pid)}},{$unwind:"$size"},{$match:{'size.label':cartProductSize}},{$project:{"Quantity":"$size.quantity",_id:0}}])
+    console.log("QuantityStock:",verifyQuantityStock)
+   const productQty=verifyQuantityStock[0].Quantity
+
+    if(productQty >= parsedqty){
+      const editqty=await userModel.findOneAndUpdate({_id:userid,'cart._id':id},{$set:{'cart.$.qty':parsedqty}},{new:true})
+      res.status(200).json({data:productQty})
+    }
+    else{
+      res.status(400).json({error:"There is no sufficient Stock"})
+    }
+
   } catch (error) {
     console.error(error)
   }
