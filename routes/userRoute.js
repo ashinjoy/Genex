@@ -10,6 +10,7 @@ const address=require("../controllers/addressManagement")
 const userProfile=require("../controllers/userProfileManagement")
 const orders=require("../controllers/orderMangement")
 const changepassword=require("../controllers/changepassword")
+const wallet=require("../controllers/walletManagement")
 
 
 
@@ -71,7 +72,9 @@ userRouter.post("/forgot-password",changepassword.forgotPassword)
 userRouter.get("/reset-password",changepassword.load_resetPassword)
 userRouter.post("/reset-password",changepassword.resetPassword)
 
-
+userRouter.get("/wallet",session.user_islogin,wallet.load_wallet)
+userRouter.post("/addMoney-wallet",wallet.addMoney_wallet)
+userRouter.post("/verify-walletPayment",wallet.verifypayment)
 
 
 module.exports=userRouter

@@ -26,4 +26,29 @@ return new Promise((resolve,reject)=>{
 }
 
 
-module.exports={generate_razorpayOrder}
+function generateOrder_Wallet(userid,amount){
+    return new Promise((resolve,reject)=>{
+        instance.orders.create({
+            amount: amount * 100,
+            currency: "INR",
+            receipt: userid,
+            notes: {
+                key1: "value3",
+                key2: "value2"
+            }
+            },function(err,order){
+                if(err){
+                    console.log(err)
+                }
+                else{
+                    console.log("New Order:",order)
+                     resolve(order)
+                }
+            })
+    })
+       
+    }
+
+
+
+module.exports={generate_razorpayOrder,generateOrder_Wallet}

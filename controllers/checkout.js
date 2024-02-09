@@ -2,6 +2,7 @@ const addressModel=require("../models/address")
 const userModel=require("../models/userModel")
 const orderModel=require("../models/order")
 const productModel=require("../models/productModel")
+const wallet=require("../models/wallet")
 const razorpay=require("../utils/razorpay")
 
 const { default: mongoose } = require("mongoose")
@@ -27,9 +28,11 @@ try {
 const userAddresssAvailable=await addressModel.find({userid:userid})
 const cartProducts=await userModel.findById({_id:userid},{cart:1,_id:0})
 console.log(cartProducts)
+const {name,houseno,landmark,city,state,phone,email,country,pincode,sum,check_method}=req.body
+
 if(userAddresssAvailable.length == 0){
-   const {name,houseno,landmark,city,state,phone,email,country,pincode,sum,check_method}=req.body
    const  {userid}= req.session
+   
    const Address={
       name:name,
       phone:phone,
@@ -45,6 +48,7 @@ if(userAddresssAvailable.length == 0){
    const userAddress=await addressModel.create(Address)
 
    console.log("useradd"+userAddress)
+ 
    const orders={
       userid:userid,
       addressid:userAddress._id,
@@ -58,15 +62,28 @@ if(userAddresssAvailable.length == 0){
       paymentMethod:check_method
       
    }
+   if(check_method === "wallet"){
+      console.log("entered wallet")
+      const walletAmount=await userModel.findById({_id:userid},{WalletBalance:1,_id:0})
+      console.log(walletAmount)
+      if(walletAmount.WalletBalance>=sum){
     ordersave=await orderModel.create(orders)
-   console.log("order",ordersave)
-   // console.log("before")
-   // const productsArray= ordersave.products
-   // console.log("after")
 
-   console.log("products",productsArray)
+      }
+      else{
+         res.send(400).json({walleterror:"Insufficient amount in wallet to Purchase"})
+      }
+   }
+   else{
+      ordersave=await orderModel.create(orders)
+      console.log("order",ordersave)
+   }
+    
+   // console.log("before")
+   const productArray= ordersave.products
+   // console.log("after")
    if(ordersave){
-      const deletefomCart=await userModel.findById({_id:userid},{$pull:{cart:{}}})
+      const deletefomCart=await userModel.findByIdAndUpdate({_id:userid},{$pull:{cart:{}}})
       console.log(deletefomCart)
       for(i=0;i<productArray.length;i++){
          console.log("pid",productArray[i].productid,"size",productArray[i].size ,"qty",productArray[i].qty)
@@ -95,7 +112,9 @@ else{
       paymentMethod:check_method
       
    }
-    ordersave=await orderModel.create(orders)
+ 
+      ordersave=await orderModel.create(orders)
+
    console.log("order"+ordersave)
    const productArray=ordersave.products
    if(ordersave){
@@ -110,13 +129,36 @@ else{
    }
      
 }
-console.log(ordersave.paymentMethod)
+// console.log(ordersave.paymentMethod)
 
 if(ordersave.paymentMethod === "cod"){
 
    res.status(200).json({codSucess:"sucess"})
  
 }
+else if(ordersave.paymentMethod === "wallet"){
+   console.log("enteered wallet");
+   const walletAmount=await userModel.findById({_id:userid},{WalletBalance:1,_id:0})
+   console.log(walletAmount)
+   if(walletAmount.WalletBalance>=sum){
+const walletBalanceReduce=await userModel.findByIdAndUpdate({_id:userid},{$inc:{WalletBalance:-ordersave.totalprice}})
+const walletcreate={
+   redeemedAmount:ordersave.totalprice,
+   orderId:ordersave._id,
+   paymentMethod:ordersave.paymentMethod,
+   userid:userid
+   
+}
+const walletcreation=await wallet.create(walletcreate)
+ res.status(200).json({walletsucess:"sucees"})
+   }
+   else{
+      const order=await orderModel.findByIdAndDelete({_id:orders._id})
+      res.status(400).json({walleterror:"Insufficient amount in wallet to Purchase"})
+
+   }
+}
+
 else{
 console.log("entered razorpay")
  const razorpayOrder=await razorpay.generate_razorpayOrder(ordersave._id,ordersave.totalprice)

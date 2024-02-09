@@ -1,0 +1,103 @@
+<%-include("userlayout/header.ejs")%>
+<div class="card col-sm-12 col-md-7 col-lg-7 card border-dark mb-3 mx-auto">
+    <div class="card-header">
+        <b>WALLET</b>
+        <b class="float-end">BALANCE:</b>
+    </div>
+    <div class="card-body text-dark">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+           
+            </tbody>
+          </table>
+            <div class="user-actions">
+                <h3> 
+                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                    Wallet Topup
+                    <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_coupon" aria-expanded="true">Add Amount</a>     
+
+                </h3>
+                 <div id="checkout_coupon" class="collapse" data-parent="#accordion">
+                    <div class="checkout_info coupon_info">
+                        <form >
+                            <input placeholder="Add amount" type="number" id="addAmount">
+                            <button type="button" onclick="addWalletAmount()">Add amount</button>
+                        </form>
+                    </div>
+                </div>    
+            </div>    
+       </div>
+    </div>
+</div>
+<script>
+async function addWalletAmount(){
+url="/addMoney-wallet"
+const addWalletMoney=document.getElementById("addAmount").value
+const postdata={
+  balance:addWalletMoney
+}
+const res=await fetch(url,{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
+const data=await res.json()
+generatePayment(data)
+}
+
+function generatePayment(order){
+    console.log("hi")
+    var options = {
+    "key": "rzp_test_aykCH4paLrlr2m", 
+    "amount": order.amount,
+    "currency": "INR",
+    "name": "Genex clothing", 
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id":order.id , 
+    "handler": function (response){
+   
+        paymentVerify(response,order)
+    },
+    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com", 
+        "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+    paymentVerify(response,order)
+   })
+rzp1.open();
+   }
+
+   async function paymentVerify(payment,order){
+    const url="/verify-walletPayment"
+    const data={
+      payment:payment,
+      order:order
+    }
+    const response=await fetch(url,{method:"post",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)},)
+
+   }
+    
+</script>
+              
+<%-include("userlayout/footer.ejs")%>

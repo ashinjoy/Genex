@@ -1,5 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const orderModel = require("../models/order");
+const userModel=require("../models/userModel")
+const wallet=require("../models/wallet")
 const crypto = require("crypto");
 const load_orderpage = async (req, res) => {
   try {
@@ -16,6 +18,7 @@ const load_orderpage = async (req, res) => {
 };
 const cancelorder = async (req, res) => {
   try {
+    const {userid}=req.session
     console.log("entered cannceled order");
     const { oid, pid } = req.query;
     console.log(oid);
@@ -45,6 +48,12 @@ const cancelorder = async (req, res) => {
       { _id: oid, "products.productid": pid },
       { $inc: { totalprice: -priceReduction } }
     );
+  const  order=await orderModel.findById({_id:oid})
+  const paymentMethod =order.paymentMethod
+    if(paymentMethod === "wallet"){
+      const updatewalletBalance=await userModel.findByIdAndUpdate({_id:userid},{$inc:{WalletBalance:priceReduction}})
+      const  walletRefund=await wallet.findOneAndUpdate({orderId:oid},{$inc:{WalletBalance:priceReduction}})
+    }
     res.status(200).json({ data: "success" });
   } catch (error) {
     console.error(error);
