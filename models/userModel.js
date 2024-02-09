@@ -45,6 +45,11 @@ default:[]
 createdAt:{
   type:Date,
   default:Date.now
+},
+WalletBalance:{
+  type:Number,
+  default:0
+
 }
 });
 const userModel = mongoose.model("user", userSchema);

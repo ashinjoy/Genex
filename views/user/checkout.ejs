@@ -219,6 +219,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="panel-default">
+                                    <input id="payment_defult" name="check_method" type="radio" data-bs-target="createp_account" value="wallet" class="payment"/>
+                                    <label for="payment_defult" data-bs-toggle="collapse" data-bs-target="#collapsedefult" aria-controls="collapsedefult">Wallet </label>
+                                    
+                                    <div id="method" class="collapse one" data-parent="#accordion">
+                                    <div class="card-body1">
+                                       <p>Purchase through Wallet</p>
+                                    </div>
+                                </div>
+                                </div>
+
+
+
+
+
                                 <div class="order_button">
                                     <button type="button" onclick="paymentProceed()" >Proceed Payment</button> 
                                 </div>    
@@ -229,6 +245,8 @@
             </div> 
         </div>       
     </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         console.log("hello")
    const uname = document.getElementById("uname")
@@ -239,6 +257,7 @@
    const state = document.getElementById("state")
    const phone = document.getElementById("phone")
    const email = document.getElementById("email")
+   const country= document.getElementById("country")
    const addresstag=document.getElementById("addressRadio")
    const sum=document.getElementById("sum").value
    const paymentradio=document.querySelectorAll('.payment')
@@ -252,7 +271,7 @@
    async function paymentProceed(){ 
     console.log("hello enterd function")
     let  selectedpayment
- for(i=0;i<2;i++){
+ for(i=0;i<3;i++){
     if(paymentradio[i].checked == true){
     selectedpayment=paymentradio[i].value
     }
@@ -262,11 +281,13 @@ const addresstag=document.getElementById("addressRadio")
 console.log(addresstag)
 let address
 
-   if(addresstag && addresstag.checked){
+   if(addresstag && addresstag.checked)
+   {
     console.log("hi")
      address= addresstag.value
    }
-   else{
+   else
+   {
     address="nill"
    }
    let payment
@@ -282,6 +303,7 @@ let address
         state:state? state.value:'nill',
         phone:phone? phone.value:'nill',
         email:email? email.value:'nill',
+        country:country?country.value:'nill',
         address:address,
         check_method:selectedpayment,
         sum:sum
@@ -296,6 +318,15 @@ const response=await res.json()
 
 if(response.codSucess == "sucess"){
     window.location.href="/ordersuccess"
+}
+else if(response.walletsucess){
+   await Swal.fire({icon:"success",title:response.walletsucess})
+
+    window.location.href="/ordersuccess"
+}
+
+else if(response.walleterror){
+    Swal.fire({icon:"error",title:response.walleterror})
 }
 else{
 
