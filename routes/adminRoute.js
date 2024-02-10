@@ -18,7 +18,7 @@ adminRouter.post("/",session.admin_islogout,adminAuthController.adminlogin)
 adminRouter.get("/logout",session.admin_islogin,adminAuthController.adminlogout)
 
 adminRouter.get("/weekly-report",dashboardController.weeklyReport)
-// adminRouter.get("/monthly-report",dashboardController.monthlyReport)
+adminRouter.get("/monthly-report",dashboardController.monthlyreport)
 
 adminRouter.get("/home",session.admin_islogin,userManagementController.load_admindashboard)
 adminRouter.get("/users",session.admin_islogin,userManagementController.load_usermanagement)
