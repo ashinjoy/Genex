@@ -62,6 +62,7 @@ userRouter.post("/verifyPayment",session.user_islogin,orders.verifyPayment)
 userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
 userRouter.get("/ordersummary",session.user_islogin,orders.load_OrderSummary)
 userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
+userRouter.get("/invoice-download",orders.invoice)
 
 userRouter.get("/change-password",session.user_islogin,changepassword.load_ChangePassword)
 userRouter.post("/change-password",session.user_islogin,changepassword.changePassword)
