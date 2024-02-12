@@ -7,24 +7,18 @@ const utils=require("../utils/filter")
 const load_admindashboard = async (req, res) => {
     try{
       const productsCount=await productModel.countDocuments({is_active:true})
-      const ordersCount=await orderModel.countDocuments({})
+      const ordersCount=await orderModel.aggregate([{$unwind:"$products"},{$match:{'products.status':'delivery'}},{$count:'count'}])
+      console.log('ordersCount',ordersCount)
       const categoryCount=await categoryModel.countDocuments({status:true})
-      // const orderDetail=await orderModel.find({}).populate('userid')
-
-        // const pageNumber= req.query.page||1
-        // const limit=8
-        // const docSkipped=(pageNumber-1)*limit
-        // const orders=await orderModel.find({}).skip(docSkipped).limit(8).populate('userid')
-
-      // console.log(orders)
-      
+      const revenue=await orderModel.aggregate([{$unwind:"$products"},{$match:{'products.status':'delivery'}},{$group:{_id:null,total:{$sum:"$totalprice"}}}])
+      console.log(revenue)
       console.log(productsCount,ordersCount)
       const orderCount=await orderModel.countDocuments({})
       console.log(orderCount)
       const pageLimit=8
       const totalPage=Math.ceil(orderCount/pageLimit)
       console.log(totalPage)
-        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount,totalPage});
+        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount,totalPage,revenue});
     }
     catch(error){
 console.error(error)

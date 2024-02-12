@@ -67,16 +67,18 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card card-body mb-4">
+                    <%if(locals.revenue){%>
                     <article class="icontext">
                         <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                         <div class="text">
                             <h6 class="mb-1 card-title">Revenue</h6>
-                            <span>$13,456.5</span>
+                            <span>Rs :<%= locals.revenue ? locals.revenue[0].total : 0 %></span>
                             <span class="text-sm">
                                 Shipping fees are not included
                             </span>
                         </div>
                     </article>
+                    <% } %>
                 </div>
             </div>
             <%if(locals.ordersCount){%>
@@ -85,7 +87,7 @@
                     <article class="icontext">
                         <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                         <div class="text">
-                            <h6 class="mb-1 card-title">Orders</h6> <span><%=locals.ordersCount%></span>
+                            <h6 class="mb-1 card-title">Orders</h6> <span><%=locals.ordersCount ? locals.ordersCount[0].count : 0%></span>
                             <span class="text-sm">
                                 Including orders in transit
                             </span>
