@@ -3,6 +3,7 @@ const orderModel = require("../models/order");
 const userModel=require("../models/userModel")
 const wallet=require("../models/wallet")
 const crypto = require("crypto");
+const invoiceGenerator=require("../utils/invoice")
 const load_orderpage = async (req, res) => {
   try {
     const { userid } = req.session;
@@ -112,10 +113,24 @@ const verifyPayment = async (req, res) => {
   }
 };
 
+const invoice=async(req,res)=>{
+const {userid}=req.session
+const {orderid}=req.query
+const userDetail=await userModel.findById({_id:userid})
+const orderDetail=await orderModel.aggregate([{$match:{_id:new mongoose.Types.ObjectId(orderid)}},{$lookup:{from:'addresses',localField:'addressid',foreignField:'_id',as:'addressDetail'}},{$lookup:{from:'products',localField:'products.productid',foreignField:'_id',as:'productDetails'}}])
+console.log("userDetail",userDetail)
+console.log("orderDetail",orderDetail)
+
+const invoiceCreate=await invoiceGenerator.generateInvoice(userDetail,orderDetail)
+console.log(invoiceCreate)
+res.status(200).json(invoiceCreate)
+}
+
 module.exports = {
   load_orderpage,
   cancelorder,
   load_orderSuccessPage,
   load_OrderSummary,
   verifyPayment,
+  invoice
 };
