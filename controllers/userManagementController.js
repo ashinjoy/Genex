@@ -9,10 +9,22 @@ const load_admindashboard = async (req, res) => {
       const productsCount=await productModel.countDocuments({is_active:true})
       const ordersCount=await orderModel.countDocuments({})
       const categoryCount=await categoryModel.countDocuments({status:true})
-      const orderDetail=await orderModel.find({}).populate('userid')
-      console.log(orderDetail)
+      // const orderDetail=await orderModel.find({}).populate('userid')
+
+        // const pageNumber= req.query.page||1
+        // const limit=8
+        // const docSkipped=(pageNumber-1)*limit
+        // const orders=await orderModel.find({}).skip(docSkipped).limit(8).populate('userid')
+
+      // console.log(orders)
+      
       console.log(productsCount,ordersCount)
-        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount,orderDetail});
+      const orderCount=await orderModel.countDocuments({})
+      console.log(orderCount)
+      const pageLimit=8
+      const totalPage=Math.ceil(orderCount/pageLimit)
+      console.log(totalPage)
+        res.render("admin/admindashboard",{productsCount,ordersCount,categoryCount,totalPage});
     }
     catch(error){
 console.error(error)

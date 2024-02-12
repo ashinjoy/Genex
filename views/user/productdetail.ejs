@@ -760,6 +760,7 @@
   </div>
 </section>
 <!--product area end-->
+
 <script>
   const size = document.getElementById("size");
   let stock = document.getElementById("prdtqty");
@@ -780,11 +781,14 @@
       const selectedSize = size.value.split(",")[1];
       const selectedStock = size.value.split(",")[0];
       const productId=document.getElementById("prodid").value
-      document.cookie =`${productId+selectedSize}=${selectedStock}`
-      const url = `/add-to-cart?id=${productid}&qty=${quantity.value}&size=${selectedSize}`;
+      console.log(productId)
+      
+      const url= `/add-to-cart?id=${productid}&qty=${quantity.value}&size=${selectedSize}`
+      console.log(url)
       const res = await fetch(url);
+      console.log(res)
       const data = await res.json();
-      console.log(data.error);
+      console.log(data);
       console.log(res);
       if (res.ok) {
         const result = await Swal.fire({

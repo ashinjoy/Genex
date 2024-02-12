@@ -3,6 +3,7 @@ const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const addtocart = async (req, res) => {
   try {
+    console.log("entered addtocart")
     const { id, qty, size } = req.query;
     const qtySelected = parseInt(qty);
     console.log("productid",id);

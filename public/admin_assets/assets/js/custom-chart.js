@@ -1,7 +1,8 @@
 
+let orderBody=document.getElementById('ordtableBody')
 
 window.onload=async function weeklychart1(){
-      console.log("fetch");
+  console.log("fetch");
   const url = '/admin/weekly-report'
   const res = await fetch(url)
   const detail=await res.json()
@@ -24,7 +25,104 @@ const chart = new Chart(
       }
     }
   );
+
+const pageurl=`/admin/defaultpagination?page=1`
+const response = await fetch(pageurl)
+const orderdata=await response.json()
+console.log(orderdata)
+ orderBody.innerHTML=''
+orderdata.forEach(orderdata => {
+    injectData(orderdata)
+});
+
+
+
 }
+
+async function pagination(index){
+  const pageurl=`/admin/pagination?page=${index}`
+  const response = await fetch(pageurl)
+  const orderdata=await response.json()
+  console.log(orderdata)
+ orderBody.innerHTML=''
+  orderdata.forEach(orderdata => {
+      injectData(orderdata)
+  });
+}
+
+
+
+function injectData(orders){
+
+  const row =document.createElement('tr')
+  //checkbox
+  
+  
+  const checkboxCell = document.createElement('td');
+  checkboxCell.classList.add('text-center');
+  const checkboxDiv = document.createElement('div');
+  checkboxDiv.classList.add('form-check');
+  const checkboxInput = document.createElement('input');
+  checkboxInput.classList.add('form-check-input');
+  checkboxInput.setAttribute('type', 'checkbox');
+  checkboxInput.id = 'transactionCheck02';
+  const checkboxLabel = document.createElement('label');
+  checkboxLabel.classList.add('form-check-label');
+  checkboxLabel.setAttribute('for', 'transactionCheck02');
+  checkboxDiv.appendChild(checkboxInput);
+  checkboxDiv.appendChild(checkboxLabel);
+  checkboxCell.appendChild(checkboxDiv);
+  row.appendChild(checkboxCell);
+  
+  // orderid cell
+  const orderIdCell=document.createElement('td')
+  const orderlink=document.createElement('a')
+  orderlink.classList.add('fw-bold')
+  orderlink.id='orderid'
+  orderlink.innerHTML=orders._id
+  orderIdCell.appendChild(orderlink)
+  row.appendChild(orderIdCell)
+  
+  // customername cell
+  const customerNameCell=document.createElement('td')
+  customerNameCell.textContent=orders.userdetails[0].uname
+  row.appendChild(customerNameCell)
+  
+  // date cell
+  const dateCell=document.createElement('td')
+  dateCell.innerHTML=orders.createdAt
+  row.appendChild(dateCell)
+  
+  // totalCell cell
+  const totalCell=document.createElement('td')
+  totalCell.innerHTML=orders.totalprice
+  row.appendChild(totalCell)
+  
+  
+  
+  // payment status
+  const paymentCell=document.createElement('td')
+  const status=document.createElement('span')
+  status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+  status.innerHTML=orders.products.status
+  paymentCell.appendChild(status)
+  row.appendChild(paymentCell)
+  // payment method
+  
+  const paymentMethodCell=document.createElement('td')
+  paymentMethodCell.innerHTML=orders.paymentMethod
+  
+  row.appendChild(paymentMethodCell)
+  // // button cell
+  
+  const viewDetailCell=document.createElement('a')
+  viewDetailCell.classList.add('btn', 'btn-xs')
+  viewDetailCell.innerHTML='View Detail'
+  row.appendChild(viewDetailCell)
+  
+  orderBody.appendChild(row)
+  
+  }
 
 document.getElementById("month").addEventListener("click",monthlydata)
 
