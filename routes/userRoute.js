@@ -33,7 +33,7 @@ userRouter.post("/email-verification",otp,userController.verifyotp)
 userRouter.get("/usershop",userController.load_usershop)
 userRouter.get("/productdetail",userController.load_productdetail)
 
-userRouter.get("/add-to-cart",session.user_islogin,cart.addtocart)
+userRouter.get("/add-to-cart",cart.addtocart)
 userRouter.get("/loadcart",session.user_islogin,cart.loadcart)
 userRouter.get("/edit-qty",session.user_islogin,cart.editquantity)
 userRouter.get("/delete-cartitems",session.user_islogin,cart.deleteCart)

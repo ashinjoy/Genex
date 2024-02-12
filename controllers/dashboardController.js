@@ -38,7 +38,7 @@ console.log("json data about to send")
 res.status(200).json([{filtered_Datedata},{filteredOrders}])
 
 
-
 }
+
 
 module.exports={weeklyReport,monthlyreport}

@@ -6,6 +6,7 @@ const categoryController=require("../controllers/categoryController")
 const productController=require("../controllers/productController")
 const orderController=require("../controllers/adminorderManagement")
 const dashboardController =require("../controllers/dashboardController")
+const pagination=require("../controllers/paginationController")
 
 
 const session=require("../middleware/session")
@@ -24,6 +25,14 @@ adminRouter.get("/home",session.admin_islogin,userManagementController.load_admi
 adminRouter.get("/users",session.admin_islogin,userManagementController.load_usermanagement)
 adminRouter.get("/users/block",session.admin_islogin,userManagementController.blockuser)
 adminRouter.get("/users/unblock",session.admin_islogin,userManagementController.unblockuser)
+
+adminRouter.get("/defaultpagination",pagination.pagination)
+adminRouter.get("/pagination",pagination.pagination)
+
+
+
+
+
 
 adminRouter.get("/categories",session.admin_islogin,categoryController.load_category)
 adminRouter.post("/categories",multer.single('catimg'),categoryController.add_category)
