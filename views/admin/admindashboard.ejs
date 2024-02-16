@@ -61,7 +61,7 @@
                 <p>Whole data about your business here</p>
             </div>
             <div>
-                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
+                <!-- <a href="/admin/salesreport" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a> -->
             </div>
         </div>
         <div class="row">
@@ -307,7 +307,7 @@
                 <h4 class="card-title">Latest orders</h4>
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                        <div class="custom_select">
+                        <!-- <div class="custom_select">
                             <select class="form-select select-nice">
                                 <option selected>All Categories</option>
                                 <option>Women's Clothing</option>
@@ -321,20 +321,20 @@
                                 <option>Shoes</option>
                                 <option>Mother & Kids</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="col-md-2 col-6">
+                    <!-- <div class="col-md-2 col-6">
                         <input type="date"  class="form-control">
-                    </div>
+                    </div> -->
                     <div class="col-md-2 col-6">
                         <div class="custom_select">
-                            <select class="form-select select-nice">
-                                <option selected>Status</option>
+                            <!-- <select class="form-select select-nice" id="report" onchange="filterReport()">
+                                
                                 <option>All</option>
-                                <option>Paid</option>
-                                <option>Chargeback</option>
-                                <option>Refund</option>
-                            </select>
+                                <option value="yearly">yearly</option>
+                                <option value="monthly">monthly</option>
+                                <option value="weekly">weekly</option>
+                            </select> -->
                         </div>
                     </div>
                 </div>
@@ -343,6 +343,7 @@
                 <div class="table-responsive">
                     <div class="table-responsive">
                         <table class="table align-middle table-nowrap mb-0">
+
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col" class="text-center">
@@ -493,6 +494,13 @@
 // orderBody.appendChild(row)
 
 // }
+async function filterReport(){
+    console.log('heeeeeeeeeeeeee')
+const  filter= document.getElementById('report')
+const url='monthwise-report'
+const res=await fetch(url)
+const data=await res.json()
+}
 </script>
 
     <%-include("./adminlayout/footer.ejs")%>

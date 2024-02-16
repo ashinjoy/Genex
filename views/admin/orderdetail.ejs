@@ -73,11 +73,13 @@
                         <small class="text-muted">Order ID: #<%=order._id%></small>
                     </div>
                     <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                        <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" onchange="changestatus('<%=order._id%>','<%=order.products.productid%>')" id="status">
+                        <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" onchange="changestatus('<%=order._id%>','<%=order.products.productid%>','<%=order.userid%>')" id="status">
                             <option value="">Change status</option>
                             <option value="processing">Processing</option>
                             <option value="dispatched">dispatched</option>
                             <option value="shipped">Shipped</option>
+                            <option value="refund">refunded</option>
+                            <option value="paid">paid</option>
                             <option value="delivery">Delivered</option>
                             <option value="canceled">canceled</option>
 
@@ -222,10 +224,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        async function changestatus(oid,pid){
+        async function changestatus(oid,pid,userid){
             let statuschange=document.getElementById('status')
            let value= statuschange.value
-            url=`/admin/change-orderstatus?oid=${oid}&pid=${pid}&value=${value}`
+            url=`/admin/change-orderstatus?oid=${oid}&pid=${pid}&value=${value}&uid=${userid}`
             const res= await fetch(url)
             if(res.ok){
             await Swal.fire({title:"Status Changed",icon:"success"})

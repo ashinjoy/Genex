@@ -7,10 +7,10 @@ const utils=require("../utils/filter")
 const load_admindashboard = async (req, res) => {
     try{
       const productsCount=await productModel.countDocuments({is_active:true})
-      const ordersCount=await orderModel.aggregate([{$unwind:"$products"},{$match:{'products.status':'delivery'}},{$count:'count'}])
+      const ordersCount=await orderModel.aggregate([{$unwind:"$products"},{$match:{$or:[{'products.status':"delivery"},{'products.status':'paid'}]}},{$count:'count'}])
       console.log('ordersCount',ordersCount)
       const categoryCount=await categoryModel.countDocuments({status:true})
-      const revenue=await orderModel.aggregate([{$unwind:"$products"},{$match:{'products.status':'delivery'}},{$group:{_id:null,total:{$sum:"$totalprice"}}}])
+      const revenue=await orderModel.aggregate([{$unwind:"$products"},{$match:{$or:[{'products.status':"delivery"},{'products.status':'paid'}]}},{$group:{_id:null,total:{$sum:"$totalprice"}}}])
       console.log(revenue)
       console.log(productsCount,ordersCount)
       const orderCount=await orderModel.countDocuments({})

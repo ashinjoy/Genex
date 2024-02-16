@@ -65,6 +65,7 @@
                         value="<%=product.qty%>"
                         id="qty<%=index%>"
                         onchange="changeTotal('<%=index%>','<%=product._id%>','<%=product.productid._id%>')"
+                        onkeydown="return onlyUpDownArrows(event);"
                       />
                     </td>
                     <td class="product_total" id="totalprice<%=index%>">
@@ -153,7 +154,8 @@
     let newtotal = newarr;
     totalamount.innerHTML = newtotal;
   };
-function cartTotal () {
+
+  function cartTotal() {
     let Nodelist = document.querySelectorAll(".product_total");
     let array = Array.from(Nodelist);
     console.log(array);
@@ -166,12 +168,68 @@ function cartTotal () {
     }, 0);
     let newtotal = newarr;
     totalamount.innerHTML = newtotal;
-  };
+  }
+  function onlyUpDownArrows(event) {
+    
+    if (event.keyCode === 38 || event.keyCode === 40) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
+  function setMaxQty(qty, index) {
+    console.log("Maxquantity", qty);
+    console.log(typeof qty);
+    console.log("maxqty");
+    let input = document.getElementById(`qty${index}`);
+    console.log(input);
+    input.max = qty;
+    console.log(input);
+  }
+
+  // fetch productQty from db
+  async function fetchQty(cartid, qty, pid, index) {
+    let url = `/edit-qty?id=${cartid}&qty=${qty}&pid=${pid}`;
+    console.log(url);
+    const changeqty = await fetch(url);
+    console.log(changeqty);
+    const data = await changeqty.json();
+    console.log(data);
+    setMaxQty(data.qty, index);
+
+    if (!changeqty.ok) {
+      console.log("eneterd ok function");
+      document
+        .getElementById("checkout_link")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          await Swal.fire({
+            icon: "error",
+            title: "Insufficient Quantity",
+            text: "reduce the Quantity to purchase",
+          });
+        });
+      Swal.fire({
+        icon: "warning",
+        title: data.error,
+        text: "reduce the quantity to place order",
+      });
+    } else {
+      console.log("eneterd not ok function");
+
+      //commented now because it is unwanetd now notice it
+      window.location.reload();
+    }
+  }
 
   async function changeTotal(index, cartid, pid) {
+    console.log(index);
     console.log("entered changeTotal");
     console.log("productid:", pid);
     const quantity = document.getElementById("qty" + index);
+    console.log(quantity);
     const price = document.getElementById("salesprice" + index);
     const productTotal = document.getElementById("totalprice" + index);
     const selectedqty = quantity.value;
@@ -179,54 +237,8 @@ function cartTotal () {
     const newTotal = price.innerHTML;
     const total = parseFloat(newTotal);
     productTotal.innerHTML = qty * total;
-    console.log("hi");
-    cartTotal()
-    // const allCookies = document.cookie;
-    // console.log("cookies", allCookies, typeof allCookies);
-    // const newArr = allCookies.split(""); 
-    // console.log(newArr);
-
-    // const stockvalue = newArr[1];
-    // console.log("Stockvalue:", stockvalue);
-    // const parsedQty = parseInt(stockvalue);
-    // console.log(quantity.value);
-
-    // if (parsedQty < quantity.value) {
-    //   console.log("enterred prevent");
-    //   document
-    //     .getElementById("checkout_link")
-    //     .addEventListener("click", (event) => {
-    //       event.preventDefault();
-    //     });
-    //   Swal.fire({
-    //     icon: "warning",
-    //     title: "Insufficient Stock",
-    //     text: "Reduce the Quantity",
-    //   });
-    // } else {
-      let url = `/edit-qty?id=${cartid}&qty=${qty}&pid=${pid}`;
-      console.log(url);
-      const changeqty = await fetch(url);
-      console.log(changeqty)
-      const data = await changeqty.json();
-      console.log(data);
-      if(!changeqty.ok){
-        document
-        .getElementById("checkout_link")
-        .addEventListener("click", (event) => {
-          event.preventDefault();
-        });
-        Swal.fire({icon:"warning",
-         title:data.error,
-        text:"reduce the quantity to place order"})
-
-      }
-      else{
-       window.location.reload()
-        console.log("Quantity updated Successfully")
-      }
-    
-    
+    cartTotal();
+    fetchQty(cartid, qty, pid, index);
   }
   async function deleteitem(cartproductid) {
     console.log(cartproductid);
@@ -244,6 +256,4 @@ function cartTotal () {
       }
     }
   }
-
-
 </script>

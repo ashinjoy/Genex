@@ -1,34 +1,107 @@
 <%-include("userlayout/header.ejs")%>
 <%if(locals.userAdrress){%>
-    <%userAdrress.forEach((address)=>{%>
-        <div class="container">
-            <div class="row">
-                <div class="card col-md-12 w-75 mx-auto">
-                    <div class="card-head p-3"><h3 class="fw-bold">Addresses</h3></div>
-                    <div class="card-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Name:<%=address.name%></h5>
-                                <h6>Phone:<%=address.phone%></h6>
-                                <h6>Email:<%=address.email%></h6>
-                                <h6>houseno:<%=address.houseno%></h6>
-                                <h6>Landmark:<%=address.landmark%></h6>
-                                <h6>city:<%=address.city%></h6>
-                                <h6>state:<%=address.state%></h6>
-                                <h6>pincode:<%=address.pincode%></h6>
-                                <h6>country:<%=address.country%></h6>      
-                                <a href="/add-address"><button class="btn ">Add Address</button></a>
-                                <div class="float-end"><a href="/edit-address/?id=<%=address._id%>"><button class="btn ">Edit </button></a><a href="/remove-address/?id=<%=address._id%>"><button class="btn">Remove</button></a></div>
+   <% if(locals.userAdrress.length > 0 ){%>
+        <%userAdrress.forEach((address)=>{%>
+            <div class="container">
+                <div class="row">
+                    <div class="card col-md-12 w-75 mx-auto">
+                        <div class="card-head p-3"><h3 class="fw-bold">Addresses</h3></div>
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Name:<%=address.name%></h5>
+                                    <h6>Phone:<%=address.phone%></h6>
+                                    <h6>Email:<%=address.email%></h6>
+                                    <h6>houseno:<%=address.houseno%></h6>
+                                    <h6>Landmark:<%=address.landmark%></h6>
+                                    <h6>city:<%=address.city%></h6>
+                                    <h6>state:<%=address.state%></h6>
+                                    <h6>pincode:<%=address.pincode%></h6>
+                                    <h6>country:<%=address.country%></h6>      
+                                    <a href="/add-address"><button class="btn ">Add Address</button></a>
+                                    <div class="float-end"><a href="/edit-address/?id=<%=address._id%>"><button class="btn ">Edit </button></a><a href="/remove-address/?id=<%=address._id%>"><button class="btn">Remove</button></a></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            
+       <% })%>
+    <%} else{%>
+    
+        <div class="customer_login" >
+        <div class="container">
+          <div class="row"></div><div class="col-lg-6 col-md-6 mx-auto">
+        <div class="account_form register">
         
-   <% })%>
+      
+          <form action="/add-address" method="post" id="addform">
+            <p>
+              
+                  <label> Name <span>*</span></label>
+                  <input type="text" name="name"  id="name">    
+                  <div id="error1"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label>Street Address</label>
+                  <input placeholder="House number and street name" type="text" name="houseno"  id="street">     
+                  <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label>Landmark</label>
+                  <input placeholder="landmark or Area" type="text" name="landmark"   id="landmark">     
+                  <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label>Pincode</label>
+                  <input  type="number" name="pincode"   id="pincode">     
+                  <div id="error4"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label>Town / City</label>
+                  <input  type="text" name="city"   id="city">   
+                  <div id="error5"  style="display: none;" class="alert alert-danger"></div>
+      
+                </p>
+                <p>
+                  <label>State  <span>*</span></label>
+                  <input type="text" name="state"   id="state">        
+                  <div id="error6"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label>Phone<span>*</span></label>
+                  <input type="text" name="phone"   id="phone">    
+                  <div id="error7"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <label> Email Address <span>*</span></label>
+                  <input type="text" name="email"   id="email">     
+                  <div id="error8"  style="display: none;" class="alert alert-danger"></div>
+                </p>
+                <p>
+                  <p>
+                      <label for="country">country <span>*</span></label>
+                      <input type="text" name="country"   id="country">                                    
+          
+                      <div id="error9"  style="display: none;" class="alert alert-danger"></div>
+                    </p> 
+                  
+                </p>
+                <input type="hidden" name="addressid"  >
+              
+      
+      
+            <div class="login_submit">
+              <button type="submit">Add Address</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+      </div>
 <%}%>
 
-
+<%}%>
 
 <%-include("userlayout/footer.ejs")%>

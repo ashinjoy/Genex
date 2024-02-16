@@ -92,6 +92,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>#ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
@@ -101,8 +102,8 @@
                                 <th scope="col" class="text-end"> Action </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <%if(locals.orders){%>
+                        <tbody id="ordtableBody">
+                            <!-- <%if(locals.orders){%>
                                <% orders.forEach((order)=>{%>
                                
                                     <%for(let i=0;i<order.products.length;i++){%>
@@ -111,8 +112,8 @@
                                             <td><b><%=order.userid.uname%></b></td>
                                             <td><%=order.userid.email%></td>
                                             <td><%=order.totalprice%></td>
-                                            <%if(order.products[i].status === "processing"){%>
-                                        <td><span class="badge rounded-pill alert-warning">processing</span></td>
+                                            <%if(order.products[i].status === "delivery"){%>
+                                        <td><span class="badge rounded-pill alert-warning">delivery</span></td>
                                             <%} else if(order.products[i].status === "shipped"){%>
                                                 <td><span class="badge rounded-pill alert-warning">Shipped</span></td>
 
@@ -121,9 +122,14 @@
 
                                             <%}  else if (order.products[i].status === "canceled"){%>
                                                 <td><span class="badge rounded-pill alert-warning">Canceled</span></td>
-
+                                            <%}  else if (order.products[i].status === "paid"){%>
+                                                    <td><span class="badge rounded-pill alert-warning">paid</span></td>
+                                            <%}  else if (order.products[i].status === "refund"){%>
+                                                        <td><span class="badge rounded-pill alert-warning">refunded</span></td>
+                                            <%}  else if (order.products[i].status === "pending"){%>
+                                                            <td><span class="badge rounded-pill alert-warning">pending</span></td>
                                             <%}else {%>
-                                                <td><span class="badge rounded-pill alert-warning">Delivered</span></td>
+                                                <td><span class="badge rounded-pill alert-warning">processing</span></td>
 
                                             
                                             <%}%>
@@ -138,16 +144,16 @@
                                                     <a class="dropdown-item" href="#">Edit info</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
-                                            </div> <!-- dropdown //end -->
-                                        </td>
+                                            </div>  dropdown //end -->
+                                        <!-- </td>
                                     <%}%>
                                     
                                <%})%>
                                 
 
-                            <%}%>
+                            <%}%> -->
                             
-                            
+                             
                            
                         </tbody>
                     </table>
@@ -157,14 +163,134 @@
         <div class="pagination-area mt-15 mb-50">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    <%if(locals.totalPage){%>
+                        <%for(i=1;i<=totalPage;i++){%>
+                            <li class="page-item active"><button class="page-link" id="btn<%=i%>" onclick="pagination('<%=i%>')"><%=i%></button></li>
+                        <%}%>
+                    <%}%>>
                 </ul>
             </nav>
         </div>
     </section> <!-- content-main end// -->
+    <script>
+        
+
+
+let orderBody=document.getElementById('ordtableBody')
+
+window.onload=async function pagination(){
+ 
+const pageurl=`/admin/defaultpaginationOrders?page=1`
+const response = await fetch(pageurl)
+const orderdata=await response.json()
+console.log(orderdata)
+ orderBody.innerHTML=''
+orderdata.forEach(orderdata => {
+    injectData(orderdata)
+});
+
+
+
+}
+
+async function pagination(index){
+  const pageurl=`/admin/pagination?page=${index}`
+  const response = await fetch(pageurl)
+  const orderdata=await response.json()
+  console.log(orderdata)
+ orderBody.innerHTML=''
+  orderdata.forEach(orderdata => {
+      injectData(orderdata)
+  });
+}
+
+
+
+function injectData(orders){
+
+  const row =document.createElement('tr')
+  //checkbox
+  
+  
+  const checkboxCell = document.createElement('td');
+  checkboxCell.classList.add('text-center');
+  const checkboxDiv = document.createElement('div');
+  checkboxDiv.classList.add('form-check');
+  const checkboxInput = document.createElement('input');
+  checkboxInput.classList.add('form-check-input');
+  checkboxInput.setAttribute('type', 'checkbox');
+  checkboxInput.id = 'transactionCheck02';
+  const checkboxLabel = document.createElement('label');
+  checkboxLabel.classList.add('form-check-label');
+  checkboxLabel.setAttribute('for', 'transactionCheck02');
+  checkboxDiv.appendChild(checkboxInput);
+  checkboxDiv.appendChild(checkboxLabel);
+  checkboxCell.appendChild(checkboxDiv);
+  row.appendChild(checkboxCell);
+  
+  // orderid cell
+  const orderIdCell=document.createElement('td')
+  const orderlink=document.createElement('a')
+  orderlink.classList.add('fw-bold')
+  orderlink.id='orderid'
+  orderlink.innerHTML=orders._id
+  orderIdCell.appendChild(orderlink)
+  row.appendChild(orderIdCell)
+  
+  // customername cell
+  const customerNameCell=document.createElement('td')
+  customerNameCell.textContent=orders.userdetails[0].uname
+  row.appendChild(customerNameCell)
+  
+  // date cell
+  const dateCell=document.createElement('td')
+  dateCell.innerHTML=orders.createdAt
+  row.appendChild(dateCell)
+  
+  // totalCell cell
+  const totalCell=document.createElement('td')
+  totalCell.innerHTML=orders.totalprice
+  row.appendChild(totalCell)
+  
+  
+  
+  // payment status
+  const paymentCell=document.createElement('td')
+  const status=document.createElement('span')
+  status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+  status.innerHTML=orders.products.status
+  paymentCell.appendChild(status)
+  row.appendChild(paymentCell)
+  // payment method
+  
+  const paymentMethodCell=document.createElement('td')
+  paymentMethodCell.innerHTML=orders.paymentMethod
+  
+  row.appendChild(paymentMethodCell)
+  // // button cell
+  
+//   const viewDetailCell=document.createElement('a')
+//   viewDetailCell.classList.add('btn', 'btn-xs')
+//   viewDetailCell.innerHTML='View Detail'
+//   row.appendChild(viewDetailCell)
+
+const anchor = document.createElement('a');
+
+anchor.setAttribute('href', '/admin/ordersummary?oid=' + orders._id + '&pid=' + orders.products.productid);
+
+anchor.setAttribute('class', 'btn btn-md rounded font-sm');
+
+
+anchor.innerHTML = 'Detail';
+console.log("anchor",anchor)
+
+
+row.appendChild(anchor)
+  
+  orderBody.appendChild(row)
+  
+  }
+
+
+    </script>
 <%-include("adminlayout/footer.ejs")%>

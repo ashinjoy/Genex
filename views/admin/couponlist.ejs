@@ -1,0 +1,213 @@
+<%-include('adminlayout/header.ejs')%>
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div class="col-nav">
+            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-icon" href="#">
+                        <i class="material-icons md-notifications animation-shake"></i>
+                        <span class="badge rounded-pill">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                </li>
+
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Products List</h2>
+               
+            </div>
+            <div>
+                <a href="#" class="btn btn-light rounded font-md">Export</a>
+                <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col col-check flex-grow-0">
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="checkbox" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                        <select class="form-select">
+                            <option selected>All category</option>
+                            <option>Electronics</option>
+                            <option>Clothes</option>
+                            <option>Automobile</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <input type="date" value="02.05.2022" class="form-control">
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <select class="form-select">
+                            <option selected>Status</option>
+                            <option>Active</option>
+                            <option>Disabled</option>
+                            <option>Show all</option>
+                        </select>
+                    </div>
+                </div>
+            </header> <!-- card-header end// -->
+            <div class="card-body">
+                <%if(locals.couponsAvailable){%>
+                    <%couponsAvailable.forEach((coupon)=>{%>
+                    <article class="itemlist">
+                        <div class="row align-items-center">
+                            <div class="col col-check flex-grow-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                              
+                                    <a class="itemside" href="#">
+                                    
+                                        <div class="info">
+                                            <h6 class="mb-0"><%=coupon.name%></h6>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            
+                           <% if(coupon.status === true)  { %>
+                                <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                    <span class="badge rounded-pill alert-success">Active</span>
+                                </div>
+                            <% } else { %>
+                                <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                    <span class="badge rounded-pill alert-danger">Inactive</span>
+                                </div>
+                           <% } %>  
+                                
+                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                    <%  if(coupon.is_active === true) {%>
+                                        <button type="button" class="btn btn-sm btn-block rounded font-sm " onclick="deleteCoupon('<%=coupon._id%>')">Delete</button>
+
+                                        <% }%>
+                                    <a href="/admin/editCoupon?id=<%=coupon._id%>" class="btn btn-sm font-sm rounded btn-brand">
+                                        <i class="material-icons md-edit"></i> Edit
+                                    </a>
+                                     <%  if(coupon.status === true) {%>
+                                        <button type="button" class="btn btn-sm btn-block rounded font-sm " onclick="blockStatus('<%=coupon._id%>')">block</button>
+
+                                        <% } else {%>
+     
+                                             <button type="button" class="btn btn-sm btn-brand rounded font-sm " onclick="unblockStatus('<%=coupon._id%>')">Unblock</button>
+     
+                                         <%}%>
+
+                                  
+                                    
+                                    
+                                </div>
+                            </div> <!-- row .// -->
+                            
+                    </article>  
+                    <% })%>
+                                
+                    <%}%>  
+              
+                 <!-- itemlist  .// -->
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+        <div class="pagination-area mt-30 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+        async function deleteCoupon(couponid){
+            try {
+                const url='/admin/deleteCoupon'
+            const postdata={id:couponid}
+            const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
+            const data=await res.json()
+            if(res.status == 200){
+                await Swal.fire({icon:'success',title:"Coupon Deleted Suceessfully"})
+                window.location.href='/admin/listCoupon'
+            }
+            } catch (error) {
+                console.error(error)
+            }
+            
+        }
+        async function blockStatus(couponid){
+            try {
+                const url='/admin/blockStatus'
+            const postdata={id:couponid}
+            const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
+            const data=await res.json()
+            if(res.status == 200){
+                await Swal.fire({icon:'success',title:"Status updated Suceessfully"})
+                window.location.href='/admin/listCoupon'
+            }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        async function unblockStatus(couponid){
+            try {
+                const url='/admin/unblockStatus'
+            const postdata={id:couponid}
+            const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
+            const data=await res.json()
+            if(res.status == 200){
+                await Swal.fire({icon:'success',title:"Status updated Suceessfully"})
+                window.location.href='/admin/listCoupon'
+            }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    </script>
+<%-include('adminlayout/footer.ejs')%>

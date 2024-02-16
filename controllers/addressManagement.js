@@ -110,7 +110,7 @@ const deleteAddress=async(req,res)=>{
   try {
     const {id}=req.query
     const deleteAddress=await addressModel.findByIdAndDelete({_id:id})
-    res.redirect("user/listaddress")
+    res.redirect("/listaddress")
     
   } catch (error) {
     console.error(error)
