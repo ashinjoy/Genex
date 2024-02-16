@@ -28,9 +28,9 @@
                              <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_login" aria-expanded="true">Click here to login</a>     
  
                          </h3>
-                          <div id="checkout_login" class="collapse" data-parent="#accordion">
-                             <div class="checkout_info">
-                                 <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer please proceed to the Billing & Shipping section.</p>  
+                            <div id="checkout_login" class="collapse" data-parent="#accordion">
+                                <div class="checkout_info">
+                                    <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer please proceed to the Billing & Shipping section.</p>  
                                  <form action="#">  
                                      <div class="form_group">
                                          <label>Username or email <span>*</span></label>
@@ -62,8 +62,8 @@
                           <div id="checkout_coupon" class="collapse" data-parent="#accordion">
                              <div class="checkout_info coupon_info">
                                  <form action="#">
-                                     <input placeholder="Coupon code" type="text">
-                                     <button type="submit">Apply coupon</button>
+                                     <input placeholder="Coupon code" type="text" id="couponcode">
+                                     <button type="button" id="applycoupon" onclick="applyCoupon()">Apply coupon</button>
                                  </form>
                              </div>
                          </div>    
@@ -108,45 +108,64 @@
                                 <div class="row">
                                  <div class="col-lg-6 mb-20">
                                      <label> Name <span>*</span></label>
-                                     <input type="text" name="name" id="uname">    
+                                     <input type="text" name="name" id="name">
+        <div id="error1"  style="display: none;" class="alert alert-danger"></div>
+
                                  </div>
                                
  
                                  <div class="col-12 mb-20">
                                      <label>Street address<span>*</span></label>
-                                     <input placeholder="House number and street name" type="text" name="houseno" id="houseno">     
+                                     <input placeholder="House number and street name" type="text" name="houseno" id="street">  
+        <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+
                                  </div>
                                  <div class="col-12 mb-20">
                                     <label>Landmark<span>*</span></label>
-                                    <input placeholder="landmark or Area" type="text" name="landmark" id="landmark">     
+                                    <input placeholder="landmark or Area" type="text" name="landmark" id="landmark">  
+        <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+
                                 </div>
 
                                 <div class="col-6 mb-20">
                                     <label>pincode<span>*</span></label>
-                                    <input  type="number" name="pincode" id="pincode">     
+                                    <input  type="number" name="pincode" id="pincode">
+        <div id="error4"  style="display: none;" class="alert alert-danger"></div>
+
                                 </div>
                                  
                                  <div class="col-12 mb-20">
                                      <label>Town / City <span>*</span></label>
-                                     <input  type="text" name="city" id="city">    
+                                     <input  type="text" name="city" id="city">
+                                    <div id="error5"  style="display: none;" class="alert alert-danger"></div>
+
                                  </div> 
                                   <div class="col-12 mb-20">
                                      <label>State  <span>*</span></label>
-                                     <input type="text" name="state" id="state">    
+                                     <input type="text" name="state" id="state">
+                        <div id="error6"  style="display: none;" class="alert alert-danger"></div>
+
+
                                  </div> 
                                  <div class="col-lg-6 mb-20">
                                      <label>Phone<span>*</span></label>
-                                     <input type="text" name="phone" id="phone"> 
+                                     <input type="text" name="phone" id="phone">
+                            <div id="error7"  style="display: none;" class="alert alert-danger"></div>
+
  
                                  </div> 
                                   <div class="col-lg-6 mb-20">
                                      <label> Email Address <span>*</span></label>
-                                       <input type="text" name="email" id="email"> 
+                                       <input type="text" name="email" id="email">
+                                <div id="error8"  style="display: none;" class="alert alert-danger"></div>
+
  
                                  </div> 
                                  <div class="col-12 mb-20">
                                     <label for="country">country <span>*</span></label>
-                                    <input type="text" name="country" id="country">                                    
+                                    <input type="text" name="country" id="country"> 
+                                <div id="error9"  style="display: none;" class="alert alert-danger"></div>
+
                                 </div>
                             </div>
 
@@ -184,22 +203,23 @@
                                         <tr>
                                             <th>Cart Subtotal</th>
                                             
-                                            <td><%=sum%></td>
+                                            <td class="ordersum"><%=sum%></td>
                                         </tr>
                                         <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>$5.00</strong></td>
+                                            <th>Discount</th>
+                                            <td><strong></strong></td>
                                         </tr>
                                         <tr class="order_total">
                                             <th>Order Total</th>
-                                            <td><strong><%=sum%></strong></td>
+                                            <td ><strong class="ordersum" id="ordertotal"><%=sum%></strong></td>
                                             <input type="hidden" id="sum" value="<%=sum%>" name="sum">
                                         </tr>
                                     </tfoot>
                                 </table>     
                             </div>
                             <div class="payment_method">
-                               <div class="panel-default">
+                             <% if ( sum > 1000 ) { %>
+                                <div id="coddiv" class="panel-default">
                                     <input id="payment" name="check_method" type="radio" data-bs-target="createp_account" value="cod" class="payment"/>
                                     <label for="payment" data-bs-toggle="collapse" data-bs-target="#method" aria-controls="method">COD</label>
 
@@ -209,19 +229,24 @@
                                         </div>
                                     </div>
                                 </div> 
+                            <%}%>
+                    
+                                   
+                                  
+                              
                                 <div class="panel-default">
                                     <input id="payment_defult" name="check_method" type="radio" data-bs-target="createp_account" value="razorpay" class="payment"/>
-                                    <label for="payment_defult" data-bs-toggle="collapse" data-bs-target="#collapsedefult" aria-controls="collapsedefult">PayPal <img src="assets/img/icon/papyel.png" alt=""></label>
+                                    <label for="payment_defult" data-bs-toggle="collapse" data-bs-target="#collapsedefult" aria-controls="collapsedefult">Razorpay <img src="assets/img/icon/papyel.png" alt=""></label>
                                     
                                     <div id="collapsedefult" class="collapse one" data-parent="#accordion">
                                         <div class="card-body1">
-                                           <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p> 
+                                           <p>Pay via Razorpay; you can pay with your credit card if you don’t have a PayPal account.</p> 
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="panel-default">
-                                    <input id="payment_defult" name="check_method" type="radio" data-bs-target="createp_account" value="wallet" class="payment"/>
+                                    <input id="payment_wallet" name="check_method" type="radio" data-bs-target="createp_account" value="wallet" class="payment"/>
                                     <label for="payment_defult" data-bs-toggle="collapse" data-bs-target="#collapsedefult" aria-controls="collapsedefult">Wallet </label>
                                     
                                     <div id="method" class="collapse one" data-parent="#accordion">
@@ -231,12 +256,8 @@
                                 </div>
                                 </div>
 
-
-
-
-
                                 <div class="order_button">
-                                    <button type="button" onclick="paymentProceed()" >Proceed Payment</button> 
+                                    <button type="button" onclick="paymentProceed()"  id="payment_button" >Proceed Payment</button> 
                                 </div>    
                             </div> 
                         </form>         
@@ -246,11 +267,14 @@
         </div>       
     </div>
     
+<script src="/public/assets/js/client js/addressValidation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script>
-        console.log("hello")
-   const uname = document.getElementById("uname")
-   const houseno = document.getElementById("houseno")
+    console.log("hello")
+   const uname = document.getElementById("name")
+   const houseno = document.getElementById("street")
    const landmark = document.getElementById("landmark")
    const pincode = document.getElementById("pincode")
    const city = document.getElementById("city")
@@ -259,7 +283,7 @@
    const email = document.getElementById("email")
    const country= document.getElementById("country")
    const addresstag=document.getElementById("addressRadio")
-   const sum=document.getElementById("sum").value
+   let sum=document.getElementById("sum").value
    const paymentradio=document.querySelectorAll('.payment')
  
 
@@ -269,45 +293,41 @@
    
    
    async function paymentProceed(){ 
+
     console.log("hello enterd function")
     let  selectedpayment
- for(i=0;i<3;i++){
-    if(paymentradio[i].checked == true){
-    selectedpayment=paymentradio[i].value
+    let radioIndex
+    paymentradio.forEach((paymentMethod,index)=>{
+    if(paymentMethod.checked == true){
+        radioIndex =index
     }
- }
-  
-const addresstag=document.getElementById("addressRadio")
-console.log(addresstag)
-let address
+    })
 
-   if(addresstag && addresstag.checked)
-   {
-    console.log("hi")
-     address= addresstag.value
-   }
-   else
-   {
-    address="nill"
-   }
-   let payment
+    selectedpayment =paymentradio ? paymentradio[radioIndex].value :'no payment'
+  
+    const addresstag=document.getElementById("addressRadio")
+      let address
+    addresstag.checked ? address= addresstag.value : address="nill"
+    let payment
    
-   console.log("payment",selectedpayment)
+    console.log("payment",selectedpayment)
 
     postdata={
-        name:uname ? uname.value:'nill',
-        houseno:houseno? houseno.value:'nill',
-        landmark:landmark? landmark.value:'nill',
-        pincode:pincode? pincode.value:'nill',
-        city:city? city.value:'nill',
-        state:state? state.value:'nill',
-        phone:phone? phone.value:'nill',
-        email:email? email.value:'nill',
-        country:country?country.value:'nill',
+        name:uname ? uname.value : 'nill',
+        houseno:houseno ? houseno.value : 'nill',
+        landmark:landmark ? landmark.value : 'nill',
+        pincode:pincode ? pincode.value : 'nill',
+        city:city ? city.value : 'nill',
+        state:state ? state.value : 'nill',
+        phone:phone ? phone.value : 'nill',
+        email:email ? email.value : 'nill',
+        country:country ? country.value : 'nill',
         address:address,
         check_method:selectedpayment,
-        sum:sum
+        sum:document.getElementById('sum').value,
+        previousTotal:sum
     }
+    console.log(postdata)
     url='/checkout'
   const res = await fetch(url,{method:'POST',headers:{
     'Content-Type': 'application/json',
@@ -382,7 +402,93 @@ const response= await fetch(url,{method:'POST',headers:{
 
 const data=await response.json()
 }
+async function applyCoupon(){
+    console.log('applycoupon');
+  const code=  document.getElementById('couponcode').value
+  console.log(code)
+  const sum=document.getElementById('sum').value
+  console.log(sum)
+  console.log('before Checking')
+ 
+//   else{
+//     document.getElementById('coddiv').style.display="block"
+
+//   }
+    const url='/applyCoupon'
+    const postdata={
+        couponCode:code,
+        totalamount:sum
+    }
+    // console.log(post)
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
+    const data= await res.json()
+    console.log(data)
+    if(res.status === 200)
+    {
+        
+      const total=document.getElementById('ordertotal').innerHTML
+      const parsedTotal=parseFloat(total)
+      const offerTotal=parsedTotal-data
+      console.log("offertotal",offerTotal)
+      
+      document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
+        orderTotal.innerHTML=offerTotal
+      })
+        document.getElementById('sum').value = offerTotal
+        if(document.getElementById('sum').value < 1000){
+            document.getElementById('coddiv').style.display="none"
+        } 
+        else{
+            document.getElementById('coddiv').style.display="block"
+
+        }
+      
+        const removebtn=document.createElement('button')
+        removebtn.innerHTML="Remove"
+        removebtn.type="button"
+        removebtn.onclick=removeCoupon
+        removebtn.id="removebtn"
+        document.getElementById('applycoupon').replaceWith(removebtn)
+      
+
+
+    }
+    else{
+         Swal.fire({icon:'error',title:data.data}) 
+    }
+}
+
+
+async function removeCoupon(){
+
+    console.log('entered removeCoupon function')
+    const couponReduction =  parseFloat(sum)-parseFloat(document.getElementById('sum').value)
+    console.log(couponReduction)
+    const total=document.getElementById('ordertotal').innerHTML
+    const parsedTotal=parseFloat(total)
+    const originalAmount=parsedTotal+couponReduction
+    document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
+        orderTotal.innerHTML=originalAmount
+    })
+    document.getElementById('sum').value = originalAmount
+    if(document.getElementById('sum').value > 1000){
+        document.getElementById('coddiv').style.display="block"
+        
+    }
+    else{
+        document.getElementById('coddiv').style.display="none"
+
+    }
+    const couponbtn=document.createElement('button')
+    couponbtn.innerHTML="Apply Coupon"
+    couponbtn.type="button"
+    couponbtn.onclick=applyCoupon
+    couponbtn.id="applycoupon"
+    document.getElementById('removebtn').replaceWith(couponbtn)
+
+}
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <%-include("userlayout/footer.ejs")%>

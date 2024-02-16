@@ -2,10 +2,14 @@ const razorpay=require("../utils/razorpay")
 const crypto=require("crypto")
 const userModel=require("../models/userModel")
 const orderModel=require("../models/order")
+const walletModel = require("../models/wallet")
 const load_wallet=async(req,res)=>{
     try {
-        const walletOrders=await orderModel.find({paymentMethod:"wallet"})
-        res.render("user/wallet",{walletOrders})
+        const walletOrders=await walletModel.find({})
+        const {userid}=req.session
+        const WalletBalance=await userModel.findById({_id:userid},{WalletBalance:1,_id:0})
+        console.log(WalletBalance)
+        res.render("user/wallet",{walletOrders,WalletBalance})
     } catch (error) {
         console.error(error)
     }

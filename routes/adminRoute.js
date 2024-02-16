@@ -7,6 +7,7 @@ const productController=require("../controllers/productController")
 const orderController=require("../controllers/adminorderManagement")
 const dashboardController =require("../controllers/dashboardController")
 const pagination=require("../controllers/paginationController")
+const coupon=require("../controllers/couponManagement")
 
 
 const session=require("../middleware/session")
@@ -28,6 +29,10 @@ adminRouter.get("/users/unblock",session.admin_islogin,userManagementController.
 
 adminRouter.get("/defaultpagination",pagination.pagination)
 adminRouter.get("/pagination",pagination.pagination)
+adminRouter.get('/defaultpaginationOrders',pagination.pagination)
+adminRouter.get('/paginationofOrders',pagination.pagination)
+
+
 
 
 
@@ -56,5 +61,18 @@ adminRouter.get("/listorders",session.admin_islogin,orderController.load_ordersl
 adminRouter.get("/ordersummary",session.admin_islogin,orderController.load_Ordersummary)
 adminRouter.get("/change-orderstatus",session.admin_islogin,orderController.changestatus)
 
+
+adminRouter.get("/createCoupon",session.admin_islogin,coupon.load_addCoupon)
+adminRouter.post('/createCoupon',session.admin_islogin,coupon.addCoupon)
+adminRouter.get('/listCoupon',session.admin_islogin,coupon.listCoupon)
+adminRouter.get("/editCoupon",session.admin_islogin,coupon.loadEditCoupon)
+adminRouter.post('/editCoupon',session.admin_islogin,coupon.editCoupon)
+adminRouter.patch('/blockStatus',coupon.blockStatus)
+adminRouter.patch('/unblockStatus',coupon.unblockStatus)
+adminRouter.patch('/deleteCoupon',coupon.deleteCoupon)
+
+
+adminRouter.get('/bestproducts',session.admin_islogin,productController.bestProducts)
+// adminRouter.get('/bestcategory',session.admin_islogin,productController.bestCategory)
 
 module.exports=adminRouter

@@ -50,7 +50,16 @@ WalletBalance:{
   type:Number,
   default:0
 
+},
+coupon:{
+  type:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'coupon'
+  }],
+  default:[]
 }
+
+
 });
 const userModel = mongoose.model("user", userSchema);
 module.exports = userModel;
