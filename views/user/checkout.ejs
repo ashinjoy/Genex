@@ -104,7 +104,7 @@
                               
                                   <%} else {%>
                              <h3>Address Details</h3>
-                             <form>
+                             <form id="addressform">
                                 <div class="row">
                                  <div class="col-lg-6 mb-20">
                                      <label> Name <span>*</span></label>
@@ -117,20 +117,20 @@
                                  <div class="col-12 mb-20">
                                      <label>Street address<span>*</span></label>
                                      <input placeholder="House number and street name" type="text" name="houseno" id="street">  
-        <div id="error2"  style="display: none;" class="alert alert-danger"></div>
+                                     <div id="error2"  style="display: none;" class="alert alert-danger"></div>
 
                                  </div>
                                  <div class="col-12 mb-20">
                                     <label>Landmark<span>*</span></label>
                                     <input placeholder="landmark or Area" type="text" name="landmark" id="landmark">  
-        <div id="error3"  style="display: none;" class="alert alert-danger"></div>
+                                 <div id="error3"  style="display: none;" class="alert alert-danger"></div>
 
                                 </div>
 
                                 <div class="col-6 mb-20">
                                     <label>pincode<span>*</span></label>
                                     <input  type="number" name="pincode" id="pincode">
-        <div id="error4"  style="display: none;" class="alert alert-danger"></div>
+                                <div id="error4"  style="display: none;" class="alert alert-danger"></div>
 
                                 </div>
                                  
@@ -143,14 +143,14 @@
                                   <div class="col-12 mb-20">
                                      <label>State  <span>*</span></label>
                                      <input type="text" name="state" id="state">
-                        <div id="error6"  style="display: none;" class="alert alert-danger"></div>
+                                 <div id="error6"  style="display: none;" class="alert alert-danger"></div>
 
 
                                  </div> 
                                  <div class="col-lg-6 mb-20">
                                      <label>Phone<span>*</span></label>
                                      <input type="text" name="phone" id="phone">
-                            <div id="error7"  style="display: none;" class="alert alert-danger"></div>
+                                <div id="error7"  style="display: none;" class="alert alert-danger"></div>
 
  
                                  </div> 
@@ -257,7 +257,7 @@
                                 </div>
 
                                 <div class="order_button">
-                                    <button type="button" onclick="paymentProceed()"  id="payment_button" >Proceed Payment</button> 
+                                    <button type="button" onclick="paymentProceed(event)"  id="payment_button" >Proceed Payment</button> 
                                 </div>    
                             </div> 
                         </form>         
@@ -267,7 +267,7 @@
         </div>       
     </div>
     
-<script src="/public/assets/js/client js/addressValidation.js"></script>
+<!-- <script src="/public/assets/js/client js/checkoutValidation.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -285,16 +285,13 @@
    const addresstag=document.getElementById("addressRadio")
    let sum=document.getElementById("sum").value
    const paymentradio=document.querySelectorAll('.payment')
- 
-
-
    
   console.log("going to enter function");
    
    
-   async function paymentProceed(){ 
-
-    console.log("hello enterd function")
+   async function paymentProceed(event){ 
+    try{
+        console.log("hello enterd function")
     let  selectedpayment
     let radioIndex
     paymentradio.forEach((paymentMethod,index)=>{
@@ -302,13 +299,17 @@
         radioIndex =index
     }
     })
-
-    selectedpayment =paymentradio ? paymentradio[radioIndex].value :'no payment'
+    if(radioIndex == undefined){
+        await Swal.fire({icon:'warning',title:'Please select Payment Option to Proceed'})
+        event.preventDefault()     
+    }else{
+        console.log('radioindex',radioIndex)
+    selectedpayment = paymentradio[radioIndex].value 
   
     const addresstag=document.getElementById("addressRadio")
       let address
-    addresstag.checked ? address= addresstag.value : address="nill"
-    let payment
+      addresstag &&  addresstag.checked ? address= addresstag.value : address="nill"
+      let payment
    
     console.log("payment",selectedpayment)
 
@@ -354,6 +355,14 @@ else{
   
 }
 
+    }
+
+
+    }
+    
+    catch(error){
+        console.error(error)
+    }
    }
    function generatePayment(order){
     console.log("hi")
@@ -401,41 +410,46 @@ const response= await fetch(url,{method:'POST',headers:{
 
 
 const data=await response.json()
+if(response.status == 200){
+    
+    window.location.href ='/ordersuccess'
+}
+else{
+    Swal.fire({icon:"error",title:data.error})
+}
 }
 async function applyCoupon(){
     console.log('applycoupon');
-  const code=  document.getElementById('couponcode').value
-  console.log(code)
-  const sum=document.getElementById('sum').value
-  console.log(sum)
-  console.log('before Checking')
- 
-//   else{
-//     document.getElementById('coddiv').style.display="block"
+    const code=  document.getElementById('couponcode').value
+    console.log(code)
+    const sum=document.getElementById('sum').value
+    console.log(sum)
+    console.log('before Checking')
 
-//   }
     const url='/applyCoupon'
     const postdata={
         couponCode:code,
         totalamount:sum
     }
-    // console.log(post)
+
     const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
     const data= await res.json()
-    console.log(data)
+    const {reduction}=data
+
     if(res.status === 200)
     {
-        
+        await Swal.fire({icon:'success',title:data.sucess})
+      
       const total=document.getElementById('ordertotal').innerHTML
       const parsedTotal=parseFloat(total)
-      const offerTotal=parsedTotal-data
-      console.log("offertotal",offerTotal)
+      const totalAfterCoupon=parsedTotal-reduction
+      console.log("totalAfterCoupon",totalAfterCoupon)
       
       document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
-        orderTotal.innerHTML=offerTotal
+        orderTotal.innerHTML=totalAfterCoupon 
       })
-        document.getElementById('sum').value = offerTotal
-        if(document.getElementById('sum').value < 1000){
+        document.getElementById('sum').value = totalAfterCoupon
+        if(document.getElementById('sum').value <= 1000){
             document.getElementById('coddiv').style.display="none"
         } 
         else{
@@ -453,6 +467,9 @@ async function applyCoupon(){
 
 
     }
+    else if(res.status === 403){
+        Swal.fire({icon:'error',title:data.err,text:data.msg})
+    }
     else{
          Swal.fire({icon:'error',title:data.data}) 
     }
@@ -460,32 +477,31 @@ async function applyCoupon(){
 
 
 async function removeCoupon(){
+    const url ='/removeCoupon'
+    const response=await fetch(url)
+    const data=await response.json()
+    console.log(data)
+    await Swal.fire({icon:'success',title:'Coupon Removed Successfully'})
+    const removedCouponamount = parseFloat(document.getElementById('sum').value)+data
+    console.log(removedCouponamount)
 
-    console.log('entered removeCoupon function')
-    const couponReduction =  parseFloat(sum)-parseFloat(document.getElementById('sum').value)
-    console.log(couponReduction)
-    const total=document.getElementById('ordertotal').innerHTML
-    const parsedTotal=parseFloat(total)
-    const originalAmount=parsedTotal+couponReduction
-    document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
-        orderTotal.innerHTML=originalAmount
-    })
-    document.getElementById('sum').value = originalAmount
-    if(document.getElementById('sum').value > 1000){
-        document.getElementById('coddiv').style.display="block"
-        
-    }
-    else{
-        document.getElementById('coddiv').style.display="none"
-
-    }
-    const couponbtn=document.createElement('button')
-    couponbtn.innerHTML="Apply Coupon"
-    couponbtn.type="button"
-    couponbtn.onclick=applyCoupon
-    couponbtn.id="applycoupon"
-    document.getElementById('removebtn').replaceWith(couponbtn)
-
+     document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
+         orderTotal.innerHTML=removedCouponamount
+     })
+     document.getElementById('sum').value = removedCouponamount
+     if(document.getElementById('sum').value > 1000){
+         document.getElementById('coddiv').style.display="block"
+  
+     }
+     else{
+         document.getElementById('coddiv').style.display="none"
+     }
+     const couponbtn=document.createElement('button')
+     couponbtn.innerHTML="Apply Coupon"
+     couponbtn.type="button"
+     couponbtn.onclick=applyCoupon
+     couponbtn.id="applycoupon"
+     document.getElementById('removebtn').replaceWith(couponbtn)
 }
 
     </script>

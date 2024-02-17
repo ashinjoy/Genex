@@ -50,34 +50,68 @@ const cancelorder = async (req, res) => {
     console.log("product", product);
     const priceReduction =
       product[0].productdetail[0].salesprice * product[0].products.qty;
-    const totalAfterCancel = await orderModel.findOneAndUpdate(
-      { _id: oid, "products.productid": pid },
-      { $inc: { totalprice: -priceReduction } }
-    );
+
     const order = await orderModel.findById({ _id: oid });
     const paymentMethod = order.paymentMethod;
-    if (paymentMethod === "wallet") {
-      // console.log(req.session.couponid)
-
-      const updatewalletBalance = await userModel.findByIdAndUpdate(
-        { _id: userid },
-        { $inc: { WalletBalance: priceReduction } }
-      );
-      const walletRefund = await wallet.findOneAndUpdate(
-        { orderId: oid },
-        { $inc: { refundedAmount: priceReduction } }
-      );
-    } else if (paymentMethod === "razorpay") {
-      const wallet = {
-        redeemedAmount: 0,
-        refundedAmount: priceReduction,
-        orderId: oid,
-        userid: req.session.userid,
-        paymentMethod: "razorpay",
-      };
-      const walletcreate = await walletModel.create(wallet);
-    }
-    res.status(200).json({ data: "success" });
+    const uncanceledProducts=await orderModel.aggregate([{$match:{_id:new mongoose.Types.ObjectId(oid)}},{$unwind:"$products"},{$match:{'products.status':{$ne:'canceled'}}},{$count:'nonConceledProducts'}])
+    console.log('uncanceledProducts',uncanceledProducts)
+    const codStatus=await orderModel.aggregate([{$match:{_id:new mongoose.Types.ObjectId(oid)}},{$unwind:"$products"},{$match:{_id:new mongoose.Types.ObjectId(pid),'products.status':'delivery'}}])
+    console.log(codStatus)
+      if(uncanceledProducts.length == 0){
+        const totalAfterCancel = await orderModel.findOneAndUpdate(
+       { _id: oid, "products.productid": pid },
+       { $inc: { totalprice: -order.totalprice } }
+     );
+        if(paymentMethod == "wallet"){
+          const walletRefund = await wallet.findOneAndUpdate(
+            { orderId: oid },
+            { $inc: { refundedAmount: order.totalprice } }
+          );
+          const updatewalletBalance = await userModel.findByIdAndUpdate(
+              { _id: userid },
+              { $inc: { WalletBalance: order.totalprice } }
+            );
+        }
+        else if(paymentMethod == "razorpay"){
+          const wallet = {
+                 redeemedAmount: 0,
+                 refundedAmount: order.totalprice,
+                 orderId: oid,
+                 userid: req.session.userid,
+                 paymentMethod: "razorpay",
+               };
+               const walletcreate = await walletModel.create(wallet);
+             }
+            
+        else{
+          const totalAfterCancel = await orderModel.findOneAndUpdate(
+            { _id: oid, "products.productid": pid },
+            { $inc: { totalprice: -priceReduction } }
+          );
+          if(paymentMethod == "wallet"){
+            const walletRefund = await wallet.findOneAndUpdate(
+              { orderId: oid },
+              { $inc: { refundedAmount: priceReduction } }
+            );
+            const updatewalletBalance = await userModel.findByIdAndUpdate(
+                { _id: userid },
+                { $inc: { WalletBalance: priceReduction } }
+              );
+          }
+          else if(paymentMethod == "razorpay"){
+            const wallet = {
+                   redeemedAmount: 0,
+                   refundedAmount: priceReduction,
+                   orderId: oid,
+                   userid: req.session.userid,
+                   paymentMethod: "razorpay",
+                 };
+                 const walletcreate = await walletModel.create(wallet);
+               }
+              
+        }
+      }
+    res.status(200).json({ data: "success" })   
   } catch (error) {
     console.error(error);
   }
@@ -122,6 +156,12 @@ const verifyPayment = async (req, res) => {
         { _id: req.body.order.receipt },
         { $set: { "products.$[].status": "paid" } }
       );
+      if (req.session.couponid) {
+        const isCouponUsed = await userModel.findByIdAndUpdate(
+          { _id: userid },
+          { $push: { coupon: req.session.couponid } }
+        );
+      }
       console.log(changeStatus, "orderupdate");
       const ordersave = await orderModel.findById({
         _id: req.body.order.receipt,
@@ -153,6 +193,7 @@ const verifyPayment = async (req, res) => {
           );
         }
       }
+      res.status(200).json({ verified: "success" });
     } else {
       console.log("not matched");
       console.log(req.body);
@@ -160,6 +201,7 @@ const verifyPayment = async (req, res) => {
         { _id: req.body.order.receipt },
         { $set: { "products.$[].status": "pending" } }
       );
+      res.status(400).json({ error: "razorpay order is not verified" });
     }
   } catch (error) {
     console.log(error);

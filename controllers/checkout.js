@@ -24,218 +24,84 @@ const loadCheckout = async (req, res) => {
 };
 const postCheckout = async (req, res) => {
   try {
-    let ordersave;
-    console.log("entered post");
     const { userid } = req.session;
-    const userAddresssAvailable = await addressModel.find({ userid: userid });
-    const cartProducts = await userModel.findById(
-      { _id: userid },
-      { cart: 1, _id: 0 }
-    );
-    console.log(cartProducts);
+    const userAddresssAvailable = await addressModel.find({ userid });
+    const cartProducts = await userModel.findById(userid, { cart: 1 });
     const {
-      name,
-      houseno,
-      landmark,
-      city,
-      state,
-      phone,
-      email,
-      country,
-      pincode,
-      sum,
-      check_method,
-      previousTotal,
+      name, houseno, landmark, city, state, phone, email, country, pincode,
+      sum, check_method, previousTotal
     } = req.body;
 
-    if (userAddresssAvailable.length == 0) {
-      const { userid } = req.session;
+    let ordersave;
 
-      const Address = {
-        name: name,
-        phone: phone,
-        email: email,
-        pincode: pincode,
-        houseno: houseno,
-        landmark: landmark,
-        city: city,
-        state: state,
-        country: country,
-        userid: userid,
-      };
-      const userAddress = await addressModel.create(Address);
+    if (userAddresssAvailable.length === 0) {
+      const address = { name, phone, email, pincode, houseno, landmark, city, state, country, userid };
+      const userAddress = await addressModel.create(address);
 
-      console.log("useradd" + userAddress);
+      const orders = { userid, addressid: userAddress._id, products: cartProducts.cart.map(item => ({ productid: item.productid, size: item.size, qty: item.qty })), totalprice: sum, paymentMethod: check_method };
 
-      const orders = {
-        userid: userid,
-        addressid: userAddress._id,
-        products: cartProducts.cart.map((item) => ({
-          productid: item.productid,
-          size: item.size,
-          qty: item.qty,
-        })),
-        totalprice: sum,
-        paymentMethod: check_method,
-      };
-      const { couponid } = req.session;
-      const couponPresent = await userModel.findOne({
-        _id: userid,
-        coupon: { $in: [couponid] },
-      });
-      if (!couponPresent) {
-        const isCouponUsed = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $push: { coupon: iscouponCodeValid._id } }
-        );
-      } else {
-      //   res.status()
-      }
-      if (check_method === "wallet") {
-        console.log("entered wallet");
-        const walletAmount = await userModel.findById(
-          { _id: userid },
-          { WalletBalance: 1, _id: 0 }
-        );
-        console.log(walletAmount);
-        if (walletAmount.WalletBalance >= sum) {
-          ordersave = await orderModel.create(orders);
-        } else {
-          res
-            .status(400)
-            .json({ walleterror: "Insufficient amount in wallet to Purchase" });
-        }
+      if (check_method === 'razorpay') {
+        const onlinepayment = { ...orders, products: orders.products.map(product => ({ ...product, status: 'pending' })) };
+        ordersave = await orderModel.create(onlinepayment);
       } else {
         ordersave = await orderModel.create(orders);
-        console.log("order", ordersave);
       }
     } else {
-      console.log("entered order");
-      const { address, sum, check_method, previousTotal } = req.body;
-      const orders = {
-        userid: userid,
-        addressid: address,
-        products: cartProducts.cart.map((item) => ({
-          productid: item.productid,
-          size: item.size,
-          qty: item.qty,
-        })),
-        totalprice: sum,
-        paymentMethod: check_method,
-      };
+      const { address } = req.body;
+      const orders = { userid, addressid: address, products: cartProducts.cart.map(item => ({ productid: item.productid, size: item.size, qty: item.qty })), totalprice: sum, paymentMethod: check_method };
 
-      ordersave = await orderModel.create(orders);
-
-      const { couponid } = req.session;
-      const couponPresent = await userModel.findOne({
-        _id: userid,
-        coupon: { $in: [couponid] },
-      });
-      if (!couponPresent) {
-        const isCouponUsed = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $push: { coupon: couponid } }
-        );
+      if (check_method === 'razorpay') {
+        const onlinepayment = { ...orders, products: orders.products.map(product => ({ ...product, status: 'pending' })) };
+        ordersave = await orderModel.create(onlinepayment);
       } else {
-        console.log("coupon already used");
+        ordersave = await orderModel.create(orders);
       }
-      console.log("order" + ordersave);
     }
 
     const productArray = ordersave.products;
 
     if (ordersave.paymentMethod === "cod") {
-      if (ordersave) {
-        const deletefomCart = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $pull: { cart: {} } }
-        );
-        console.log(deletefomCart, "delete");
-        console.log("entered loop");
-        for (i = 0; i < productArray.length; i++) {
-          console.log(
-            "pid",
-            productArray[i].productid,
-            "size",
-            productArray[i].size,
-            "qty",
-            productArray[i].qty
-          );
-          const stockUpdate = await productModel.findOneAndUpdate(
-            {
-              _id: productArray[i].productid,
-              "size.label": productArray[i].size,
-            },
-            { $inc: { "size.$.quantity": -productArray[i].qty } }
-          );
-        }
+      if(req.session.couponid){
+        console.log('enterd coupon ininin')
+          await userModel.findByIdAndUpdate({ _id: userid }, { $push: { coupon: req.session.couponid } });
       }
-      res.status(200).json({ codSucess: "sucess" });
-    } else if (ordersave.paymentMethod === "wallet") {
-      console.log("enteered wallet");
-      const walletAmount = await userModel.findById(
-        { _id: userid },
-        { WalletBalance: 1, _id: 0 }
-      );
-      console.log(walletAmount);
+      const deletefomCart = await userModel.findByIdAndUpdate({ _id: userid }, { $pull: { cart: {} } });
+      for (let i = 0; i < productArray.length; i++) {
+        await productModel.findOneAndUpdate({ _id: productArray[i].productid, "size.label": productArray[i].size }, { $inc: { "size.$.quantity": -productArray[i].qty } });
+      }
+      return res.status(200).json({ codSucess: "sucess" });
+    }
+
+    if (ordersave.paymentMethod === "wallet") {    
+
+      const walletAmount = await userModel.findById({ _id: userid }, { WalletBalance: 1 });
       if (walletAmount.WalletBalance >= sum) {
-        const walletBalanceReduce = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $inc: { WalletBalance: -ordersave.totalprice } }
-        );
-        const walletcreate = {
-          redeemedAmount: ordersave.totalprice,
-          orderId: ordersave._id,
-          paymentMethod: ordersave.paymentMethod,
-          userid: userid,
-        };
-        const walletcreation = await wallet.create(walletcreate);
-        if (ordersave) {
-          const deletefomCart = await userModel.findByIdAndUpdate(
-            { _id: userid },
-            { $pull: { cart: {} } }
-          );
-          console.log(deletefomCart, "delete");
-          console.log("entered loop");
-          for (i = 0; i < productArray.length; i++) {
-            console.log(
-              "pid",
-              productArray[i].productid,
-              "size",
-              productArray[i].size,
-              "qty",
-              productArray[i].qty
-            );
-            const stockUpdate = await productModel.findOneAndUpdate(
-              {
-                _id: productArray[i].productid,
-                "size.label": productArray[i].size,
-              },
-              { $inc: { "size.$.quantity": -productArray[i].qty } }
-            );
-          }
+        if(req.session.couponid){
+            await userModel.findByIdAndUpdate({ _id: userid }, { $push: { coupon: req.session.couponid } });
         }
-        res.status(200).json({ walletsucess: "sucees" });
+        await userModel.findByIdAndUpdate({ _id: userid }, { $inc: { WalletBalance: -ordersave.totalprice } });
+        const walletcreate = { redeemedAmount: ordersave.totalprice, orderId: ordersave._id, paymentMethod: ordersave.paymentMethod, userid: userid };
+        await wallet.create(walletcreate);
+        const deletefomCart = await userModel.findByIdAndUpdate({ _id: userid }, { $pull: { cart: {} } });
+        for (let i = 0; i < productArray.length; i++) {
+          await productModel.findOneAndUpdate({ _id: productArray[i].productid, "size.label": productArray[i].size }, { $inc: { "size.$.quantity": -productArray[i].qty } });
+        }
+        return res.status(200).json({ walletsucess: "Payment Succees" });
       } else {
-        const order = await orderModel.findByIdAndDelete({
-          _id: ordersave._id,
-        });
-        res
-          .status(400)
-          .json({ walleterror: "Insufficient amount in wallet to Purchase" });
+        await orderModel.findByIdAndDelete({ _id: ordersave._id });
+        return res.status(400).json({ walleterror: "Insufficient amount in wallet to Purchase" });
       }
-    } else {
-      console.log("entered razorpay");
-      const razorpayOrder = await razorpay.generate_razorpayOrder(
-        ordersave._id,
-        ordersave.totalprice
-      );
-      console.log("razorpayOrder", razorpayOrder);
-      res.json(razorpayOrder);
+    }
+
+    if (ordersave.paymentMethod === "razorpay") {
+      const razorpayOrder = await razorpay.generate_razorpayOrder(ordersave._id, ordersave.totalprice);
+      return res.json(razorpayOrder);
     }
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+}
+
 
 module.exports = { loadCheckout, postCheckout };
