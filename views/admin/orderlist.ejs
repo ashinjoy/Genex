@@ -194,7 +194,7 @@ orderdata.forEach(orderdata => {
 }
 
 async function pagination(index){
-  const pageurl=`/admin/pagination?page=${index}`
+  const pageurl=`/admin/paginationofOrders?page=${index}`
   const response = await fetch(pageurl)
   const orderdata=await response.json()
   console.log(orderdata)
@@ -258,7 +258,16 @@ function injectData(orders){
   const paymentCell=document.createElement('td')
   const status=document.createElement('span')
   status.classList.add('badge', 'badge-pill', 'badge-soft-success')
-  status.innerHTML=orders.products.status
+  const orderStatus=orders.products.map((product)=>product.status) 
+  if(orderStatus.every(status => status == 'canceled')){
+    status.innerHTML='canceled'
+  }
+  else if(orderStatus.every(status =>status == 'delivery')){
+    status.innerHTML='delivery'
+  }
+  else{
+    status.innerHTML='processing'
+  }
   paymentCell.appendChild(status)
   row.appendChild(paymentCell)
   // payment method
@@ -276,13 +285,13 @@ function injectData(orders){
 
 const anchor = document.createElement('a');
 
-anchor.setAttribute('href', '/admin/ordersummary?oid=' + orders._id + '&pid=' + orders.products.productid);
+anchor.setAttribute('href', '/admin/ordersummary?oid=' + orders._id);
 
 anchor.setAttribute('class', 'btn btn-md rounded font-sm');
 
 
 anchor.innerHTML = 'Detail';
-console.log("anchor",anchor)
+// console.log("anchor",anchor)
 
 
 row.appendChild(anchor)

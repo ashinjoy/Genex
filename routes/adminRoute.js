@@ -29,8 +29,8 @@ adminRouter.get("/users/unblock",session.admin_islogin,userManagementController.
 
 adminRouter.get("/defaultpagination",pagination.pagination)
 adminRouter.get("/pagination",pagination.pagination)
-adminRouter.get('/defaultpaginationOrders',pagination.pagination)
-adminRouter.get('/paginationofOrders',pagination.pagination)
+adminRouter.get('/defaultpaginationOrders',pagination.orderPagination)
+adminRouter.get('/paginationofOrders',pagination.orderPagination)
 
 
 
@@ -59,6 +59,7 @@ adminRouter.post("/products/editproduct",session.admin_islogin,multer.array('Ima
 
 adminRouter.get("/listorders",session.admin_islogin,orderController.load_orderslist)
 adminRouter.get("/ordersummary",session.admin_islogin,orderController.load_Ordersummary)
+adminRouter.get('/order-changeStatus',session.admin_islogin,orderController.load_productStatusPage)
 adminRouter.get("/change-orderstatus",session.admin_islogin,orderController.changestatus)
 
 

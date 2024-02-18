@@ -17,4 +17,19 @@ const pagination=async(req,res)=>{
       res.json(orders)
 }
 
-module.exports={pagination}
+
+const orderPagination= async(req,res)=>{
+  try {
+    const pageNumber= req.query.page
+    console.log("pageNumber",pageNumber,"type",typeof(pageNumber))
+    const parsedPageNumber=parseInt(pageNumber)
+    const limit=8
+    const docSkipped=(parsedPageNumber-1)*limit
+    const orders=await orderModel.aggregate([{$sort:{createdAt:-1}},{$lookup:{from:'users',localField:'userid',foreignField:'_id',as:'userdetails'}},{$skip:docSkipped},{$limit:limit}])
+    res.json(orders)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+module.exports={pagination,orderPagination}

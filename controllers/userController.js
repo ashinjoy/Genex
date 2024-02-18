@@ -159,9 +159,9 @@ const login = async (req, res) => {
 };
 const load_userhome = async (req, res) => {
   try {
-    const categoryAvailable = await categoryModel.find({ status: true });
+    const categoryAvailable = await categoryModel.find({ status: true ,}).sort({created_at:-1}).limit(4);
 
-    const productAvailable = await productModel.find({ is_active: true });
+    const productAvailable = await productModel.find({ is_active: true }).limit(4);
 
     res.render("user/userhome", { categoryAvailable, productAvailable });
   } catch (error) {

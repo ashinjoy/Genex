@@ -55,12 +55,12 @@
         </div>
     </header>
     <%if(locals.orderDetail){%>
-        <% orderDetail.forEach((order)=>{%>
+       
     <section class="content-main">
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Order detail</h2>
-                <p>Details for Order ID:#<%=order._id%> </p>
+                <p>Details for Order ID:#<%=orderDetail[0]._id%> </p>
             </div>
         </div>
         <div class="card">
@@ -70,23 +70,10 @@
                         <span>
                             <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
                         </span> <br>
-                        <small class="text-muted">Order ID: #<%=order._id%></small>
+                        <small class="text-muted">Order ID: #<%=orderDetail[0]._id%></small>
                     </div>
-                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                        <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" onchange="changestatus('<%=order._id%>','<%=order.products.productid%>','<%=order.userid%>')" id="status">
-                            <option value="">Change status</option>
-                            <option value="processing">Processing</option>
-                            <option value="dispatched">dispatched</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="refund">refunded</option>
-                            <option value="paid">paid</option>
-                            <option value="delivery">Delivered</option>
-                            <option value="canceled">canceled</option>
-
-                        </select>
-                        <a class="btn btn-primary" href="#">Save</a>
-                        <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
-                    </div>
+                    
+                        
                 </div>
             </header> <!-- card-header end// -->
             <div class="card-body">
@@ -99,9 +86,8 @@
                             <div class="text">
                                 <h6 class="mb-1">Customer</h6>
                                 <p class="mb-1">
-                                    <%=order.user[0].uname%><br><%=order.user[0].email%><br> <%=order.user[0].phone%>
+                                    <%=orderDetail[0].user[0].uname%><br><%=orderDetail[0].user[0].email%><br> <%=orderDetail[0].user[0].phone%>
                                 </p>
-                                <!-- <a href="/">View profile</a> -->
                             </div>
                         </article>
                     </div> <!-- col// -->
@@ -113,7 +99,7 @@
                             <div class="text">
                                 <h6 class="mb-1">Order info</h6>
                                 <p class="mb-1">
-                                    Shipping: Fargo express <br> Pay method: <%=order.paymentMethod%> <br> Status: <%=order.products.status%>
+                                    Shipping: Fargo express <br> Pay method: <%=orderDetail[0].paymentMethod%> <br> Status: <%=orderDetail[0].products.status%>
                                 </p>
                                 <!-- <a href="#">Download info</a> -->
                             </div>
@@ -127,7 +113,7 @@
                             <div class="text">
                                 <h6 class="mb-1">Deliver to</h6>
                                 <p class="mb-1">
-                                    City: <%=order.address[0].city%>, <%=order.address[0].country%> <br><%=order.address[0].houseno%><br> <%=order.address[0].pincode%>
+                                    City: <%=orderDetail[0].address[0].city%>, <%=orderDetail[0].address[0].country%> <br><%=orderDetail[0].address[0].houseno%><br> <%=orderDetail[0].address[0].pincode%>
                                 </p>
                                 <!-- <a href="#">View profile</a> -->
                             </div>
@@ -143,26 +129,35 @@
                                         <th width="40%">Product</th>
                                         <th width="20%">Unit Price</th>
                                         <th width="20%">Quantity</th>
-                                        <th width="20%" class="text-end">Total</th>
+                                        <th width="20%">Current Status</th>
+                                        <th width="20%" >Total</th>
+                                        <th width="20%" class="text-end">view detail</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <%locals.orderDetail.forEach((product)=>{%>
+                                        <tr>
                                         <td>
                                             <a class="itemside" href="#">
                                                 <div class="left">
                                                     
-                                                    <img src="/assets/<%=order.productsList[0].img[0]%>" width="200" height="200" class="img-xs" alt="Item">
+                                                    <img src="/assets/<%=product.productsList[0].img[0]%>" width="200" height="200" class="img-xs" alt="Item">
                                                     
 
                                                 </div>
-                                                <div class="info"> <%=order.productsList[0].name%></div>
+                                                <div class="info"> <%=product.productsList[0].name%></div>
                                             </a>
                                         </td>
-                                        <td><%=order.productsList[0].salesprice%> </td>
-                                        <td><%=order.products.qty%> </td>
-                                        <td class="text-end"><%=order.productsList[0].salesprice*order.products.qty%> </td>
+                                        <td><%=product.productsList[0].salesprice%> </td>
+                                        <td><%=product.products.qty%> </td>
+                                        <td><span class="badge rounded-pill alert-success text-success"><%=product.products.status%></span></td>
+                                        <td ><%=product.productsList[0].salesprice*product.products.qty%> </td>
+                                        <td class="text-end"><a href="/admin/order-changeStatus?oid=<%=product._id%>&pid=<%=product.products.productid%>">View Order</a> </td>
+                                        
                                     </tr>
+                                    <%})%>
+                                    
                                     
                                     
                                     
@@ -171,7 +166,7 @@
                                             <article class="float-end">
                                                 <dl class="dlist">
                                                     <dt>Subtotal:</dt>
-                                                    <dd>Rs<%=order.productsList[0].salesprice  * order.products.qty%></dd>
+                                                    <dd>Rs<%=orderDetail[0].totalprice%></dd>
                                                 </dl>
                                                 <!-- <dl class="dlist">
                                                     <dt>Shipping cost:</dt>
@@ -179,7 +174,7 @@
                                                 </dl> -->
                                                 <dl class="dlist">
                                                     <dt>Grand total:</dt>
-                                                    <dd> <b class="h5">Rs<%=order.productsList[0].salesprice*order.products.qty%></b> </dd>
+                                                    <dd> <b class="h5">Rs<%=orderDetail[0].totalprice%></b> </dd>
                                                 </dl>
                                                 <!-- <dl class="dlist">
                                                     <dt class="text-muted">Status:</dt>
@@ -206,9 +201,9 @@
                                 Phone: +1 (800) 555-154-52
                             </p>
                         </div>
-       <% })%>
+   <%}%>
 
-                         <%}%>
+                    
                         <div class="h-25 pt-4">
                             <div class="mb-3">
                                 <label>Notes</label>
@@ -221,18 +216,5 @@
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        async function changestatus(oid,pid,userid){
-            let statuschange=document.getElementById('status')
-           let value= statuschange.value
-            url=`/admin/change-orderstatus?oid=${oid}&pid=${pid}&value=${value}&uid=${userid}`
-            const res= await fetch(url)
-            if(res.ok){
-            await Swal.fire({title:"Status Changed",icon:"success"})
-            window.location.reload()
-            }
-        }
-    </script>
+  
 <%-include("adminlayout/footer.ejs")%>
