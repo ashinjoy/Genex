@@ -15,8 +15,8 @@ const logredirect = async (req, res) => {
 
 const Loadlogin = async (req, res) => {
   try {
-  const successMsg=  req.query ? req.query.message : null
-    res.render("user/userLogin",{successMsg});
+    const successMsg = req.query ? req.query.message : null;
+    res.render("user/userLogin", { successMsg });
   } catch (err) {
     console.log(err.message);
   }
@@ -48,6 +48,9 @@ const signup = async (req, res) => {
       console.log(userDetails);
       const userid = userDetails._id;
       req.session.otp = userid;
+      if (req.query.ref) {
+        req.session.ref = req.query.ref;
+      }
       res.redirect("/email-verification");
     } else {
       res.render("user/userSignup", {
@@ -114,13 +117,31 @@ const verifyotp = async (req, res) => {
         { _id: userid },
         { is_verified: 1 }
       );
+      // generate referral String for all sucesfully verified user
+      const refferalString = `${req.headers.host}/signup?ref:${userid}`;
+      const reffreallink = await userModel.findByIdAndUpdate(
+        { _id: userid },
+        { $set: { referralString: refferalString } }
+      );
+      if (req.session.ref) {
+        const { ref } = req.session;
+        const refernceValid = await userModel.findById({ _id: ref });
+        if (refernceValid) {
+          await userModel.findByIdAndUpdate(
+            { _id: ref },
+            { $inc: { wallet: 100 } }
+          );
+        }
+      }
+      req.session.ref = null;
+
       req.session.otp = null;
+
       const success = "User Successfully verified";
-      res.status(200).json(success)
+      res.status(200).json(success);
     } else {
-      const error = "Invalid OTP"
-      res.status(403).json(error)
-      
+      const error = "Invalid OTP";
+      res.status(403).json(error);
     }
   } catch (err) {
     console.error(err);
@@ -151,7 +172,7 @@ const login = async (req, res) => {
         res.render("user/userLogin", { error: "Invalid Credentials" });
       }
     } else {
-      console.log("Please Signup");
+      res.render("user/userLogin", { noSignup: "Please Sign Up " });
     }
   } catch (err) {
     console.error(err);
@@ -159,9 +180,14 @@ const login = async (req, res) => {
 };
 const load_userhome = async (req, res) => {
   try {
-    const categoryAvailable = await categoryModel.find({ status: true ,}).sort({created_at:-1}).limit(4);
+    const categoryAvailable = await categoryModel
+      .find({ status: true })
+      .sort({ created_at: -1 })
+      .limit(4);
 
-    const productAvailable = await productModel.find({ is_active: true }).limit(4);
+    const productAvailable = await productModel
+      .find({ is_active: true })
+      .limit(4);
 
     res.render("user/userhome", { categoryAvailable, productAvailable });
   } catch (error) {
@@ -187,8 +213,21 @@ const load_usershop = async (req, res) => {
 const load_productdetail = async (req, res) => {
   const { id } = req.query;
   const product = await productModel.findById({ _id: id }).populate("category");
+  console.log("catName", product.category.name);
+  // const relatedProducts= await productModel.find({category:product.category._id})
+  const relatedProducts = await productModel.aggregate([
+    {
+      $match: {
+        $and: [
+          { _id: { $ne: product._id } },
+          { category: product.category._id },
+        ],
+      },
+    },
+  ]);
+  console.log("relatedProducts", relatedProducts);
   console.log(product);
-  res.render("user/productdetail", { product });
+  res.render("user/productdetail", { product, relatedProducts });
 };
 
 const logout = async (req, res) => {

@@ -51,9 +51,6 @@ userRouter.get("/listaddress",session.user_islogin,address.listAddress)
 userRouter.get("/remove-address/",session.user_islogin,address.deleteAddress)
 
 
-
-
-
 userRouter.get("/myaccount",session.user_islogin,userProfile.loadUserProfile)
 
 userRouter.get("/edituser",session.user_islogin,userProfile.load_edituser)
@@ -65,6 +62,7 @@ userRouter.get("/cancelorders",session.user_islogin,orders.cancelorder)
 userRouter.get("/ordersummary",session.user_islogin,orders.load_OrderSummary)
 userRouter.get("/ordersuccess",session.user_islogin,orders.load_orderSuccessPage)
 userRouter.get("/invoice-download",orders.invoice)
+userRouter.get('/return-orders',session.user_islogin,orders.returnOrder)
 
 userRouter.get("/change-password",session.user_islogin,changepassword.load_ChangePassword)
 userRouter.post("/change-password",session.user_islogin,changepassword.changePassword)
@@ -82,6 +80,8 @@ userRouter.post("/verify-walletPayment",wallet.verifypayment)
 userRouter.post('/applyCoupon',coupon.applyCoupon)
 userRouter.get('/removeCoupon',coupon.removeCoupon)
 userRouter.get('/listcoupons',session.user_islogin,coupon.couponlist)
+
+
 
 userRouter.get('/search',search.searchProducts)
 

@@ -79,4 +79,30 @@ for(i=1;i<=12;i++)
 return monthDatefilter
   
 }
-module.exports={weeklyData,monthlyData}
+
+function yearlyData(){
+const today=new Date()
+const startingDate=new Date(today)
+startingDate.setMonth(0)
+startingDate.setDate(1)
+startingDate.setUTCHours(0)
+startingDate.setUTCMinutes(0)
+startingDate.setUTCSeconds(0)
+console.log(startingDate)
+const endingDate=new Date(today)
+return {endingDate:endingDate,startingDate:startingDate}
+
+}
+function monthsale(){
+const today=new Date()
+const startingDate=new Date(today)
+startingDate.setDate(1)
+startingDate.setUTCHours(0)
+startingDate.setUTCMinutes(0)
+startingDate.setUTCSeconds(0)
+console.log(startingDate)
+const endingDate=new Date(today)
+return {endingDate:endingDate,startingDate:startingDate}
+}
+
+module.exports={weeklyData,monthlyData,yearlyData,monthsale}

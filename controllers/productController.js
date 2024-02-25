@@ -20,7 +20,7 @@ const add_product = async (req, res) => {
     const {
       pname,
       description,
-      reg_price,
+      // reg_price,
       sales_price,
       cat,
       small_qty,
@@ -55,7 +55,7 @@ const add_product = async (req, res) => {
       name: pname,
       description: description,
       category: cat,
-      regularprice: reg_price,
+      // regularprice: reg_price,
       salesprice: sales_price,
       size: [
         { label: "small", quantity: small_qty },
@@ -86,8 +86,11 @@ const load_productlist = async (req, res) => {
         return data;
       }
     });
+    const productsCount = await productModel.countDocuments({});
+    const limit = 8;
+    const totalPageNumber = Math.ceil(productsCount / limit);
 
-    res.render("admin/productlist", { filteredproducts });
+    res.render("admin/productlist", { filteredproducts, totalPageNumber });
   } catch (error) {
     console.log(error);
   }
@@ -131,7 +134,7 @@ const editproduct = async (req, res) => {
     const {
       pname,
       description,
-      reg_price,
+      // reg_price,
       sales_price,
       cat,
       small_qty,
@@ -150,7 +153,7 @@ const editproduct = async (req, res) => {
             name: pname,
             description: description,
             category: cat,
-            regularprice: reg_price,
+            // regularprice: reg_price,
             salesprice: sales_price,
             size: [
               { label: "small", quantity: small_qty },
@@ -173,7 +176,7 @@ const editproduct = async (req, res) => {
             name: pname,
             description: description,
             category: cat,
-            regularprice: reg_price,
+            // regularprice: reg_price,
             salesprice: sales_price,
             size: [
               { label: "small", quantity: small_qty },
@@ -221,52 +224,7 @@ const bestProducts = async (req, res) => {
   }
 };
 
-// const bestCategory=async(req,res)=>{
-//   try {
-//     const bestTenCategory=await order.aggregate([
-//       {
-//         $lookup: {
-//           from: 'products',
-//           localField: 'productId',
-//           foreignField: '_id',
-//           as: 'product',
-//         },
-//       },
-//       {
-//         $unwind: '$product',
-//       },
-//       {
-//         $group: {
-//           _id: '$product.category',
-//           totalQuantitySold: { $sum: '$quantity' },
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: 'categories',
-//           localField: '_id',
-//           foreignField: '_id',
-//           as: 'category',
-//         },
-//       },
-//       {
-//         $unwind: '$category',
-//       },
-//       {
-//         $sort: { totalQuantitySold: -1 },
-//       },
-//       {
-//         $limit: 10,
-//       },
 
-//     ])
-//     res.render('admin/bestcategories',{bestTenCategory})
-//     console.log("cat",bestTenCategory)
-
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
 
 module.exports = {
   load_addproduct,

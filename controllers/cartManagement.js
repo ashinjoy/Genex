@@ -3,7 +3,8 @@ const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const addtocart = async (req, res) => {
   try {
-    console.log("entered addtocart");
+    if(req.session.userid){
+      console.log("entered addtocart");
     const { id, qty, size } = req.query;
     const qtySelected = parseInt(qty);
     console.log("productid", id);
@@ -46,6 +47,11 @@ const addtocart = async (req, res) => {
       console.log("no stocks available");
       res.status(409).json({ error: "No stocks Available" });
     }
+    }
+    else{
+      res.status(400).json({failure:'Please login to Shop '})
+    }
+    
   } catch (error) {
     console.error(error);
   }
@@ -61,7 +67,7 @@ const loadcart = async (req, res) => {
 
     res.render(
       "user/cart",
-      carts.length > 0 ? { carts } : { message: "your cart is empty" }
+      carts.length> 0 ? { carts } :{noitem:"no item"}
     );
   } catch (error) {
     console.error(error);
@@ -98,7 +104,9 @@ const editquantity = async (req, res) => {
       );
       res.status(200).json({ data: productQty });
     } else {
-      res.status(400).json({ error: "There is no sufficient Stock", qty:productQty});
+      res
+        .status(400)
+        .json({ error: "There is no sufficient Stock", qty: productQty });
     }
   } catch (error) {
     console.error(error);

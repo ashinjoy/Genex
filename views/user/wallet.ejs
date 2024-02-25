@@ -107,6 +107,10 @@ rzp1.open();
       order:order
     }
     const response=await fetch(url,{method:"post",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)},)
+    const moneydetail =await response.json()
+    if(response.ok){
+        window.location.reload()
+    }
 
    }
     

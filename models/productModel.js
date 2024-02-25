@@ -24,9 +24,9 @@ const productSchema = new mongoose.Schema({
       },
     },
   ],
-  regularprice: {
+  offerPrice:{
     type: Number,
-    required: true,
+    default: 0,
   },
   salesprice: {
     type: Number,
@@ -39,7 +39,11 @@ const productSchema = new mongoose.Schema({
   img:[{
     type:String,
     required:true
-  }]
+  }],
+  offer:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'offer'
+  }
 });
 const productModel=mongoose.model("product",productSchema)
 module.exports=productModel

@@ -31,7 +31,7 @@
             ></button>
           </div>
           <div class="niceselect_option">
-            <form class="select_option" action="#">
+            <!-- <form class="select_option" action="#">
               <select name="orderby" id="short">
                 <option selected value="1">Sort by average rating</option>
                 <option value="2">Sort by popularity</option>
@@ -40,10 +40,13 @@
                 <option value="5">Sort by price: high to low</option>
                 <option value="6">Product Name: Z</option>
               </select>
-            </form>
+            </form> -->
           </div>
           <div class="page_amount">
-            <p>Showing 1–12 of 21 results</p>
+           <% if(filtered){%>
+              <p>Showing 1–<%=filtered.length%> of <%=filtered.length%>  results</p>
+
+           <% }%>
           </div>
         </div>
         <!--shop toolbar end-->
@@ -76,11 +79,11 @@
                         <span class="pe-7s-search"></span
                       ></a>
                     </li>
-                    <li class="wishlist">
+                    <!-- <li class="wishlist">
                       <a href="#" title="Add to Wishlist"
                         ><span class="pe-7s-like"></span
                       ></a>
-                    </li>
+                    </li> -->
                     <li class="compare">
                       <a href="#" title="Add to Compare"
                         ><span class="pe-7s-edit"></span
@@ -92,16 +95,28 @@
               <div class="product_content grid_content">
                 <div class="product_content_inner">
                   <h4 class="product_name">
-                    <a href="product-details.html"><%=data.name%></a>
+                    <a href="product-details.html"><b><%=data.name%></b></a>
+
+                    <!-- old_price -->
                   </h4>
                   <div class="price_box">
-                    <span class="old_price"><%=data.regularprice%></span>
-                    <span class="current_price"><%=data.salesprice%></span>
+                   
+                    <!-- <span ><b>Rs:<%=data.offerPrice%></b></span> -->
+
+                <%if(data.offerPrice == 0){%>
+                  <span class="current_price"><b>Rs:<%=data.salesprice%></b></span>
+                <%}  else {%>
+                
+                  <span class="old_price"><b>Rs:<%=data.salesprice%></b></span>
+
+                  <span class="current_price"><b>Rs:<%=data.offerPrice%></b></span>
+
+                <%}%>
                   </div>
                 </div>
                 <div class="add_to_cart">
-                  <a href="" onclick="addtocart('<%=data._id%>'); return false;"
-                    >Add to cart</a
+                  <a href="/productdetail?id=<%=data._id%>" 
+                    >Product View</a
                   >
                 </div>
               </div>
@@ -111,7 +126,18 @@
                 </h4>
                 <div class="price_box">
                   <span class="old_price"><%=data.regularprice%></span>
-                  <span class="current_price"><%=data.salesprice%></span>
+
+                  <%if(data.offerPrice == 0){%>
+                    <span class="current_price"><b>Rs:<%=data.salesprice%></b></span>
+                  <%}  else {%>
+                  
+                    <span class="old_price"><b>Rs:<%=data.salesprice%></b></span>
+  
+                    <span class="current_price"><b>Rs:<%=data.offerPrice%></b></span>
+  
+                  <%}%>
+                  
+                  <!-- <span class="current_price"><%=data.salesprice%></span> -->
                 </div>
                 <div class="product_rating">
                   <ul>
@@ -136,14 +162,14 @@
                   <p><%=data.description%></p>
                 </div>
                 <div class="add_to_cart shop_list_cart">
-                  <a href="cart.html">Add to cart</a>
+                  <a href="#">Add to cart</a>
                 </div>
               </div>
             </div>
           </div>
           <%})%>
 
-          <div class="shop_toolbar t_bottom">
+          <!-- <div class="shop_toolbar t_bottom">
             <div class="pagination">
               <ul>
                 <li class="current">1</li>
@@ -153,23 +179,12 @@
                 <li><a href="#">>></a></li>
               </ul>
             </div>
-          </div>
+          </div> -->
           <!--shop toolbar end-->
           <!--shop wrapper end-->
         </div>
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    async function addtocart(pid) {
-        console.log("hi")
-      const res = await Swal.fire({ title: "Add the size", icon:"warning"});
-      console.log(res)
-      if(res.isConfirmed){
-        window.location.href=`http://localhost:3000/productdetail?id=${pid}`
-      }
-    }
-  </script>
   <%-include("./userlayout/footer.ejs")%>
 </div>

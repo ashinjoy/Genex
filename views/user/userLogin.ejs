@@ -116,6 +116,10 @@
             <%if(locals.successMsg){%>
             <div class="text-success successborder" > <%=locals.successMsg%></div>
             <%}%>
+            <%if(locals.noSignup){%>
+            <div class="alert alert-danger" > <%=locals.noSignup%></div>
+              
+           <% }%>
           <form action="/login" method="post" id="regform">
             <p>
               <label>Email</label>

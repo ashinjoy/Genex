@@ -42,6 +42,7 @@ function validteImg() {
         imgerror.innerHTML = "Only supports /jpeg, /png, /gif, /webp formats";
     }
     else {
+      console.log('sucess')
         imgerror.style.display = "none";
         imgerror.innerHTML = "";
       }
@@ -55,12 +56,14 @@ function validteImg() {
 
 function validate_description() {
   const desc = description.value;
+  console.log(desc)
   if (desc.trim() === "") {
     desc_error.style.display = "block";
     desc_error.innerHTML = "please enter the description";
   } else {
+    console.log('wrong')
     desc_error.style.display = "none";
-    desc.innerHTML = "";
+    desc_error.innerHTML = "";
   }
 }
 
@@ -71,7 +74,10 @@ catform.addEventListener("submit", (event) => {
   validatecatname();
   validteImg();
   validate_description();
-  if (nameerror.innerHTML  || desc_error.innerHTML) {
+  console.log(nameerror.innerHTML)
+  console.log(desc_error.innerHTML)
+  if (nameerror.innerHTML  || desc_error.innerHTML|| imgerror.innerHTML) {
+    console.log('enter prevent default')
     event.preventDefault();
   }
 });

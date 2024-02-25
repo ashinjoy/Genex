@@ -57,6 +57,10 @@ coupon:{
     ref:'coupon'
   }],
   default:[]
+},
+
+referralString:{
+  type:String
 }
 
 

@@ -36,6 +36,41 @@ orderdata.forEach(orderdata => {
 });
 
 
+const monthurl='/admin/monthly-report'
+const report=await fetch(monthurl)
+console.log(report)
+const monthlysales = await report.json() 
+console.log('monthlysales',monthlysales)
+console.log(monthlysales[1].filteredOrders)
+// let label=[]
+// for(i=0;i<12;i++){
+// const labelstorage=  detail[0].
+
+// }
+
+const monthNameLabel=monthlysales[0].filtered_Datedata.map(month=>month.monthName)
+ const data2=monthlysales[1].filteredOrders.map(totalorder =>totalorder.length > 0 ? totalorder[0].orderTotal : 0)
+
+console.log("labels",monthNameLabel)
+console.log(data2)
+
+
+const chart1 = new Chart(
+  document.getElementById('myChart2'),
+  {
+    type: 'doughnut',
+    data: {
+      labels: monthNameLabel,
+      datasets: [
+        {
+          label: 'Total Orders per Month',
+          data: data2
+        }
+      ]
+    }
+  }
+);
+
 
 }
 
@@ -124,41 +159,42 @@ function injectData(orders){
   
   }
 
-document.getElementById("month").addEventListener("click",monthlydata)
+// document.getElementById("month").addEventListener("click",monthlydata)
 
 async function monthlydata(){
-  url='/admin/monthly-report'
-  const res=await fetch(url)
-  console.log(res)
-  const detail = await res.json() 
-  console.log(detail)
-  console.log(detail[1].filteredOrders)
-  // let label=[]
-  // for(i=0;i<12;i++){
-  // const labelstorage=  detail[0].
+//   url='/admin/monthly-report'
+//   const res=await fetch(url)
+//   console.log(res)
+//   const detail = await res.json() 
+//   console.log(detail)
+//   console.log(detail[1].filteredOrders)
+//   // let label=[]
+//   // for(i=0;i<12;i++){
+//   // const labelstorage=  detail[0].
 
-  // }
+//   // }
   
-  const monthNameLabel=detail[0].filtered_Datedata.map(month=>month.monthName)
-   const data=detail[1].filteredOrders.map(totalorder =>totalorder.length > 0 ? totalorder[0].orderTotal : 0)
+//   const monthNameLabel=detail[0].filtered_Datedata.map(month=>month.monthName)
+//    const data=detail[1].filteredOrders.map(totalorder =>totalorder.length > 0 ? totalorder[0].orderTotal : 0)
   
-console.log("labels",monthNameLabel)
-console.log(data)
+// console.log("labels",monthNameLabel)
+// console.log(data)
 
 
-const chart = new Chart(
-    document.getElementById('myChart2'),
-    {
-      type: 'doughnut',
-      data: {
-        labels: monthNameLabel,
-        datasets: [
-          {
-            label: 'Total Orders per Month',
-            data: data
-          }
-        ]
-      }
-    }
-  );
+// const chart = new Chart(
+//     document.getElementById('myChart2'),
+//     {
+//       type: 'doughnut',
+//       data: {
+//         labels: monthNameLabel,
+//         datasets: [
+//           {
+//             label: 'Total Orders per Month',
+//             data: data
+//           }
+//         ]
+//       }
+//     }
+//   );
 }
+

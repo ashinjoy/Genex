@@ -36,9 +36,14 @@
                                         
                                        
                                        <td><%=order.products[i].qty*order.products[i].productid.salesprice%></td> 
-                                       <%if(order.products[i].status != 'canceled'){%>
+                                       <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivery' && order.products[i].status != 'returned' && order.products[i].status != 'pending'){%>
                                 <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="cancelorder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Cancel</button></td>
                                        <%}%>
+                                       <%if(order.products[i].status == 'delivery'){%>
+                                <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="returnOrder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Return</button></td>
+                                      <%}%>
+
+
                                 </tr> 
                                
                               <%}%>
@@ -65,6 +70,25 @@
     try {
       console.log(pid)
     url=`/cancelorders?pid=${pid}&oid=${oid}`
+    const res=await fetch(url)
+if(res.ok){
+  await Swal.fire({
+    title:"Item canceled Successfully",
+    icon:"success"
+  })
+  window.location.reload()
+}
+  }
+      
+     catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function returnOrder(proid,ordid){
+    try {
+
+    url=`/return-orders?pid=${proid}&oid=${ordid}`
     const res=await fetch(url)
 if(res.ok){
   await Swal.fire({

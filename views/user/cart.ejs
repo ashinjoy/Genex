@@ -23,9 +23,7 @@
     <form action="/checkout">
       <div class="row">
         <div class="col-12">
-          <%if(locals.message){%>
-          <div class="text-center"><b><%=message%></b></div>
-          <%}%>
+
           <div class="table_desc">
             <div class="cart_page table-responsive">
               <%if(locals.carts) {%> <%if(locals.carts.length>0){%>
@@ -53,9 +51,16 @@
                     <td class="product_name">
                       <a href="#"><%=product.productid.name%></a>
                     </td>
-                    <td class="product-price" id="salesprice<%=index%>">
-                      <%=product.productid.salesprice%>
-                    </td>
+                   <% if(product.productid.offerPrice > 0){%>
+                      <td class="product-price" id="salesprice<%=index%>">
+                        <%=product.productid.offerPrice%>
+                      </td>
+                   <% } else{%>
+                      <td class="product-price" id="salesprice<%=index%>">
+                       <%=product.productid.salesprice%>
+                      </td>
+                     <% }%>
+                    
                     <td class="product_quantity">
                       <label></label>
                       <input
@@ -68,9 +73,16 @@
                         onkeydown="return onlyUpDownArrows(event);"
                       />
                     </td>
-                    <td class="product_total" id="totalprice<%=index%>">
-                      <%=product.qty*product.productid.salesprice%>
-                    </td>
+                    <%  if(product.productid.offerPrice > 0){%>
+                        <td class="product_total" id="totalprice<%=index%>">
+                          <%=product.qty*product.productid.offerPrice%>
+                        </td>
+                     <% } else {%>
+                        <td class="product_total" id="totalprice<%=index%>">
+                          <%=product.qty*product.productid.salesprice%>
+                        </td>
+                      <%}%>
+                    
                     <td class="product_remove">
                       <button
                         type="button"
@@ -84,9 +96,9 @@
                 </tbody>
               </table>
             </div>
-            <div class="cart_submit">
+            <!-- <div class="cart_submit">
               <button type="submit">update cart</button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -94,14 +106,14 @@
       <div class="coupon_area">
         <div class="row">
           <div class="col-lg-6 col-md-6">
-            <div class="coupon_code left">
-              <h3>Coupon</h3>
-              <div class="coupon_inner">
+            <!-- <div class="coupon_code left"> -->
+              <!-- <h3>Coupon</h3> -->
+              <!-- <div class="coupon_inner">
                 <p>Enter your coupon code if you have one.</p>
                 <input placeholder="Coupon code" type="text" />
                 <button type="submit">Apply coupon</button>
-              </div>
-            </div>
+              </div> -->
+            <!-- </div> -->
           </div>
           <div class="col-lg-6 col-md-6">
             <div class="coupon_code right">
@@ -109,13 +121,13 @@
               <div class="coupon_inner">
                 <div class="cart_subtotal">
                   <p>Subtotal</p>
-                  <p class="cart_amount">£215.00</p>
+                  <p class="cart_amount" id="subtotal">£215.00</p>
                 </div>
-                <div class="cart_subtotal">
+                <!-- <div class="cart_subtotal">
                   <p>Shipping</p>
                   <p class="cart_amount"><span>Flat Rate:</span> £255.00</p>
-                </div>
-                <a href="#">Calculate shipping</a>
+                </div> -->
+                <!-- <a href="#">Calculate shipping</a> -->
 
                 <div class="cart_subtotal">
                   <p>Total</p>
@@ -135,6 +147,13 @@
 </div>
 
 <%}%> <%}%>
+<%if(locals.noitem){%>
+  <div class="noaddress">
+  <img src="/public/assets/img/icon/d438a32e-765a-4d8b-b4a6-520b560971e8.webp" alt="" width="100px" height="100px">
+  <h3>Cart is Empty</h3>
+  <h4>Add items to cart</h4>
+</div>
+<%}%>
 
 <!--shopping cart area end -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -148,11 +167,14 @@
       return parseFloat(el.innerHTML);
     });
     let totalamount = document.getElementById("maintotal");
+    let newsubtotal =document.getElementById('subtotal')
     let newarr = totalArray.reduce((acc, el) => {
       return (acc += el);
     }, 0);
     let newtotal = newarr;
-    totalamount.innerHTML = newtotal;
+    totalamount.innerHTML = "₹"+newtotal;
+    newsubtotal.innerHTML="₹"+newtotal
+
   };
 
   function cartTotal() {

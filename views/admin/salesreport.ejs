@@ -1,0 +1,248 @@
+<%-include("./adminlayout/header.ejs")%>
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div class="col-nav">
+            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-icon" href="#">
+                        <i class="material-icons md-notifications animation-shake"></i>
+                        <span class="badge rounded-pill">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                        <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
+                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                    </div>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <section class="content-main">
+        
+        
+        
+        <div class="card mb-4">
+            <header class="card-header">
+                <h4 class="card-title">Latest orders</h4>
+                <div class="row align-items-center">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                        
+                    </div>
+                   
+                    <div class="col-md-2 col-6">
+                        <div class="custom_select">
+                            <select class="form-select select-nice" id="report" onchange="filterReport()">
+                                
+                                <option>All</option>
+                                <option value="yearly">yearly</option>
+                                <option value="monthly">monthly</option>
+                                <!-- <option value="weekly">weekly</option> -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="text-center">
+                                        <div class="form-check align-middle">
+                                            <input class="form-check-input" type="checkbox" id="transactionCheck01">
+                                            <label class="form-check-label" for="transactionCheck01"></label>
+                                        </div>
+                                    </th>
+                                    <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Billing Name</th>
+                                    <th class="align-middle" scope="col">Date</th>
+                                    <th class="align-middle" scope="col">Total</th>
+                                    <th class="align-middle" scope="col">Payment Status</th>
+                                    <th class="align-middle" scope="col">Payment Method</th>
+                                    <!-- <th class="align-middle" scope="col">View Details</th> -->
+                                </tr>
+                            </thead>
+                            <tbody id="orderBody">
+                                
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- table-responsive end// -->
+            </div>
+        </div>
+        <div class="pagination-area mt-30 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                 
+                </ul>
+            </nav>
+        </div>
+    </section> <!-- content-main end// -->
+    
+<script>
+async function filterReport(){
+let orderBody=document.getElementById('orderBody')
+
+console.log('hello')
+const filter= document.getElementById('report').value
+
+let url
+if(filter == 'yearly'){
+    console.log('jcbhubdsucbusdbu')
+ url=`/admin/filter-report?filter=${filter}`
+}
+else if(filter == 'monthly'){
+ url=`/admin/filter-report?filter=${filter}`
+
+}
+else {
+    url=`/admin/filter-report?filter=${filter}`
+
+}
+
+const res=await fetch(url)
+const data=await res.json()
+console.log(data)
+orderBody.innerHTML= ''
+data.forEach((order)=>{
+    injectData(order)
+})
+}
+
+
+
+function injectData(orders){
+const row =document.createElement('tr')
+//checkbox
+
+
+const checkboxCell = document.createElement('td');
+checkboxCell.classList.add('text-center');
+const checkboxDiv = document.createElement('div');
+checkboxDiv.classList.add('form-check');
+const checkboxInput = document.createElement('input');
+checkboxInput.classList.add('form-check-input');
+checkboxInput.setAttribute('type', 'checkbox');
+checkboxInput.id = 'transactionCheck02';
+const checkboxLabel = document.createElement('label');
+checkboxLabel.classList.add('form-check-label');
+checkboxLabel.setAttribute('for', 'transactionCheck02');
+checkboxDiv.appendChild(checkboxInput);
+checkboxDiv.appendChild(checkboxLabel);
+checkboxCell.appendChild(checkboxDiv);
+row.appendChild(checkboxCell);
+
+// orderid cell
+const orderIdCell=document.createElement('td')
+const orderlink=document.createElement('a')
+orderlink.classList.add('fw-bold')
+orderlink.id='orderid'
+orderlink.innerHTML=orders._id
+orderIdCell.appendChild(orderlink)
+row.appendChild(orderIdCell)
+
+// customername cell
+const customerNameCell=document.createElement('td')
+customerNameCell.textContent=orders.userdetails[0].uname
+
+row.appendChild(customerNameCell)
+
+// date cell
+const dateCell=document.createElement('td')
+dateCell.innerHTML=orders.createdAt
+row.appendChild(dateCell)
+
+// totalCell cell
+const totalCell=document.createElement('td')
+totalCell.innerHTML=orders.totalprice
+row.appendChild(totalCell)
+
+
+
+// payment status
+const paymentCell=document.createElement('td')
+const status=document.createElement('span')
+status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+status.innerHTML=orders.products.status
+paymentCell.appendChild(status)
+row.appendChild(paymentCell)
+// payment method
+
+const paymentMethodCell=document.createElement('td')
+paymentMethodCell.innerHTML=orders.paymentMethod
+
+row.appendChild(paymentMethodCell)
+// // button cell
+
+// const viewDetailCell=document.createElement('a')
+// viewDetailCell.classList.add('btn', 'btn-xs')
+// viewDetailCell.innerHTML='View Detail'
+// row.appendChild(viewDetailCell)
+
+//  orderBody=document.getElementById('ordtableBody')
+orderBody.appendChild(row)
+
+}
+// async function filterReport(){
+// console.log("jbnchbdshcv")
+// const  filter= document.getElementById('report').value
+// let url
+// if(filter == 'yearly'){
+//  url=`/admin/filter-report?filter=${filter}`
+// }
+// else if(filter == 'monthly'){
+//  url=`/admin/filter-report?filter=${filter}`
+
+// }
+// else {
+//     url=`/admin/filter-report?filter=${filter}`
+
+// }
+
+// const res=await fetch(url)
+// const data=await res.json()
+// }
+
+</script>
+
+    <%-include("./adminlayout/footer.ejs")%>

@@ -60,7 +60,7 @@
                 <div class="content-header">
                     <h2 class="content-title">Edit Coupon</h2>
                     <div>
-                        <form action="/admin/editCoupon" method="post">
+                        <form action="/admin/editCoupon" method="post" id="couponform">
                         <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
                         <button class="btn btn-md rounded font-sm hover-up">Edit Coupon</button>
                     </div>
@@ -77,11 +77,15 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Coupon Name</label>
-                                        <input type="text" placeholder="Type here" class="form-control" name="couponName" value="<%=editCoupon.name%>">
+                                        <input type="text" placeholder="Type here" class="form-control" name="couponName" value="<%=editCoupon.name%>" id="name">
+                                        <div style="display: none;" id="error1"  class="alert alert-danger" > </div>
+
                                     </div>
                                     <div class="mb-4"> 
                                         <label class="form-label">Coupon Description</label>
-                                        <textarea placeholder="Type here" class="form-control" rows="4" name="desc"><%=editCoupon.description%></textarea>
+                                        <textarea placeholder="Type here" class="form-control" rows="4" name="desc" id="desc"><%=editCoupon.description%></textarea>
+                                        <div style="display: none;" id="error2"  class="alert alert-danger" ></div>
+
                                     </div>
                                   
                                 </div> <!-- col.// -->
@@ -92,19 +96,25 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Coupon Code</label>
-                                        <input type="text" placeholder="coupon code" class="form-control" name="couponCode" value="<%=editCoupon.couponCode%>">
+                                        <input type="text" placeholder="coupon code" class="form-control" name="couponCode" value="<%=editCoupon.couponCode%>" id="code">
+                                        <div style="display: none;" id="error3"  class="alert alert-danger" > </div>
+
                                     </div>
                                 </div> <!-- col.// -->
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Coupon Limit</label>
-                                        <input type="number" placeholder="coupon code" class="form-control" name="limit" value="<%=editCoupon.couponlimit%>">
+                                        <input type="number" placeholder="coupon code" class="form-control" name="limit" value="<%=editCoupon.couponlimit%>" id="limit">
+                                        <div style="display: none;" id="error4"  class="alert alert-danger" > </div>
+
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Reduction Rate</label>
-                                        <input type="number" placeholder="coupon code" class="form-control" name="reductionRate" value="<%=editCoupon.reductionRate%>" >
+                                        <input type="number" placeholder="coupon code" class="form-control" name="reductionRate" value="<%=editCoupon.reductionRate%>" id="discount">
+                                        <div style="display: none;" id="error5"  class="alert alert-danger" > </div>
+
                                     </div>
-                                    <input type="hidden" name="couponid" value="<%=editCoupon._id%>"">
+                                    <input type="hidden" name="couponid" value="<%=editCoupon._id%>">
                                 </div> 
                             </div> <!-- row.// -->
                                <%}%>
@@ -117,9 +127,116 @@
         </div>
         </div>
     </section> <!-- content-main end// -->
+
     <script>
-        
+        const couponName=document.getElementById('name')
+        const description=document.getElementById('desc')
+        const couponCode=document.getElementById('code')
+        const couponLimit=document.getElementById('limit')
+        const couponDiscount=document.getElementById('discount')
+       const couponform=document.getElementById('couponform')
+       
+        const nameError=document.getElementById('error1')
+        const descError=document.getElementById('error2')
+        const codeError=document.getElementById('error3')
+        const limitError=document.getElementById('error4')
+        const discountError=document.getElementById('error5')
+       
+        function validate_productname() {
+         const coupon_value = couponName.value.trim();
+        const namepattern = /^[a-zA-Z\s]+$/;
+         if (coupon_value === "") {
+           nameError.style.display = "block";
+           nameError.innerHTML = "Please enter the product name";
+         } else if (!namepattern.test(coupon_value)) {
+           nameError.style.display = "block";
+           nameError.innerHTML = "Please enter valid product name";
+         } else {
+           nameError.style.display = "none";
+           nameError.innerHTML = "";
+         }
+       }
+       
+       function validate_description() {
+         const desc = description.value;
+         if (desc.trim() === "") {
+           descError.style.display = "block";
+           descError.innerHTML = "please enter the description";
+         } else {
+           descError.style.display = "none";
+           descError.innerHTML = "";
+         }
+       }
+       
+       function validate_limit() {
+         const regprice = couponLimit.value.trim();
+         const regular = parseFloat(regprice);
+         if (regular < 0 ) {
+           console.log('bdhbsauhdvhavydcuhvcx')
+           limitError.style.display = "block";
+           limitError.innerHTML = "Enter a valid price";
+         } else if (regprice === "") {
+           limitError.style.display = "block";
+           limitError.innerHTML = "Please enter a price";
+         } else {
+           limitError.style.display = "none";
+           limitError.innerHTML = "";
+         }
+       }
+       function validateCode (){
+           const coupon=couponCode.value.trim()
+           codepattern=/^(?=(?:.*[a-zA-Z]){2})(?=[^\d]*\d)[a-zA-Z\d]{6}$/
+           if(coupon === ""){
+               codeError.style.display="block"
+               codeError.innerHTML="Please enter a value"
+       
+           }
+       else if(!codepattern.test(coupon)){
+           console.log('enetedfytevdvwgyevd')
+               codeError.style.display="block"
+               codeError.innerHTML="Please enter minimum 2 numbers and minimum 1 number and max 6 length"
+       }
+       else{
+           codeError.style.display="none"
+               codeError.innerHTML=""
+       }
+       }
+       function validateDiscount(){
+            const discount = couponDiscount.value.trim() 
+            const discountRate = parseFloat(discount);
+         if (discountRate < 0 ) {
+           console.log("enetererereerer")
+           discountError.style.display = "block";
+           discountError.innerHTML = "Enter a valid discount";
+         } else if (discount === "") {
+           discountError.style.display = "block";
+           discountError.innerHTML = "Please enter a price";
+         } else {
+           discountError.style.display = "none";
+           discountError.innerHTML = "";
+         }
+       }
+       
+       couponName.addEventListener("blur",validate_productname) 
+       description.addEventListener("blur",validate_description) 
+       couponCode.addEventListener("blur", validateCode);
+       couponLimit.addEventListener("blur", validate_limit);
+       couponDiscount.addEventListener("blur", validateDiscount);
+       couponform.addEventListener('submit',(event)=>{
+           validate_productname()
+           validate_description()
+           validateCode()
+           validate_limit()
+           validateDiscount()
+           if(nameError.innerHTML ||descError.innerHTML||codeError.innerHTML||limitError.innerHTML||discountError.innerHTML){
+               event.preventDefault()
+           }
+       })
+       
+       
+       
+               </script>
 
         
-    </script>
+   
 <%-include('adminlayout/footer.ejs')%>

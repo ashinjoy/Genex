@@ -43,23 +43,26 @@ function validate_description() {
     desc_error.innerHTML = "";
   }
 }
-function validate_regprice() {
-  const regprice = preg_price.value.trim();
-  const regular = parseFloat(regprice);
-  if (regular < 0) {
-    regprice_error.style.display = "block";
-    regprice_error.innerHTML = "Enter a valid price";
-  } else if (regprice === "") {
-    regprice_error.style.display = "block";
-    regprice_error.innerHTML = "Please enter a price";
-  } else {
-    regprice_error.style.display = "none";
-    regprice_error.innerHTML = "";
-  }
-}
+
+// function validate_regprice() {
+//   const regprice = preg_price.value.trim();
+//   const regular = parseFloat(regprice);
+//   if (regular < 0) {
+//     regprice_error.style.display = "block";
+//     regprice_error.innerHTML = "Enter a valid price";
+//   } else if (regprice === "") {
+//     regprice_error.style.display = "block";
+//     regprice_error.innerHTML = "Please enter a price";
+//   } else {
+//     regprice_error.style.display = "none";
+//     regprice_error.innerHTML = "";
+//   }
+// }
 
 function validate_saleprice() {
   const saleprice = psale_price.value.trim();
+  const regprice = preg_price.value.trim();
+
   const sale = parseFloat(saleprice);
   if (sale < 0) {
     saleprice_error.style.display = "block";
@@ -67,7 +70,12 @@ function validate_saleprice() {
   } else if (saleprice === "") {
     saleprice_error.style.display = "block";
     saleprice_error.innerHTML = "Please enter a price";
-  } else {
+  }
+  else if(sale >regprice){
+    saleprice_error.style.display = "block";
+    saleprice_error.innerHTML = "Sale price must be lower than regular price"
+  }
+   else {
     saleprice_error.style.display = "none";
     saleprice_error.innerHTML = "";
   }
@@ -158,23 +166,23 @@ function validate_largequantity(){
 }
 product.addEventListener("blur",validate_productname) 
 pdesc.addEventListener("blur",validate_description) 
-preg_price.addEventListener("blur", validate_regprice);
+// preg_price.addEventListener("blur", validate_regprice);
 psale_price.addEventListener("blur", validate_saleprice);
 psmall.addEventListener("blur", validate_smallquantity);
 pmedium.addEventListener("blur", validate_mediumquantity);
 plarge.addEventListener("blur", validate_largequantity);
-pimg.addEventListener("blur",validteImg)
+// pimg.addEventListener("blur",validteImg)
 productform.addEventListener("submit",function(event){
     validate_productname(),
     validate_description(),
-    validate_regprice(),
+    // validate_regprice(),
     validate_saleprice(),
     validate_smallquantity(),
     validate_mediumquantity(),
     validate_largequantity(),
     // validteImg()
     compareprice()
-    if(producterror.innerHTML||desc_error.innerHTML||regprice_error.innerHTML|| saleprice_error.innerHTML||small_error.innerHTML ||medium_error.innerHTML ||large_error.innerHTML ||pricecompare.innerHTML)
+    if(producterror.innerHTML||desc_error.innerHTML|| saleprice_error.innerHTML||small_error.innerHTML ||medium_error.innerHTML ||large_error.innerHTML ||pricecompare.innerHTML)
     {
         event.preventDefault()
     }

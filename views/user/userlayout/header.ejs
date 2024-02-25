@@ -52,7 +52,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-2 col-md-4 offset-md-4 offset-lg-0 col-5 offset-3 col-sm-5">
                     <div class="logo">
-                        <a href="index.html"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
+                        <a href="/usershop"><img src="/public/assets/img/logo/genez.svg" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-8">                
@@ -60,25 +60,25 @@
                     <div class="main_menu menu_position"> 
                         <nav>  
                             <ul>
-                                <li><a  href="/userhome">home<i class="fa fa-angle-down"></i></a>
+                                <li><a  href="/userhome" >home<i class="fa fa-angle-down"></i></a>
                                     <!-- <ul class="sub_menu">
                                         <li><a href="index.html">Home shop 1</a></li>
                                         <li><a href="index-2.html">Home shop 2</a></li>
                                         <li><a href="index-3.html">Home shop 3</a></li>
                                     </ul> -->
                                 </li>
-                                <li class="mega_items"><a href="/usershop">shop<i class="fa fa-angle-down"></i></a> 
+                                <li class="mega_items"><a href="/usershop"  onclick="">shop<i class="fa fa-angle-down"></i></a> 
                                     <div class="mega_menu">
                                         <ul class="mega_menu_inner">
-                                            <li><a href="#">Shop Layouts</a>
-                                                <ul>
+                                            <!-- <li><a href="#">Shop Layouts</a> -->
+                                                <!-- <ul> -->
                                                     <!-- <li><a href="shop-fullwidth.html">Full Width</a></li>
                                                     <li><a href="shop-fullwidth-list.html">Full Width list</a></li> -->
-                                                    <li><a href="/listcoupons">Coupons</a></li>
+                                                    <!-- <li><a href="/listcoupons">Coupons</a></li> -->
                                                     <!-- <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
                                                     <li><a href="shop-list.html">List View</a></li> -->
-                                                </ul>
-                                            </li>
+                                                <!-- </ul> -->
+                                            <!-- </li> -->
                                             <!-- <li><a href="#">other Pages</a>
                                                 <ul>
                                                     <li><a href="cart.html">cart</a></li>
@@ -100,15 +100,15 @@
                                         </ul>
                                     </div>
                                 </li>
-                                <li><a href="blog.html">blog<i class="fa fa-angle-down"></i></a>
-                                    <ul class="sub_menu pages">
-                                        <li><a href="blog-details.html"></a></li>
+                                <li><a href="/listcoupons">Coupons<i class="fa fa-angle-down"></i></a>
+                                    <!-- <ul class="sub_menu pages">
+                                        <li><a href="/listcoupons">List Coupons</a></li>
                                         
-                                    </ul>
+                                    </ul> -->
                                 </li> 
-                                <li><a href="contact.html"> Contact Us</a></li>
-                                <li><a href="about.html"> About us</a></li>
-                                <li><a class="active" href="#">pages <i class="fa fa-angle-down"></i></a>
+                                <!-- <li><a href="contact.html"> Contact Us</a></li> -->
+                                <!-- <li><a href="about.html"> About us</a></li> -->
+                                <!-- <li><a  href="#">pages <i class="fa fa-angle-down"></i></a>
                                     <ul class="sub_menu pages">
                                         <li><a href="about.html">About Us</a></li>
                                         <li><a href="services.html">services</a></li>
@@ -117,7 +117,7 @@
                                         <li><a href="login.html">login</a></li>
                                         <li><a href="404.html">Error 404</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                             </ul>  
                         </nav> 
                     </div>
@@ -136,7 +136,7 @@
                         </div>
                         <div class="header_account_list  mini_cart_wrapper">
                             <a href="/loadcart"><span class="pe-7s-shopbag"></span>
-                                <span class="item_count">2</span>
+                                <span class="item_count"></span>
                             </a>
                             
                        </div>
@@ -144,9 +144,9 @@
                             <a href="#"> <span class="pe-7s-user"></span></a>
                             <ul class="dropdown_currency">
                                 <li><a href="/myaccount">My account</a></li>
-                                <li><a href="#">Order History</a></li>
+                                <!-- <li><a href="#">Order History</a></li>
                                 <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="cart.html">Shipping</a></li>
+                                <li><a href="cart.html">Shipping</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
         </div>
     </div> 
     <!--mini cart-->
-    <div class="mini_cart">
+    <!-- <div class="mini_cart">
         <div class="cart_gallery">
             <div class="cart_close">
                 <div class="cart_text">
@@ -211,6 +211,12 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
     <!--mini cart end-->
 </header>
+<script>
+    function addActive(){
+        console.log(document.querySelectorAll('.main_menu menu_position'))
+
+    }
+</script>

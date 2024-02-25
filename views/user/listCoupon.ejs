@@ -8,12 +8,38 @@
                 <h5 class="card-title"></h5>
                 <p class="card-text">Name:<%=coupon.name%></p>
                 <p class="card-text">description:<%=coupon.description%> </p>
-                <p class="card-text">coupon code:<%=coupon.couponCode%></p>
+                <p class="card-text ">coupon code:<span class="couponcod" id="couponcode<%= coupon._id %>"><%=coupon.couponCode%></span></p>
+                <button type="button" class="copybtn" data-cid="<%= coupon._id %>">Copy to Clipboard</button>
             
             </div>
         </div>
+
+        
     <%})%>
    
 <%}%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    const copybtn = document.querySelectorAll('.copybtn')
+    copybtn.forEach(el=>{
+        el.addEventListener('click',()=>{
+            console.log('dffd')
+            const cid = el.dataset.cid
+            const text = document.getElementById(`couponcode${cid}`).innerHTML
+            console.log(text)
+    const copyContent = async () => {
+        try {
+        await navigator.clipboard.writeText(text);
+        await Swal.fire({icon:'success',title:'copied Succesfully'})
+        console.log('Content copied to clipboard');
+        } catch (err) {
+        console.error('Failed to copy: ', err);
+        }
+    }
+    copyContent(text)
+        })
+    })
+    
+</script>
 <%-include('userlayout/footer.ejs')%>

@@ -2,20 +2,18 @@ const userModel = require("../models/userModel");
 
 const user_islogin = async (req, res, next) => {
   if (req.session.userid) {
-    const {userid}=req.session
+    const { userid } = req.session;
     console.log(userid);
-     const userdata = await userModel.findById({ _id: userid});
-     console.log("userdata"+userdata)   
+    const userdata = await userModel.findById({ _id: userid });
+    console.log("userdata" + userdata);
     if (userdata) {
-        if(userdata.is_active === 1){
-            next();
-
-        }
-        else{
-            req.session.userid = null;
-            res.redirect("/login");
-        }
-    } 
+      if (userdata.is_active === 1) {
+        next();
+      } else {
+        req.session.userid = null;
+        res.redirect("/login");
+      }
+    }
   } else {
     res.redirect("/login");
   }
@@ -45,4 +43,4 @@ const admin_islogout = async (req, res, next) => {
   }
 };
 
-module.exports = { user_islogin, admin_islogin, admin_islogout, user_islogout};
+module.exports = { user_islogin, admin_islogin, admin_islogout, user_islogout };

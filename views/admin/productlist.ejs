@@ -87,9 +87,41 @@
                     </div>
                 </div>
             </header> <!-- card-header end// -->
-            <div class="card-body">
-              
-                <%filteredproducts.forEach((data)=>{%>
+            <div class="card-body" id="card-bodyProduct">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th scope="col">productName</th>
+                                <th scope="col">ProductPrice</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">OfferPrice</th>
+                                <th scope="col"></th>
+                                <th scope="col" class="text-end"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody id="card-bodyProduct">
+                            <!-- <tr>
+                                <td>0901</td>
+                                <td><b>Marvin McKinney</b></td>
+                                <td>marvin@example.com</td>
+                                <td>$9.00</td>
+                                <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+                                <td>03.12.2022</td>
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                    <div class="dropdown">
+                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">View detail</a>
+                                            <a class="dropdown-item" href="#">Edit info</a>
+                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        </div>
+                                    </div> <!-- dropdown //end -->
+                                <!-- </td>
+                            </tr>  -->
+               <!-- <%filteredproducts.forEach((data)=>{%>
                     <article class="itemlist">
                         <div class="row align-items-center">
                             <div class="col col-check flex-grow-0">
@@ -129,24 +161,31 @@
                                 <%}%>
                                 
                             </div>
-                        </div> <!-- row .// -->
-                    </article>    
-              <%})%>
+                        </div>  
+                     </article>    
+          <%})%> -->
                  <!-- itemlist  .// -->
+                </tbody>
+            </table>
+         </div> <!-- table-responsive //end -->
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
         <div class="pagination-area mt-30 mb-50">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                   <% if(locals.totalPageNumber){%>
+                   <% for(i=1;i<=totalPageNumber;i++){%>
+                        <li class="page-item active"><a class="page-link" href="#" id="btnOrder<%=i%>" onclick="orderPagination('<%=i%>')"><%=i%></a></li>
+                   <% }%>
+                  <% }%>
+                   
+                    
                 </ul>
             </nav>
         </div>
     </section> <!-- content-main end// -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/public/admin_assets/assets/js/client/productmangement.js"></script>
+
+
     <%-include("./adminlayout/footer.ejs")%>

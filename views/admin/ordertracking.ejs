@@ -74,22 +74,26 @@
                         <small class="text-muted"> Order is  <%=locals.ProductDetail[0].products.status%> </small>
                     </div>
                     <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        
                         <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200 mr-15" name="status" onchange="changestatus('<%=ProductDetail[0]._id%>','<%=ProductDetail[0].products.productid%>','<%=ProductDetail[0].userid%>')" id="status">
                             <option value="">Change status</option>
-                            <option value="processing">Processing</option>
-                            <option value="dispatched">dispatched</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="refund">refunded</option>
-                            <option value="paid">paid</option>
-                            <option value="delivery">Delivered</option>
-                            <option value="canceled">canceled</option>
+                           <% if(ProductDetail[0].products.status !== 'delivery' && ProductDetail[0].products.status !== 'canceled'){%>
+                                <option value="processing">Processing</option>
+                                <option value="dispatched">dispatched</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="refund">refunded</option>
+                                <option value="paid">paid</option>
+                                <option value="delivery">Delivered</option>
+                                <option value="canceled">canceled</option>
+                           <%}%>
+                            
                         </select>
                         <a class="btn btn-primary" href="#">Screenshot</a>
                         <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print mr-5"></i>Print</a>
                     </div>
                 </div>
             </header> <!-- card-header end// -->
-            <div class="card-body">
+            <!-- <div class="card-body">
                 <div class="order-tracking mb-100">
                     <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between">
                         <div class="step completed">
@@ -128,9 +132,9 @@
                             <small class="text-muted text-sm">20 March 2022</small>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-50 mt-20 order-info-wrap text-center">
-                    <div class="col-md-4">
+                </div> -->
+                <!-- <div class="row mb-50 mt-20 order-info-wrap text-center"> -->
+                    <!-- <div class="col-md-4">
                         <article class="icontext align-items-start">                              
                             <div class="text">
                                 <h6 class="mb-1">Customer</h6>
@@ -139,9 +143,9 @@
                                 </p>
                                 <a href="#">View profile</a>
                             </div>
-                        </article>
-                    </div> <!-- col// -->
-                    <div class="col-md-4">
+                        </article> -->
+                    <!-- </div> <!-- col// -->
+                    <!-- <div class="col-md-4">
                         <article class="icontext align-items-start">                              
                             <div class="text">
                                 <h6 class="mb-1">Order info</h6>
@@ -150,9 +154,9 @@
                                 </p>
                                 <a href="#">Download info</a>
                             </div>
-                        </article>
-                    </div> <!-- col// -->
-                    <div class="col-md-4">
+                        </article> --> -->
+                    <!-- </div> col// -->
+                    <!-- <div class="col-md-4">
                         <article class="icontext align-items-start">                              
                             <div class="text">
                                 <h6 class="mb-1">Deliver to</h6>
@@ -161,15 +165,15 @@
                                 </p>
                                 <a href="#">View profile</a>
                             </div>
-                        </article>
-                    </div> <!-- col// -->
-                </div> <!-- row // -->
-               <div class="row">
+                        </article> -->
+                    <!-- </div>  -->
+                <!-- </div> row // -->
+               <!-- <div class="row">
                     <div class="text-center mt-100 mb-50">
                         <a class="btn btn-primary" href="">View Order Details</a>
                     </div>
-               </div>
-        </div> <!-- card end// -->
+               </div> -->
+        <!-- </div> card end// -->
     </section> <!-- content-main end// -->
     <%}%>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

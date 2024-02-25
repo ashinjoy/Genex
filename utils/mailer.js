@@ -9,7 +9,7 @@ async function sendMail(otp,email){
   try{
 
     const mailoptions={
-      from:"ashinjoy666@gmail.com",
+      from:process.env.mail,
       to:email,
       subject:"GEN-Z Clothing signup verification",
       text:`verification otp:${otp}`

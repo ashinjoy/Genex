@@ -128,7 +128,7 @@
         const res= await fetch(url,{method:'post',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
         console.log(res)
         if(res.ok){
-            await Swal.fire({icon:"success",title:"Verified"})
+            await Swal.fire({icon:"success",title:"Email Verified Successfully"})
             window.location.href ='/login'
         }
         else{

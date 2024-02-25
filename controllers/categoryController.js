@@ -40,7 +40,7 @@ const add_category = async (req, res) => {
       const cat_details = await categoryModel.create(category);
 
       console.log(cat_details);
-      res.redirect("/admin/products/productlist");
+      res.redirect("/admin/categories");
     } else {
       const category = await categoryModel.find({});
       res.render("admin/category", {
@@ -101,8 +101,7 @@ const updatecategory = async (req, res) => {
         { _id: catid },
         { $set: { name: catname, description: description } }
       );
-    }
-    else{
+    } else {
       const catimg = req.file.path;
       const outputpath = path.join(
         __dirname,
@@ -123,9 +122,9 @@ const updatecategory = async (req, res) => {
         { _id: catid },
         { $set: updatedcategory }
       );
-      console.log(updated_data); 
+      console.log(updated_data);
     }
-               
+
     res.redirect("/admin/categories");
   } catch (err) {
     console.error(err);

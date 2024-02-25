@@ -82,7 +82,7 @@
                                     <div class="card w-75">
                                         <div class="card-body">
                                             <label class="radio-container"></label>
-                                            <input type="radio" name="address" id="addressRadio" value="<%=address._id%>"  <%if(index==0){%>checked<%}%>>
+                                            <input type="radio" name="address" class="addressRadio" value="<%=address._id%>" <%if(index == 0){%> checked<%}%>>
                                             <span class="checkmark"></span>
                                             </label>
                                     
@@ -92,8 +92,8 @@
 
                                         </div>
                                         <p>
-                                            <a href="/add-address">add addresss</a>
-                                            <a href="/edit-address/?id=<%=address._id%>">edit addresss</a>
+                                            <a href="/add-address?page=checkout">add addresss</a>
+                                            <a href="/edit-address/?id=<%=address._id%>&page=checkout">edit addresss</a>
 
                                             
                                         </p>
@@ -103,72 +103,13 @@
                              <% })%>
                               
                                   <%} else {%>
-                             <h3>Address Details</h3>
-                             <form id="addressform">
-                                <div class="row">
-                                 <div class="col-lg-6 mb-20">
-                                     <label> Name <span>*</span></label>
-                                     <input type="text" name="name" id="name">
-        <div id="error1"  style="display: none;" class="alert alert-danger"></div>
-
-                                 </div>
-                               
- 
-                                 <div class="col-12 mb-20">
-                                     <label>Street address<span>*</span></label>
-                                     <input placeholder="House number and street name" type="text" name="houseno" id="street">  
-                                     <div id="error2"  style="display: none;" class="alert alert-danger"></div>
-
-                                 </div>
-                                 <div class="col-12 mb-20">
-                                    <label>Landmark<span>*</span></label>
-                                    <input placeholder="landmark or Area" type="text" name="landmark" id="landmark">  
-                                 <div id="error3"  style="display: none;" class="alert alert-danger"></div>
-
-                                </div>
-
-                                <div class="col-6 mb-20">
-                                    <label>pincode<span>*</span></label>
-                                    <input  type="number" name="pincode" id="pincode">
-                                <div id="error4"  style="display: none;" class="alert alert-danger"></div>
-
-                                </div>
-                                 
-                                 <div class="col-12 mb-20">
-                                     <label>Town / City <span>*</span></label>
-                                     <input  type="text" name="city" id="city">
-                                    <div id="error5"  style="display: none;" class="alert alert-danger"></div>
-
-                                 </div> 
-                                  <div class="col-12 mb-20">
-                                     <label>State  <span>*</span></label>
-                                     <input type="text" name="state" id="state">
-                                 <div id="error6"  style="display: none;" class="alert alert-danger"></div>
-
-
-                                 </div> 
-                                 <div class="col-lg-6 mb-20">
-                                     <label>Phone<span>*</span></label>
-                                     <input type="text" name="phone" id="phone">
-                                <div id="error7"  style="display: none;" class="alert alert-danger"></div>
-
- 
-                                 </div> 
-                                  <div class="col-lg-6 mb-20">
-                                     <label> Email Address <span>*</span></label>
-                                       <input type="text" name="email" id="email">
-                                <div id="error8"  style="display: none;" class="alert alert-danger"></div>
-
- 
-                                 </div> 
-                                 <div class="col-12 mb-20">
-                                    <label for="country">country <span>*</span></label>
-                                    <input type="text" name="country" id="country"> 
-                                <div id="error9"  style="display: none;" class="alert alert-danger"></div>
-
-                                </div>
+                                    <h3>No Address Found</h3>
+                                    <div class="noaddress">
+                             <img src="/public/assets/img/icon/myaddresses-empty_3b40af.png" alt="">
+                             
+                             <p>Add a delivery Address</p>
+                             <a href="/add-address?page=checkout"><button >Add Address</button></a>
                             </div>
-
                              <%}%>
                            	    
                              
@@ -190,9 +131,22 @@
                                         <%if(locals.productsInCart){%>
                                         <% productsInCart.forEach((cart)=>{%>
                                         <tr>
-                                            <%sum=sum+(cart.productid.salesprice*cart.qty)%>
+                                           <% if(cart.productid.offerPrice > 0){ %>
+                                            <%sum=sum+(cart.productid.offerPrice*cart.qty)%>
+                                                
+                                            <%} else {%>
+                                                <%sum=sum+(cart.productid.salesprice*cart.qty)%>
+
+                                            <%}%>
                                             <td> <%=cart.productid.name%> <strong> × <%=cart.qty%></strong></td>
-                                            <td class="saleprice"> <%=cart.productid.salesprice*cart.qty%></td>
+                                           <% if(cart.productid.offerPrice > 0){%>
+
+                                            <td class="saleprice"> <%=cart.productid.offerPrice*cart.qty%></td>
+                                                
+                                           <% } else{%>
+                                                <td class="saleprice"> <%=cart.productid.salesprice*cart.qty%></td>
+
+                                            <%}%>
                                         </tr>
 
                                        <% })%>
@@ -206,8 +160,8 @@
                                             <td class="ordersum"><%=sum%></td>
                                         </tr>
                                         <tr>
-                                            <th>Discount</th>
-                                            <td><strong></strong></td>
+                                            <th id="">Discount</th>
+                                            <td><strong id="discount"></strong></td>
                                         </tr>
                                         <tr class="order_total">
                                             <th>Order Total</th>
@@ -220,7 +174,7 @@
                             <div class="payment_method">
                              <% if ( sum > 1000 ) { %>
                                 <div id="coddiv" class="panel-default">
-                                    <input id="payment" name="check_method" type="radio" data-bs-target="createp_account" value="cod" class="payment"/>
+                                    <input id="payment" name="check_method" type="radio" data-bs-target="createp_account" value="cod" class="payment" />
                                     <label for="payment" data-bs-toggle="collapse" data-bs-target="#method" aria-controls="method">COD</label>
 
                                     <div id="method" class="collapse one" data-parent="#accordion">
@@ -272,17 +226,7 @@
 
 
     <script>
-    console.log("hello")
-   const uname = document.getElementById("name")
-   const houseno = document.getElementById("street")
-   const landmark = document.getElementById("landmark")
-   const pincode = document.getElementById("pincode")
-   const city = document.getElementById("city")
-   const state = document.getElementById("state")
-   const phone = document.getElementById("phone")
-   const email = document.getElementById("email")
-   const country= document.getElementById("country")
-   const addresstag=document.getElementById("addressRadio")
+   const addresstag=document.querySelectorAll(".addressRadio")
    let sum=document.getElementById("sum").value
    const paymentradio=document.querySelectorAll('.payment')
    
@@ -293,36 +237,37 @@
     try{
         console.log("hello enterd function")
     let  selectedpayment
+    let  selectedaddress
+
     let radioIndex
+    let addressIndex
     paymentradio.forEach((paymentMethod,index)=>{
     if(paymentMethod.checked == true){
         radioIndex =index
     }
     })
-    if(radioIndex == undefined){
-        await Swal.fire({icon:'warning',title:'Please select Payment Option to Proceed'})
+
+    addresstag.forEach((address,index)=>{
+    if(address.checked == true){
+        addressIndex =index
+    }
+    })
+
+
+
+    if(radioIndex == undefined || addressIndex == undefined){
+        await Swal.fire({icon:'warning',title:'Please select Both Method Option and Add Address to Proceed'})
         event.preventDefault()     
     }else{
         console.log('radioindex',radioIndex)
     selectedpayment = paymentradio[radioIndex].value 
-  
-    const addresstag=document.getElementById("addressRadio")
-      let address
-      addresstag &&  addresstag.checked ? address= addresstag.value : address="nill"
+      console.log(addresstag);
+        address= addresstag[addressIndex].value
       let payment
    
     console.log("payment",selectedpayment)
 
     postdata={
-        name:uname ? uname.value : 'nill',
-        houseno:houseno ? houseno.value : 'nill',
-        landmark:landmark ? landmark.value : 'nill',
-        pincode:pincode ? pincode.value : 'nill',
-        city:city ? city.value : 'nill',
-        state:state ? state.value : 'nill',
-        phone:phone ? phone.value : 'nill',
-        email:email ? email.value : 'nill',
-        country:country ? country.value : 'nill',
         address:address,
         check_method:selectedpayment,
         sum:document.getElementById('sum').value,
@@ -361,7 +306,7 @@ else{
     }
     
     catch(error){
-        console.error(error)
+        console.log(error)
     }
    }
    function generatePayment(order){
@@ -435,11 +380,12 @@ async function applyCoupon(){
     const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
     const data= await res.json()
     const {reduction}=data
+    console.log('rteduction',reduction)
 
     if(res.status === 200)
     {
         await Swal.fire({icon:'success',title:data.sucess})
-      
+      document.getElementById('discount').innerHTML=reduction
       const total=document.getElementById('ordertotal').innerHTML
       const parsedTotal=parseFloat(total)
       const totalAfterCoupon=parsedTotal-reduction
@@ -450,13 +396,13 @@ async function applyCoupon(){
       })
         document.getElementById('sum').value = totalAfterCoupon
         if(document.getElementById('sum').value <= 1000){
-            document.getElementById('coddiv').style.display="none"
+         document.getElementById('coddiv')? document.getElementById('coddiv').style.display="none": console.log('no div')
         } 
         else{
             document.getElementById('coddiv').style.display="block"
 
         }
-      
+    
         const removebtn=document.createElement('button')
         removebtn.innerHTML="Remove"
         removebtn.type="button"
@@ -484,6 +430,7 @@ async function removeCoupon(){
     await Swal.fire({icon:'success',title:'Coupon Removed Successfully'})
     const removedCouponamount = parseFloat(document.getElementById('sum').value)+data
     console.log(removedCouponamount)
+    document.getElementById('discount').innerHTML=0
 
      document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
          orderTotal.innerHTML=removedCouponamount
@@ -494,7 +441,9 @@ async function removeCoupon(){
   
      }
      else{
-         document.getElementById('coddiv').style.display="none"
+        if(document.getElementById('coddiv')){
+            document.getElementById('coddiv').style.display="none"
+        }
      }
      const couponbtn=document.createElement('button')
      couponbtn.innerHTML="Apply Coupon"

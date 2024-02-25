@@ -154,7 +154,10 @@
             <div id="error9"  style="display: none;" class="alert alert-danger"></div>
           </p> 
       </p>
+      <%if(locals.page){%>
+        <input type="hidden" name="source" id="" value="<%=page%>">
 
+      <%}%>
       <div class="login_submit">
         <button type="submit">Add Address</button>
       </div>

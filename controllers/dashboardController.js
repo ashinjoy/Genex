@@ -121,4 +121,82 @@ const monthlyreport = async (req, res) => {
   res.status(200).json([{ filtered_Datedata }, { filteredOrders }]);
 };
 
-module.exports = { weeklyReport, monthlyreport };
+const salesData = async (req, res) => {
+  try {
+    const { filter } = req.query;
+    if (filter == "yearly") {
+      const yearlyData = filterDate.yearlyData();
+      const yearlySalesreport = await orderModel.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: yearlyData.startingDate,
+              $lte: yearlyData.endingDate,
+            },
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { "products.status": "delivery" },
+              { "products.status": "paid" },
+            ],
+          },
+        },
+        { $unwind: "$products" },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userid",
+            foreignField: "_id",
+            as: "userdetails",
+          },
+        },
+      ]);
+      console.log(yearlySalesreport);
+      res.json(yearlySalesreport);
+    } else if (filter == "monthly") {
+      const monthwiseData = filterDate.monthsale();
+      console.log(monthwiseData);
+      const monthlySalesreport = await orderModel.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: monthwiseData.startingDate,
+              $lte: monthwiseData.endingDate,
+            },
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { "products.status": "delivery" },
+              { "products.status": "paid" },
+            ],
+          },
+        },
+        { $unwind: "$products" },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userid",
+            foreignField: "_id",
+            as: "userdetails",
+          },
+        },
+      ]);
+      console.log(monthlySalesreport);
+      res.json(monthlySalesreport);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const load_salesreport = async (req, res) => {
+  try {
+    res.render("admin/salesreport");
+  } catch (error) {
+    console.error(error);
+  }
+};
+module.exports = { weeklyReport, monthlyreport, salesData, load_salesreport };

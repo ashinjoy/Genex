@@ -2,7 +2,8 @@ const addressModel = require("../models/address");
 
 const load_addAddress = async (req, res) => {
   try {
-    res.render("user/addAddress");
+    const { page } = req.query;
+    res.render("user/addAddress", { page });
   } catch (error) {
     console.error(error);
   }
@@ -20,6 +21,7 @@ const addAddress = async (req, res) => {
       phone,
       email,
       country,
+      source,
     } = req.body;
     const address = {
       name: name,
@@ -35,8 +37,12 @@ const addAddress = async (req, res) => {
     };
     const addressStore = await addressModel.create(address);
     console.log("address", addressStore);
-    if (addressStore) {
+    console.log(req.body.source);
+    if (req.body.source == "checkout") {
       res.redirect("/checkout");
+    } else {
+      console.log("bgsvjssxaj");
+      res.redirect("/listaddress");
     }
   } catch (error) {
     console.error(error);
@@ -44,9 +50,9 @@ const addAddress = async (req, res) => {
 };
 const load_editAddress = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id, page } = req.query;
     const address = await addressModel.findById({ _id: id });
-    res.render("user/editAddress", { address });
+    res.render("user/editAddress", { address, page });
   } catch (error) {
     console.error(error);
   }
@@ -54,7 +60,7 @@ const load_editAddress = async (req, res) => {
 
 const editAddress = async (req, res) => {
   try {
-    console.log("entered editAddress")
+    console.log("entered editAddress");
     const { userid } = req.session;
     const {
       name,
@@ -67,9 +73,9 @@ const editAddress = async (req, res) => {
       email,
       country,
       addressid,
+      source,
     } = req.body;
     console.log("addressid" + addressid);
-   
 
     const editAddress = await addressModel.findByIdAndUpdate(
       { _id: addressid },
@@ -89,32 +95,43 @@ const editAddress = async (req, res) => {
       }
     );
     console.log(editAddress);
-
-    res.redirect("/checkout");
+    console.log("source", req.body.source);
+    if (req.body.source == "checkout") {
+      res.redirect("/checkout");
+    } else {
+      console.log("dkbkjdbskd");
+      res.redirect("/listaddress");
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
-const listAddress=async(req,res)=>{
+const listAddress = async (req, res) => {
   try {
-    const {userid}=req.session
-    const userAdrress=await addressModel.find({userid:userid})
-    res.render("user/addresslist",{userAdrress})
+    const { userid } = req.session;
+    const userAdrress = await addressModel.find({ userid: userid });
+    res.render("user/addresslist", { userAdrress });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
-const deleteAddress=async(req,res)=>{
+const deleteAddress = async (req, res) => {
   try {
-    const {id}=req.query
-    const deleteAddress=await addressModel.findByIdAndDelete({_id:id})
-    res.redirect("/listaddress")
-    
+    const { id } = req.query;
+    const deleteAddress = await addressModel.findByIdAndDelete({ _id: id });
+    res.redirect("/listaddress");
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
-module.exports = { load_addAddress, addAddress, load_editAddress, editAddress ,listAddress,deleteAddress};
+module.exports = {
+  load_addAddress,
+  addAddress,
+  load_editAddress,
+  editAddress,
+  listAddress,
+  deleteAddress,
+};

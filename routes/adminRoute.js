@@ -8,6 +8,7 @@ const orderController=require("../controllers/adminorderManagement")
 const dashboardController =require("../controllers/dashboardController")
 const pagination=require("../controllers/paginationController")
 const coupon=require("../controllers/couponManagement")
+const offer =require('../controllers/offerMangement')
 
 
 const session=require("../middleware/session")
@@ -31,10 +32,14 @@ adminRouter.get("/defaultpagination",pagination.pagination)
 adminRouter.get("/pagination",pagination.pagination)
 adminRouter.get('/defaultpaginationOrders',pagination.orderPagination)
 adminRouter.get('/paginationofOrders',pagination.orderPagination)
+// adminRouter.get('/paginationofOrders',pagination.orderPagination)
+adminRouter.get('/defaultproductlist-pagination',pagination.productPagination)
+adminRouter.get('/productlist-pagination',pagination.productPagination)
 
 
 
-
+adminRouter.get('/sales-report',session.admin_islogin,dashboardController.load_salesreport)
+adminRouter.get('/filter-report',session.admin_islogin,dashboardController.salesData)   
 
 
 
@@ -75,5 +80,10 @@ adminRouter.patch('/deleteCoupon',coupon.deleteCoupon)
 
 adminRouter.get('/bestproducts',session.admin_islogin,productController.bestProducts)
 // adminRouter.get('/bestcategory',session.admin_islogin,productController.bestCategory)
+
+adminRouter.get('/offer',session.admin_islogin,offer.load_offerPage)
+adminRouter.post('/offer',session.admin_islogin,offer.createOffer)
+adminRouter.get('/delete-offer',offer.deleteOffer)
+
 
 module.exports=adminRouter
