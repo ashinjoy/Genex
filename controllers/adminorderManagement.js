@@ -166,4 +166,147 @@ const load_productStatusPage=async(req,res)=>{
     console.error(error)
   }
 }
-module.exports = { load_orderslist, load_Ordersummary,changestatus,load_productStatusPage};
+const accceptReturn=async(req,res)=>{
+  try {
+   const {oid,pid,uid} = req.query
+    let priceReduction
+       const returnOrder = await orderModel.findOneAndUpdate(
+         { _id: oid, "products.productid": pid },
+         { $set: { "products.$.status": "returned" } }
+       );
+
+       const product = await orderModel.aggregate([
+         { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+         { $unwind: "$products" },
+         { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
+         { $project: { _id: 0, products: 1 } },
+         {
+           $lookup: {
+             from: "products",
+             localField: "products.productid",
+             foreignField: "_id",
+             as: "productdetail",
+           },
+         },
+       ]);
+   
+       console.log("product", product);
+       if(product[0].productdetail[0].offerPrice > 0 ){
+          priceReduction =
+         product[0].productdetail[0].offerPrice * product[0].products.qty;
+       }
+       else{
+          priceReduction =
+         product[0].productdetail[0].salesprice * product[0].products.qty;
+       }
+      
+   
+       const order = await orderModel.findById({ _id: oid });
+       const paymentMethod = order.paymentMethod;
+       const unreturnedProducts = await orderModel.aggregate([
+         { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+         { $unwind: "$products" },
+         { $match: { "products.status": { $ne: "returned" } } },
+         { $count: "nonReturnedProducts" },
+       ]);
+       console.log("unreturnedProducts", unreturnedProducts);
+       const codStatus = await orderModel.aggregate([
+         { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+         { $unwind: "$products" },
+         {
+           $match: {
+             _id: new mongoose.Types.ObjectId(pid),
+             "products.status": "delivery",
+           },
+         },
+       ]);
+       console.log(codStatus);
+       if (unreturnedProducts.length == 0) {
+         const totalAfterCancel = await orderModel.findOneAndUpdate(
+           { _id: oid, "products.productid": pid },
+           { $inc: { totalprice: -order.totalprice } }
+         );
+         if (paymentMethod == "wallet") {
+           const walletRefund = await wallet.findOneAndUpdate(
+             { orderId: oid },
+             { $inc: { refundedAmount: order.totalprice } }
+           );
+           
+         } else if (paymentMethod == "razorpay") {
+           const wallet = {
+             redeemedAmount: 0,
+             refundedAmount: order.totalprice,
+             orderId: oid,
+             userid: uid,
+             paymentMethod: "razorpay",
+           };
+           const walletcreate = await walletModel.create(wallet);
+          
+         } else {
+           const wallet = {
+             redeemedAmount: 0,
+             refundedAmount: order.totalprice,
+             orderId: oid,
+             userid:uid,
+             paymentMethod: "razorpay",
+           };
+           const walletcreate = await walletModel.create(wallet);
+           
+         }
+         const updatewalletBalance = await userModel.findByIdAndUpdate(
+          { _id: uid },
+          { $inc: { WalletBalance: order.totalprice } }
+        );
+
+       } else {
+         const totalAfterCancel = await orderModel.findOneAndUpdate(
+           { _id: oid, "products.productid": pid },
+           { $inc: { totalprice: -priceReduction } }
+         );
+         if (paymentMethod == "wallet") {
+           const walletRefund = await wallet.findOneAndUpdate(
+             { orderId: oid },
+             { $inc: { refundedAmount: priceReduction } }
+           );
+           
+         } else if (paymentMethod == "razorpay") {
+           const wallet = {
+             redeemedAmount: 0,
+             refundedAmount: priceReduction,
+             orderId: oid,
+             userid: req.session.userid,
+             paymentMethod: "razorpay",
+           };
+           const walletcreate = await walletModel.create(wallet);
+         } else {
+           const wallet = {
+             redeemedAmount: 0,
+             refundedAmount: priceReduction,
+             orderId: oid,
+             userid: req.session.userid,
+             paymentMethod: "razorpay",
+           };
+           const walletcreate = await walletModel.create(wallet);
+         }
+        
+         const updatewalletBalance = await userModel.findByIdAndUpdate(
+          { _id: uid },
+          { $inc: { WalletBalance:priceReduction  } }
+        );
+       }
+       
+      res.status(200).json({ data: "success" });
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+const rejejctReturn=async(req,res)=>{
+  try {
+    const {oid,pid}=req.query
+    const reject=await orderModel.findOneAndUpdate({_id:oid,'products.productid':pid},{$set:{'products.$.status':'returndeclined'}})
+  } catch (error) {
+    console.error(error)
+  }
+}
+module.exports = { load_orderslist, load_Ordersummary,changestatus,load_productStatusPage,accceptReturn,rejejctReturn};

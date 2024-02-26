@@ -46,6 +46,9 @@
                             <p class="card-text">Email: <%=user.email%></p>
                             <p class="card-text">PhoneNumber: <%=user.phone%></p>
                         <a href="/edituser?uid=<%=user._id%>" class="useredit">Edit userdetails</a>
+                        <h3>Referal</h3>
+                        <p>Refer your friend and get ₹100 for referal</p>
+                        <a href="<%=user.referralString%>"><%=user.referralString%></a>
                         </div>
                     </div>
                    <%}%>

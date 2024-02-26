@@ -153,8 +153,19 @@
                                         <td><%=product.products.qty%> </td>
                                         <td><span class="badge rounded-pill alert-success text-success"><%=product.products.status%></span></td>
                                         <td ><%=product.productsList[0].salesprice*product.products.qty%> </td>
-                                        <td class="text-end"><a href="/admin/order-changeStatus?oid=<%=product._id%>&pid=<%=product.products.productid%>">View Order</a> </td>
-                                        
+                                        <td class="text-end"><a href="/admin/order-changeStatus?oid=<%=product._id%>&pid=<%=product.products.productid%>">View Order</a> 
+                                      <% if(product.products.status === 'returnrequested'){%>
+                                        <div class="dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" onclick="acceptReturn('<%=product._id%>','<%=product.products.productid%>','<%=product.userid%>')">Approve Return</a>
+                                                <a class="dropdown-item" href="#" onclick="reject('<%=product._id%>','<%=product.products.productid%>')">reject return</a>
+                                              
+                                            </div>
+                                        </div>
+                                       <%}%>
+                                           
+                                        </td>
                                     </tr>
                                     <%})%>
                                     
@@ -216,5 +227,21 @@
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </section>
+    <script>
+        async function acceptReturn(oid,pid,uid){
+            const url=`/admin/accept-return?oid=${oid}&pid=${pid}&uid=${uid}`
+            const res=await fetch(url)
+            if(res.ok){
+                window.location.reload()
+            }
+        }
+        async function reject (oid,pid){
+            const url=`/admin/reject-return?oid=${oid}&pid=${pid}`
+            const res=await fetch(url)
+            if(res.ok){
+                window.location.reload()
+            }
+        }
+    </script>
   
 <%-include("adminlayout/footer.ejs")%>

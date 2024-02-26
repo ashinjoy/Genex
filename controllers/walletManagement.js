@@ -5,8 +5,9 @@ const orderModel = require("../models/order");
 const walletModel = require("../models/wallet");
 const load_wallet = async (req, res) => {
   try {
-    const walletOrders = await walletModel.find({});
     const { userid } = req.session;
+
+    const walletOrders = await walletModel.find({userid:userid});
     const WalletBalance = await userModel.findById(
       { _id: userid },
       { WalletBalance: 1, _id: 0 }

@@ -66,6 +66,9 @@ adminRouter.get("/listorders",session.admin_islogin,orderController.load_ordersl
 adminRouter.get("/ordersummary",session.admin_islogin,orderController.load_Ordersummary)
 adminRouter.get('/order-changeStatus',session.admin_islogin,orderController.load_productStatusPage)
 adminRouter.get("/change-orderstatus",session.admin_islogin,orderController.changestatus)
+adminRouter.get('/accept-return',session.admin_islogin,orderController.accceptReturn)
+adminRouter.get('/reject-return',session.admin_islogin,orderController.rejejctReturn)
+
 
 
 adminRouter.get("/createCoupon",session.admin_islogin,coupon.load_addCoupon)

@@ -1,243 +1,416 @@
-
 <%-include("./adminlayout/header.ejs")%>
 <main class="main-wrap">
-    <header class="main-header navbar">
-        <div class="col-search">
-            <form class="searchform">
-                <div class="input-group">
-                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                </div>
-                <datalist id="search_terms">
-                    <option value="Products">
-                    <option value="New orders">
-                    <option value="Apple iphone">
-                    <option value="Ahmed Hassan">
-                </datalist>
+  <header class="main-header navbar">
+    <div class="col-search">
+      <form class="searchform">
+        <div class="input-group">
+          <input
+            list="search_terms"
+            type="text"
+            class="form-control"
+            placeholder="Search term"
+          />
+          <button class="btn btn-light bg" type="button">
+            <i class="material-icons md-search"></i>
+          </button>
+        </div>
+        <datalist id="search_terms">
+          <option value="Products"></option>
+          <option value="New orders"></option>
+          <option value="Apple iphone"></option>
+          <option value="Ahmed Hassan"></option>
+        </datalist>
+      </form>
+    </div>
+    <div class="col-nav">
+      <button
+        class="btn btn-icon btn-mobile me-auto"
+        data-trigger="#offcanvas_aside"
+      >
+        <i class="material-icons md-apps"></i>
+      </button>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link btn-icon" href="#">
+            <i class="material-icons md-notifications animation-shake"></i>
+            <span class="badge rounded-pill">3</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-icon darkmode" href="#">
+            <i class="material-icons md-nights_stay"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="requestfullscreen nav-link btn-icon"
+            ><i class="material-icons md-cast"></i
+          ></a>
+        </li>
+        <li class="dropdown nav-item">
+          <a
+            class="dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+            id="dropdownLanguage"
+            aria-expanded="false"
+            ><i class="material-icons md-public"></i
+          ></a>
+          <div
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="dropdownLanguage"
+          >
+            <a class="dropdown-item text-brand" href="#"
+              ><img
+                src="assets/imgs/theme/flag-us.png"
+                alt="English"
+              />English</a
+            >
+            <a class="dropdown-item" href="#"
+              ><img
+                src="assets/imgs/theme/flag-fr.png"
+                alt="Français"
+              />Français</a
+            >
+            <a class="dropdown-item" href="#"
+              ><img
+                src="assets/imgs/theme/flag-jp.png"
+                alt="Français"
+              />日本語</a
+            >
+            <a class="dropdown-item" href="#"
+              ><img
+                src="assets/imgs/theme/flag-cn.png"
+                alt="Français"
+              />中国人</a
+            >
+          </div>
+        </li>
+        <li class="dropdown nav-item">
+          <a
+            class="dropdown-toggle"
+            data-bs-toggle="dropdown"
+            href="#"
+            id="dropdownAccount"
+            aria-expanded="false"
+          >
+            <img
+              class="img-xs rounded-circle"
+              src="assets/imgs/people/avatar2.jpg"
+              alt="User"
+          /></a>
+          <div
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="dropdownAccount"
+          >
+            <a class="dropdown-item" href="#"
+              ><i class="material-icons md-perm_identity"></i>Edit Profile</a
+            >
+            <a class="dropdown-item" href="#"
+              ><i class="material-icons md-settings"></i>Account Settings</a
+            >
+            <a class="dropdown-item" href="#"
+              ><i class="material-icons md-account_balance_wallet"></i>Wallet</a
+            >
+            <a class="dropdown-item" href="#"
+              ><i class="material-icons md-receipt"></i>Billing</a
+            >
+            <a class="dropdown-item" href="#"
+              ><i class="material-icons md-help_outline"></i>Help center</a
+            >
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="/admin/logout"
+              ><i class="material-icons md-exit_to_app"></i>Logout</a
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <section class="content-main">
+    <div class="content-header">
+      <div>
+        <h2 class="content-title card-title">Categories</h2>
+        <p>Add, edit or delete a category</p>
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="Search Categories"
+          class="form-control bg-white"
+        />
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <%if(locals.offerExists){%>
+            <div class="alert alert-danger"><%=offerExists%></div>
+
+            <%}%>
+
+            <form
+              action="/admin/offer"
+              method="post"
+              id="offerform"
+              autocomplete="off"
+            >
+              <div class="mb-4">
+                <label for="product_name" class="form-label"
+                  >Select OfferType</label
+                >
+                <select
+                  class="form-select"
+                  onchange="updateOffer()"
+                  id="selectoffer"
+                  name="offertype"
+                >
+                  <option selected disabled>Add offerType</option>
+                  <option value="product">Product</option>
+                  <option value="category">Category</option>
+                </select>
+                <div
+                  class="alert alert-danger"
+                  id="offSelErr"
+                  style="display: none"
+                ></div>
+              </div>
+              <div class="mb-4" style="display:none" id="searchAllproduct">
+                <label class="form-label">selectProducts</label>
+                <select class="form-select" name="product" id="selPro">
+                  <option value="" selected disabled></option>
+                  <%if(locals.products){%> <% products.forEach((pro)=>{%>
+                  <option value="<%=pro._id%>"><%=pro.name%></option>
+
+                  <%})%> <%}%>
+                </select>
+                <div
+                  class="alert alert-danger"
+                  id="SelproErr"
+                  style="display: none"
+                ></div>
+              </div>
+
+              <div class="mb-4" style="display: none" id="searchcatproduct">
+                <label class="form-label">select CatProducts</label>
+                <select class="form-select" name="category" id="selcat">
+                  <% if(locals.category){%>
+                  <option selected disabled>selectProducts</option>
+                  <%category.forEach((CatProd)=>{%>
+                  <option value="<%=CatProd._id%>"><%=CatProd.name%></option>
+
+                  <%})%>
+                  <%}%>
+                </select>
+                <div
+                class="alert alert-danger"
+                id="SelcatErr"
+                style="display:none"
+              ></div>
+              </div>
+            
+              <div class="mb-4">
+                <label for="product_name" class="form-label"
+                  >Select offerPercentage</label
+                >
+                <select class="form-select" name="discountRate" id="disc">
+                  <option selected disabled>Offer percentage</option>
+                  <option value="5">5 %</option>
+                  <option value="10">10 %</option>
+                  <option value="15">15 %</option>
+                  <option value="20">20 %</option>
+                  <option value="25">25 %</option>
+                </select>
+                <div
+                  class="alert alert-danger"
+                  id="discErr"
+                  style="display: none"
+                ></div>
+              </div>
+
+              <div class="d-grid">
+                <button class="btn btn-primary" type="submit">
+                  Create category
+                </button>
+              </div>
             </form>
-        </div>
-        <div class="col-nav">
-            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link btn-icon" href="#">
-                        <i class="material-icons md-notifications animation-shake"></i>
-                        <span class="badge rounded-pill">3</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                </li>
-                <li class="dropdown nav-item">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                        <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
-                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                        <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                    </div>
-                </li>
-                <li class="dropdown nav-item">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </header>
-    <section class="content-main">
-        <div class="content-header">
-            <div>
-                <h2 class="content-title card-title">Categories </h2>
-                <p>Add, edit or delete a category</p>
+          </div>
+          <div class="col-md-9">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                        />
+                      </div>
+                    </th>
+                    <th>Productoffer/Categoryoffer</th>
+                    <th>selected Product/ Category</th>
+                    <th>discount percent</th>
+                    <th class="text-end">delete offer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(locals.offers){%> <% if(locals.offers.length > 0) {%>
+                  <%offers.forEach((offer)=>{%>
+                  <tr>
+                    <td class="text-center">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                        />
+                      </div>
+                    </td>
+                    <td><b><%=offer.offertype%></b></td>
+                    <%if(offer.productid != undefined){%>
+                    <td><%=offer.productid.name%></td>
+
+                    <% } else {%>
+                    <td><%=offer.categoryid.name%></td>
+
+                    <% }%>
+
+                    <td><%=offer.discountPercentage%>%</td>
+
+                    <td class="text-end">
+                      <div
+                        class="d-grid gap-2 d-md-flex justify-content-md-end"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-block rounded font-sm mt-15"
+                          onclick="deleteOffer('<%=offer._id%>')"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <%})%> <% }%> <%}%>
+                </tbody>
+              </table>
             </div>
-            <div>
-                <input type="text" placeholder="Search Categories" class="form-control bg-white">
-            </div>
+          </div>
+          <!-- .col// -->
         </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        
-                 <%if(locals.offerExists){%>
-                 <div class="alert alert-danger"><%=offerExists%></div>
-                    
-                 <%}%>
-                        
-                        <form action="/admin/offer" method="post"  id="offerform" autocomplete="off">
-                          
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Select OfferType</label>
-                                <select class="form-select" onchange="updateOffer()" id="selectoffer" name="offertype">
-                                    <option selected disabled>Add offerType</option>
-                                    <option value="product">Product</option>
-                                    <option value="category">Category</option>
-                                </select>
-                            </div>
-                             <div class="mb-4"   style="display: none;" id="searchAllproduct">
-                                <label class="form-label">selectProducts</label>
-                                <select class="form-select" name="product">
-                                    <option value=""selected disabled></option>
-                                   <%if(locals.products){%>
-                                       <% products.forEach((pro)=>{%>
-                                            <option value="<%=pro._id%>"><%=pro.name%></option>
+        <!-- .row // -->
+      </div>
+      <!-- card body .// -->
+    </div>
+    <!-- card .// -->
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const selectProduct=document.getElementById('searchAllproduct')
+    const selectCategory=document.getElementById('searchcatproduct')
 
-                                        <%})%>
-                                   <%}%>
-                                </select>
-                            </div> 
+        function updateOffer(){
+            const selectedOfferType=document.getElementById('selectoffer').value
+            if(selectedOfferType === 'product'){
+                selectCategory.style.display = "none";
 
-                            <div class="mb-4" style="display: none;" id="searchcatproduct" >
-                                <label class="form-label">select CatProducts</label>
-                                <select class="form-select" name="category">
-                               <% if(locals.category){%>
-                                <option selected disabled>seelctProducts</option>
-                                    <%category.forEach((CatProd)=>{%>
-                                        <option value="<%=CatProd._id%>"><%=CatProd.name%></option>
+                selectProduct.style.display = "block";
 
-                                    <%})%>
-                               <%}%>
-                                </select>
-                            </div> 
-                            <!-- <div class="mb-4">
-                                <label for="product_name" class="form-label">Image</label>
-                                <input type="file"  class="form-control" accept='image/*'  id="catimg" name="catimg" />
-                                <div  style="display: none;" id="error2" class="alerjt alert-danger"></div> -->
-
-                            <!-- </div> -->
-                            <!-- <div class="mb-4">
-                                <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" id="desc" name="description" ></textarea>
-                                <div  style="display: none;" id="error3" class="alert alert-danger"></div>
-
-                            </div> -->
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Select offerPercentage</label>
-                                <select class="form-select" name="discountRate">
-                                    <option selected disabled>Offer percentage</option>
-                                    <option value="5">5 %</option>
-                                    <option value="10">10 %</option>
-                                    <option value="15">15 %</option>
-                                    <option value="20">20 %</option>
-                                    <option value="25">25 %</option>
-                                </select>
-                            </div>
-
-                            
-                            <div class="d-grid">
-                                <button class="btn btn-primary" type="submit">Create category</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                   
-                                    <tr>
-                                        <th class="text-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" />
-                                            </div>
-                                        </th>
-                                        <th>Productoffer/Categoryoffer</th>
-                                        <th>selected Product/ Category</th>
-                                        <th>discount percent</th>
-                                        <th class="text-end">delete offer</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   
-                                   <% if(locals.offers){%>
-                                       <% if(locals.offers.length > 0) {%>
-                                         <%   offers.forEach((offer)=>{%>
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="" />
-                                                        </div>
-                                                    </td>
-                                                    <td><b><%=offer.offertype%></b></td>
-                                             <%if(offer.productid != undefined){%>
-                                                <td ><%=offer.productid.name%></td>
-
-                                            <% } else {%>
-                                                <td ><%=offer.categoryid.name%></td>
-
-                                            <% }%>
-
-                                                <td><%=offer.discountPercentage%>%</td>
-                                                    
-                                                  
-                                                    <td class="text-end">
-                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                               <button type="button"  class="btn btn-sm btn-block rounded font-sm mt-15" onclick="deleteOffer('<%=offer._id%>')" >Delete</button>
-
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            <%})%>
-                                            
-                                               
-                                       <% }%>
-                                     <%}%>
-    
-                                                            
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> <!-- .col// -->
-                </div> <!-- .row // -->
-            </div> <!-- card body .// -->
-        </div> <!-- card .// -->
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-const selectProduct=document.getElementById('searchAllproduct')
-const selectCategory=document.getElementById('searchcatproduct')
-
-    function updateOffer(){
-        const selectedOfferType=document.getElementById('selectoffer').value
-        if(selectedOfferType === 'product'){
-            selectCategory.style.display = "none";
-
-            selectProduct.style.display = "block";
-
-        }
-        else {
-            selectProduct.style.display = "none";
-
-            selectCategory.style.display = "block";
-
-        }
-     
-    }
-
-    async function deleteOffer(offerid){
-        try {
-            const url=`/admin/delete-offer?id=${offerid}`
-            const res=await fetch(url)
-            const data= await res.json()
-            if(res.status == 200){
-                await Swal.fire({icon:'success',title:data.success})
-                window.location.reload()
             }
-        } catch (error) {
-            console.error(error)
+            else {
+                selectProduct.style.display = "none";
+
+                selectCategory.style.display = "block";
+
+            }
+
         }
+
+        async function deleteOffer(offerid){
+            try {
+                const url=`/admin/delete-offer?id=${offerid}`
+                const res=await fetch(url)
+                const data= await res.json()
+                if(res.status == 200){
+                    await Swal.fire({icon:'success',title:data.success})
+                    window.location.reload()
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        function validateSelectType(){
+            console.log('hjhi')
+            console.log(document.getElementById('selectoffer').value)
+           if(document.getElementById('selectoffer').value === "Add offerType") {
+            document.getElementById('offSelErr').style.display ="block"
+            document.getElementById('offSelErr').innerHTML ="Please Select type of Offer"
+
+           }
+           else{
+            document.getElementById('offSelErr').style.display ="none"
+            document.getElementById('offSelErr').innerHTML =""
+           }
+        }
+
+        function validateSelectedPro(){
+          
+            if(document.getElementById('selPro').value == ""){
+            document.getElementById('SelproErr').style.display ="block"
+            document.getElementById('SelproErr').innerHTML ="Please Select product tt"
+            }
+            else{
+            document.getElementById('SelproErr').style.display ="none"
+            document.getElementById('SelproErr').innerHTML =""
+            }
+        }
+
+        function validateSelectedCat(){
+            console.log(document.getElementById('selcat').value)
+            if(document.getElementById('selcat').value == "selectProducts"){
+                
+            document.getElementById('SelcatErr').style.display ="block"
+            document.getElementById('SelcatErr').innerHTML ="Please Select product"
+            }
+            else{
+            document.getElementById('SelcatErr').style.display="none"
+            document.getElementById('SelcatErr').innerHTML =""
+            }
+            
+        }
+
+        function validatedisc(){
+            if(document.getElementById('disc').value == "Offer percentage"){
+            document.getElementById('discErr').style.display ="block"
+            document.getElementById('discErr').innerHTML ="Please Select product "
+            }
+            else{
+            document.getElementById('discErr').style.display ="none"
+            document.getElementById('discErr').innerHTML =""
+            }
+        }
+
+
+
+    document.getElementById('selectoffer').addEventListener('blur',validateSelectType)
+    document.getElementById('disc').addEventListener('blur',validatedisc)
+    document.getElementById('offerform').addEventListener('submit',(event)=>{
+        validateSelectType()
+        if(document.getElementById('searchAllproduct').style.display == "block"){
+        validateSelectedPro()
     }
+    if(document.getElementById('searchcatproduct').style.display == "block"){
+        validateSelectedCat()
+    }
+    validatedisc()
+    if(document.getElementById('discErr').innerHTML || document.getElementById('offSelErr').innerHTML||document.getElementById('SelproErr').innerHTML|| document.getElementById('SelcatErr').innerHTML){
+        event.preventDefault()
+    }
+    })
 
 
-</script>
-<%-include("./adminlayout/footer.ejs")%>
+  </script>
+  <%-include("./adminlayout/footer.ejs")%>
+</main>

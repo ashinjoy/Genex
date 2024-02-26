@@ -103,10 +103,7 @@ const cancelorder = async (req, res) => {
           { orderId: oid },
           { $inc: { refundedAmount: order.totalprice } }
         );
-        const updatewalletBalance = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $inc: { WalletBalance: order.totalprice } }
-        );
+        
       } else if (paymentMethod == "razorpay") {
         const wallet = {
           redeemedAmount: 0,
@@ -117,6 +114,10 @@ const cancelorder = async (req, res) => {
         };
         const walletcreate = await walletModel.create(wallet);
       }
+      const updatewalletBalance = await userModel.findByIdAndUpdate(
+        { _id: userid },
+        { $inc: { WalletBalance: order.totalprice } }
+      );
      } else {
         const totalAfterCancel = await orderModel.findOneAndUpdate(
           { _id: oid, "products.productid": pid },
@@ -141,6 +142,10 @@ const cancelorder = async (req, res) => {
           };
           const walletcreate = await walletModel.create(wallet);
         }
+        const updatewalletBalance = await userModel.findByIdAndUpdate(
+          { _id: userid },
+          { $inc: { WalletBalance: priceReduction } }
+        );
       }
     res.status(200).json({ data: "success" });
   } catch (error) {
@@ -273,135 +278,18 @@ const invoice = async (req, res) => {
   res.status(200).json(invoiceCreate);
 };
 
-const returnOrder = async (req, res) => {
+
+const returnRequest=async(req,res)=>{
   try {
     const { userid } = req.session;
-    console.log("entered cannceled order");
-    const { oid, pid } = req.query;
-    console.log(oid);
-    const returnOrder = await orderModel.findOneAndUpdate(
-      { _id: oid, "products.productid": pid },
-      { $set: { "products.$.status": "returned" } }
-    );
-    console.log("cancellation");
-    const product = await orderModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
-      { $unwind: "$products" },
-      { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
-      { $project: { _id: 0, products: 1 } },
-      {
-        $lookup: {
-          from: "products",
-          localField: "products.productid",
-          foreignField: "_id",
-          as: "productdetail",
-        },
-      },
-    ]);
+     const { oid, pid } = req.query;
 
-    console.log("product", product);
-    if(product[0].productdetail[0].offerPrice > 0 ){
-      const priceReduction =
-      product[0].productdetail[0].offerPrice * product[0].products.qty;
-    }
-    else{
-      const priceReduction =
-      product[0].productdetail[0].salesprice * product[0].products.qty;
-    }
-   
-
-    const order = await orderModel.findById({ _id: oid });
-    const paymentMethod = order.paymentMethod;
-    const unreturnedProducts = await orderModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
-      { $unwind: "$products" },
-      { $match: { "products.status": { $ne: "returned" } } },
-      { $count: "nonReturnedProducts" },
-    ]);
-    console.log("unreturnedProducts", unreturnedProducts);
-    const codStatus = await orderModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
-      { $unwind: "$products" },
-      {
-        $match: {
-          _id: new mongoose.Types.ObjectId(pid),
-          "products.status": "delivery",
-        },
-      },
-    ]);
-    console.log(codStatus);
-    if (unreturnedProducts.length == 0) {
-      const totalAfterCancel = await orderModel.findOneAndUpdate(
-        { _id: oid, "products.productid": pid },
-        { $inc: { totalprice: -order.totalprice } }
-      );
-      if (paymentMethod == "wallet") {
-        const walletRefund = await wallet.findOneAndUpdate(
-          { orderId: oid },
-          { $inc: { refundedAmount: order.totalprice } }
-        );
-        const updatewalletBalance = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $inc: { WalletBalance: order.totalprice } }
-        );
-      } else if (paymentMethod == "razorpay") {
-        const wallet = {
-          redeemedAmount: 0,
-          refundedAmount: order.totalprice,
-          orderId: oid,
-          userid: req.session.userid,
-          paymentMethod: "razorpay",
-        };
-        const walletcreate = await walletModel.create(wallet);
-      } else {
-        const wallet = {
-          redeemedAmount: 0,
-          refundedAmount: order.totalprice,
-          orderId: oid,
-          userid: req.session.userid,
-          paymentMethod: "razorpay",
-        };
-        const walletcreate = await walletModel.create(wallet);
-      }
-    } else {
-      const totalAfterCancel = await orderModel.findOneAndUpdate(
-        { _id: oid, "products.productid": pid },
-        { $inc: { totalprice: -priceReduction } }
-      );
-      if (paymentMethod == "wallet") {
-        const walletRefund = await wallet.findOneAndUpdate(
-          { orderId: oid },
-          { $inc: { refundedAmount: priceReduction } }
-        );
-        const updatewalletBalance = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $inc: { WalletBalance: priceReduction } }
-        );
-      } else if (paymentMethod == "razorpay") {
-        const wallet = {
-          redeemedAmount: 0,
-          refundedAmount: priceReduction,
-          orderId: oid,
-          userid: req.session.userid,
-          paymentMethod: "razorpay",
-        };
-        const walletcreate = await walletModel.create(wallet);
-      } else {
-        const wallet = {
-          redeemedAmount: 0,
-          refundedAmount: priceReduction,
-          orderId: oid,
-          userid: req.session.userid,
-          paymentMethod: "razorpay",
-        };
-        const walletcreate = await walletModel.create(wallet);
-      }
-      res.status(200).json({ data: "success" });
-    }
+    const returnreq=await orderModel.findOneAndUpdate({_id:oid,'products.productid':pid},{$set:{'products.$.status':'returnrequested'}})
+    res.status(200).json({request:"sucess"})
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
 module.exports = {
   load_orderpage,
@@ -410,5 +298,5 @@ module.exports = {
   load_OrderSummary,
   verifyPayment,
   invoice,
-  returnOrder,
+  returnRequest,
 };

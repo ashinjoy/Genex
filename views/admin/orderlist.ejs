@@ -282,7 +282,8 @@ function injectData(orders){
 //   viewDetailCell.classList.add('btn', 'btn-xs')
 //   viewDetailCell.innerHTML='View Detail'
 //   row.appendChild(viewDetailCell)
-
+const divEnd=document.createElement('div')
+divEnd.classList.add('text-end')
 const anchor = document.createElement('a');
 
 anchor.setAttribute('href', '/admin/ordersummary?oid=' + orders._id);
@@ -294,7 +295,11 @@ anchor.innerHTML = 'Detail';
 // console.log("anchor",anchor)
 
 
-row.appendChild(anchor)
+
+divEnd.appendChild(anchor)
+
+    row.appendChild(divEnd)
+
   
   orderBody.appendChild(row)
   

@@ -120,15 +120,13 @@
     </section> <!-- content-main end// -->
     
 <script>
+ 
 async function filterReport(){
 let orderBody=document.getElementById('orderBody')
-
-console.log('hello')
 const filter= document.getElementById('report').value
-
 let url
 if(filter == 'yearly'){
-    console.log('jcbhubdsucbusdbu')
+  
  url=`/admin/filter-report?filter=${filter}`
 }
 else if(filter == 'monthly'){

@@ -149,4 +149,58 @@ const postCheckout = async (req, res) => {
   }
 };
 
-module.exports = { loadCheckout, postCheckout };
+const stockValidate = async (req, res) => {
+  try {
+    const { userid } = req.session;
+    const userObjId=new mongoose.Types.ObjectId(userid)
+    
+    const validateCart = await userModel.aggregate([
+      { $match: { _id: userObjId } },
+      { $unwind: "$cart" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "cart.productid",
+          foreignField: "_id",
+          as: "productDetail",
+        },
+      },
+      { $unwind: "$productDetail" }, 
+      { $unwind: "$productDetail.size" }, 
+
+      {
+        $match: {
+          $expr: {
+            $eq: ["$productDetail.size.label", "$cart.size"]
+          }
+        }
+      },
+      {
+        $match: {
+          $expr: {
+            $lte: ["$cart.qty", "$productDetail.size.quantity"]
+          }
+        }
+      }
+     
+    ]);
+    const cartLength=await userModel.findById({_id:userid},{cart:1,_id:0})
+    console.log('cartlength',cartLength)
+    const {cart}=cartLength
+    console.log('acrt',cart)
+
+    if(validateCart.length == cart.length){
+      res.status(200).json("success")
+    }
+    else{
+      res.status(400).json("stock validation failed")
+    }
+    
+ 
+   
+  } catch (error) {
+    console.error(error)
+  }
+};
+
+module.exports = { loadCheckout, postCheckout,stockValidate };

@@ -36,11 +36,11 @@
                                         
                                        
                                        <td><%=order.products[i].qty*order.products[i].productid.salesprice%></td> 
-                                       <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivery' && order.products[i].status != 'returned' && order.products[i].status != 'pending'){%>
+                                       <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivery' && order.products[i].status != 'returnrequested' && order.products[i].status != 'pending' && order.products[i].status != 'returned' && order.products[i].status != 'returndeclined' ){%>
                                 <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="cancelorder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Cancel</button></td>
                                        <%}%>
                                        <%if(order.products[i].status == 'delivery'){%>
-                                <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="returnOrder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Return</button></td>
+                                <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="returnOrder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Requset Return</button></td>
                                       <%}%>
 
 
@@ -61,9 +61,15 @@
             </div>
         <%})%>
        
-        <%}%>
+        <%} else{%>
+<h3 id="noorder">No Orders Yet</h3>
+       <% } %>
+
+          
 </div>
+
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   async function cancelorder(pid,oid){

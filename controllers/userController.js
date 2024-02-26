@@ -23,6 +23,7 @@ const Loadlogin = async (req, res) => {
 };
 const Loadsignup = async (req, res) => {
   try {
+     
     res.render("user/userSignup");
   } catch (err) {
     console.log(err.message);
@@ -30,6 +31,8 @@ const Loadsignup = async (req, res) => {
 };
 const signup = async (req, res) => {
   try {
+   
+
     console.log("signup entered");
     const { name, email, phone, password, confirm_password } = req.body;
     if (password === confirm_password) {
@@ -48,7 +51,10 @@ const signup = async (req, res) => {
       console.log(userDetails);
       const userid = userDetails._id;
       req.session.otp = userid;
+      console.log("starting")
       if (req.query.ref) {
+        console.log("entry")
+        console.log(req.query.ref)
         req.session.ref = req.query.ref;
       }
       res.redirect("/email-verification");
@@ -118,18 +124,23 @@ const verifyotp = async (req, res) => {
         { is_verified: 1 }
       );
       // generate referral String for all sucesfully verified user
-      const refferalString = `${req.headers.host}/signup?ref:${userid}`;
+      const refferalString = `${req.headers.host}/signup?ref=${userid}`;
       const reffreallink = await userModel.findByIdAndUpdate(
         { _id: userid },
         { $set: { referralString: refferalString } }
       );
+      console.log("referral",req.session.ref)
+
       if (req.session.ref) {
+        console.log("vdgh referene")
         const { ref } = req.session;
+        console.log('refff',ref)
         const refernceValid = await userModel.findById({ _id: ref });
+        console.log('docm',refernceValid)
         if (refernceValid) {
           await userModel.findByIdAndUpdate(
             { _id: ref },
-            { $inc: { wallet: 100 } }
+            { $inc: { WalletBalance: 100 } } 
           );
         }
       }

@@ -3,55 +3,53 @@ const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const addtocart = async (req, res) => {
   try {
-    if(req.session.userid){
+    if (req.session.userid) {
       console.log("entered addtocart");
-    const { id, qty, size } = req.query;
-    const qtySelected = parseInt(qty);
-    console.log("productid", id);
-    const { userid } = req.session;
-    console.log(userid);
-    const productDetail = await productModel.findById(
-      { _id: id },
-      { size: { $elemMatch: { label: size } } }
-    );
-    console.log("productDetail" + productDetail);
-    const stocksAvailable = productDetail.size[0].quantity;
-    const itemExist = await userModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(userid) } },
-      { $unwind: "$cart" },
-      {
-        $match: {
-          "cart.productid": new mongoose.Types.ObjectId(id),
-          "cart.size": size,
-        },
-      },
-    ]);
-    console.log(itemExist);
-
-    if (
-      stocksAvailable > 0 &&
-      itemExist.length === 0 &&
-      stocksAvailable >= qtySelected
-    ) {
-      const user = await userModel.findByIdAndUpdate(
-        { _id: userid },
-        { $push: { cart: { productid: id, size: size, qty: qtySelected } } }
+      const { id, qty, size } = req.query;
+      const qtySelected = parseInt(qty);
+      console.log("productid", id);
+      const { userid } = req.session;
+      console.log(userid);
+      const productDetail = await productModel.findById(
+        { _id: id },
+        { size: { $elemMatch: { label: size } } }
       );
-      //  const stockUpdate=await productModel.updateOne({_id:id,'size.label':size},{$inc:{"size.$.quantity":-qtySelected}})
-      // console.log("stock"+stockUpdate)
-      res.status(200).json({ data: "success" });
-    } else if (itemExist.length > 0) {
-      console.log("item already exist in cart");
-      res.status(409).json({ error: "Item Already exist in Cart" });
+      console.log("productDetail" + productDetail);
+      const stocksAvailable = productDetail.size[0].quantity;
+      const itemExist = await userModel.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(userid) } },
+        { $unwind: "$cart" },
+        {
+          $match: {
+            "cart.productid": new mongoose.Types.ObjectId(id),
+            "cart.size": size,
+          },
+        },
+      ]);
+      console.log(itemExist);
+
+      if (
+        stocksAvailable > 0 &&
+        itemExist.length === 0 &&
+        stocksAvailable >= qtySelected
+      ) {
+        const user = await userModel.findByIdAndUpdate(
+          { _id: userid },
+          { $push: { cart: { productid: id, size: size, qty: qtySelected } } }
+        );
+        //  const stockUpdate=await productModel.updateOne({_id:id,'size.label':size},{$inc:{"size.$.quantity":-qtySelected}})
+        // console.log("stock"+stockUpdate)
+        res.status(200).json({ data: "success" });
+      } else if (itemExist.length > 0) {
+        console.log("item already exist in cart");
+        res.status(409).json({ error: "Item Already exist in Cart" });
+      } else {
+        console.log("no stocks available");
+        res.status(409).json({ error: "No stocks Available" });
+      }
     } else {
-      console.log("no stocks available");
-      res.status(409).json({ error: "No stocks Available" });
+      res.status(400).json({ failure: "Please login to Shop " });
     }
-    }
-    else{
-      res.status(400).json({failure:'Please login to Shop '})
-    }
-    
   } catch (error) {
     console.error(error);
   }
@@ -67,7 +65,7 @@ const loadcart = async (req, res) => {
 
     res.render(
       "user/cart",
-      carts.length> 0 ? { carts } :{noitem:"no item"}
+      carts.length > 0 ? { carts } : { noitem: "no item" }
     );
   } catch (error) {
     console.error(error);
