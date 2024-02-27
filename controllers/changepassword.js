@@ -44,8 +44,9 @@ const load_forgotPassword = async (req, res) => {
   }
 };
 const forgotPassword = async (req, res) => {
-  try {
+  try {     
     const { email } = req.body;
+   
     const is_userRegistered = await userModel.findOne({ email: email });
     if (is_userRegistered) {
       const newSecret = process.env.jwt_secret + is_userRegistered.password;
@@ -54,7 +55,7 @@ const forgotPassword = async (req, res) => {
         email: is_userRegistered.email,
       };
       const jwt_token = jwt.sign(payload, newSecret, { expiresIn: "15m" });
-      const link = `http://localhost:3000/reset-password?id=${is_userRegistered._id}&token=${jwt_token}`;
+      const link = `${req.headers.host}/reset-password?id=${is_userRegistered._id}&token=${jwt_token}`;
       nodemailer.sendLink(link, email);
       res.redirect("/login");
     }

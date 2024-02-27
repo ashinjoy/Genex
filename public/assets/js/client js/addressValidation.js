@@ -3,14 +3,14 @@
  const nametag=document.getElementById("name");
  const streettag=document.getElementById("street");
  const landmarktag=document.getElementById("landmark");
- const pincodetag=document.getElementById("pincode");
+ const pincodetag=document.getElementById("pincode");  
  const citytag=document.getElementById("city")
  const statetag=document.getElementById("state")
  const phonetag=document.getElementById("phone")
  const emailtag=document.getElementById("email")
- const countrytag=document.getElementById("country")
+ const countrytag=document.getElementById("country") 
  const addressform=document.getElementById("addform")
-
+   
  const nameerror=document.getElementById("error1")
  const streeterror=document.getElementById("error2")
  const landmarkerror=document.getElementById("error3")

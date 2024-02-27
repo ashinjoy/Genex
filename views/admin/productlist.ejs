@@ -66,25 +66,7 @@
                             <input class="form-check-input" type="checkbox" value="">
                         </div>
                     </div>
-                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                        <select class="form-select">
-                            <option selected>All category</option>
-                            <option>Electronics</option>
-                            <option>Clothes</option>
-                            <option>Automobile</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 col-6">
-                        <input type="date" value="02.05.2022" class="form-control">
-                    </div>
-                    <div class="col-md-2 col-6">
-                        <select class="form-select">
-                            <option selected>Status</option>
-                            <option>Active</option>
-                            <option>Disabled</option>
-                            <option>Show all</option>
-                        </select>
-                    </div>
+
                 </div>
             </header> <!-- card-header end// -->
             <div class="card-body" id="card-bodyProduct">
@@ -102,68 +84,7 @@
                             </tr>
                         </thead>
                         <tbody id="card-bodyProduct">
-                            <!-- <tr>
-                                <td>0901</td>
-                                <td><b>Marvin McKinney</b></td>
-                                <td>marvin@example.com</td>
-                                <td>$9.00</td>
-                                <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                <td>03.12.2022</td>
-                                <td class="text-end">
-                                    <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div> <!-- dropdown //end -->
-                                <!-- </td>
-                            </tr>  -->
-               <!-- <%filteredproducts.forEach((data)=>{%>
-                    <article class="itemlist">
-                        <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                              
-                                <a class="itemside" href="#">
-                                    <div class="left">
-                                        <img src="/assets/<%=data.img[0]%>" class="img-sm img-thumbnail" alt="Item" width="100px" height="70px">
-                                    </div>
-                                    <div class="info">
-                                        <h6 class="mb-0"><%=data.name%></h6>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>RS. <%=data.salesprice%></span> </div>
-                            <%if(data.is_active === true){%>
-                                <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                    <span class="badge rounded-pill alert-success">Active</span>
-                                </div>
-                            <%} else{%>
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                <span class="badge rounded-pill alert-danger">Inactive</span>
-                            </div>
-                            <%}%>
-                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                <a href="/admin/products/editproduct?id=<%=data._id%>" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i> Edit
-                                </a>
-                                <%if(data.is_active === true){%>
-                                    <button type="button" class="btn btn-sm btn-block rounded font-sm " onclick="blockproduct('<%=data._id%>')">block</button>
-                                <%} else{%>
-                                 <button type="button" class="btn btn-sm btn-brand rounded font-sm " onclick="unblockproduct('<%=data._id%>')">Unblock</button>
-                                <%}%>
-                                
-                            </div>
-                        </div>  
-                     </article>    
-          <%})%> -->
+                            
                  <!-- itemlist  .// -->
                 </tbody>
             </table>

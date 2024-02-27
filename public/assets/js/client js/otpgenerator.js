@@ -26,7 +26,7 @@ async function sendmail(){
     try{
         sendotp.innerHTML="Resend OTP"
         timerstart()
-        const  url=`http://localhost:3000/generate-otp?id=${userinp_val}`
+        const  url=`/generate-otp?id=${userinp_val}`
         const response=await fetch(url)
         const data=await response.json()
         console.log(data)

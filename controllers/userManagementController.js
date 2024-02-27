@@ -61,8 +61,8 @@ const load_admindashboard = async (req, res) => {
         },
       },
       { $group: { _id: null, total: { $sum: "$totalprice" } } },
-    ]);
-    const latestUsers=await userModel.aggregate([{$sort:{createdAt:-1}},{$limit:3}])
+    ]);  
+    const latestUsers=await userModel.aggregate([{$match:{is_admin:0}},{$sort:{createdAt:-1}},{$limit:3}])
     console.log('latestUsers',latestUsers)
     console.log("monthlyrevwenue", monthlyrevenue);
     res.render("admin/admindashboard", {
@@ -115,3 +115,4 @@ module.exports = {
   blockuser,
   unblockuser,
 };
+    

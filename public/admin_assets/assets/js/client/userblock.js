@@ -4,7 +4,7 @@ const unblock = document.getElementById("btn_unblock");
 async function blockuser(userid) {
   try {
     console.log("entered blockuser");
-    url = `http://localhost:3000/admin/users/block?id=${userid}`;
+    url = `/admin/users/block?id=${userid}`;
     const response = await fetch(url);
     if (response.ok) {
       const data = await response.json();
@@ -19,7 +19,7 @@ async function blockuser(userid) {
 
 async function unblockuser(userid) {
   try {
-    url = `http://localhost:3000/admin/users/unblock?id=${userid}`;
+    url = `/admin/users/unblock?id=${userid}`;
     const response = await fetch(url);
     if (response.ok) {
       const data = await response.json();

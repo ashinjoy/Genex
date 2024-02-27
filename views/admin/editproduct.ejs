@@ -138,7 +138,7 @@
                        <%})%>
                        <input type='file'  accept='image/*' name='Images' id='fileInput' class="form-control" onchange="previewImage(event)"  multiple />
                     </div>
-                    <!-- <div style="display: none;" id="error8"  class="alert alert-danger" > </div> -->
+                    <div style="display: none;" id="error8"  class="alert alert-danger" > </div>
                     </div>
                 </div> <!-- card end// -->
                 <div class="card mb-4">
@@ -150,8 +150,10 @@
                             <div class="col-sm-6 mb-3">
                                 <label class="form-label">Category</label>
                                 <select class="form-select" name="cat" id="catname" value="<%=dataproduct.category%>">
+                                    <option value="<%=dataproduct.category._id%>" id="catoption"><%=dataproduct.category.name%></option>
                                     <%category.forEach((cat)=>{%>
-                                        <option value="<%=cat._id%>" id="catoption"><%=cat.name%></option>
+                                    <option value="<%=cat._id%>" id="catoption"><%=cat.name%></option>
+                                        
                                     <%})%>
 
                                 </select>
@@ -164,7 +166,7 @@
         </div>
     </form>
     </section> <!-- content-main end// -->
-    <script src="/public/admin_assets/assets/js/client/productvalidation.js"></script>
+    <script src="/public/admin_assets/assets/js/client/editproductvalidation.js"></script>
     <script >
 
 function previewImage(e) { 

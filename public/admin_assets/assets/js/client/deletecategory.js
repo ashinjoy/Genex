@@ -11,7 +11,7 @@ async function deletecategory (userid){
         })
         
         if(result.isConfirmed){
-            url = `http://localhost:3000/admin/categories/delete-category?id=${userid}`;
+            url = `/admin/categories/delete-category?id=${userid}`;
             const response=await fetch(url)
             if(response.ok){
               const response=await  Swal.fire({

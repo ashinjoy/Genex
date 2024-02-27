@@ -50,7 +50,7 @@ userRouter.post("/add-address",session.user_islogin,address.addAddress)
 userRouter.get("/edit-address",session.user_islogin,address.load_editAddress)
 userRouter.post("/edit-address",session.user_islogin,address.editAddress)
 userRouter.get("/listaddress",session.user_islogin,address.listAddress)
-userRouter.get("/remove-address/",session.user_islogin,address.deleteAddress)
+userRouter.get("/remove-address",session.user_islogin,address.deleteAddress)
 
 
 userRouter.get("/myaccount",session.user_islogin,userProfile.loadUserProfile)
@@ -74,7 +74,7 @@ userRouter.post("/forgot-password",changepassword.forgotPassword)
 
 userRouter.get("/reset-password",changepassword.load_resetPassword)
 userRouter.post("/reset-password",changepassword.resetPassword)
-
+ 
 userRouter.get("/wallet",session.user_islogin,wallet.load_wallet)
 userRouter.post("/addMoney-wallet",wallet.addMoney_wallet)
 userRouter.post("/verify-walletPayment",wallet.verifypayment)

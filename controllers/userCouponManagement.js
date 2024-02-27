@@ -72,3 +72,4 @@ const couponlist = async (req, res) => {
   }
 };
 module.exports = { applyCoupon, removeCoupon, couponlist };
+          

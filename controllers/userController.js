@@ -23,7 +23,6 @@ const Loadlogin = async (req, res) => {
 };
 const Loadsignup = async (req, res) => {
   try {
-     
     res.render("user/userSignup");
   } catch (err) {
     console.log(err.message);
@@ -31,31 +30,21 @@ const Loadsignup = async (req, res) => {
 };
 const signup = async (req, res) => {
   try {
-   
-
-    console.log("signup entered");
     const { name, email, phone, password, confirm_password } = req.body;
     if (password === confirm_password) {
       let saltrounds = 13;
-
       const hashedpassword = await bcrypt.hash(password, saltrounds);
-
       const userData = {
         uname: name,
         email: email,
         phone: phone,
-        password: hashedpassword,
+        password: hashedpassword,         
       };
       const userDetails = await userModel.create(userData);
-
-      console.log(userDetails);
       const userid = userDetails._id;
       req.session.otp = userid;
-      console.log("starting")
       if (req.query.ref) {
-        console.log("entry")
-        console.log(req.query.ref)
-        req.session.ref = req.query.ref;
+      req.session.ref = req.query.ref;
       }
       res.redirect("/email-verification");
     } else {
@@ -70,8 +59,6 @@ const signup = async (req, res) => {
 
 const Load_otppage = async (req, res) => {
   try {
-    // const user_id = req.session.otp;
-    // console.log(user_id);
     res.render("user/otp_page");
   } catch (err) {
     console.error(err);
@@ -79,9 +66,7 @@ const Load_otppage = async (req, res) => {
 };
 const sendotp = async (req, res) => {
   try {
-    console.log("entered sendotp");
     const otp = otpgenerate.createotp();
-    console.log(otp);
     const id = req.session.otp;
     if (!id) {
       console.log("invalid user_id");
@@ -103,7 +88,7 @@ const sendotp = async (req, res) => {
         console.error(err);
       }
     }, 60000);
-    const userdoc = await userModel.findById({ _id: id });
+    const userdoc = await userModel.findById({ _id: id });  
     console.log(userdoc);
     const useremail = userdoc.email;
     console.log(useremail);
@@ -112,7 +97,7 @@ const sendotp = async (req, res) => {
     console.error(err);
   }
 };
-
+ 
 const verifyotp = async (req, res) => {
   try {
     const { otp } = req.body;
@@ -120,7 +105,7 @@ const verifyotp = async (req, res) => {
     const otpverify = await otpModel.findOne({ userid: userid, otp: otp });
     if (otpverify) {
       const verified_user = await userModel.findByIdAndUpdate(
-        { _id: userid },
+        { _id: userid }, 
         { is_verified: 1 }
       );
       // generate referral String for all sucesfully verified user
@@ -129,18 +114,18 @@ const verifyotp = async (req, res) => {
         { _id: userid },
         { $set: { referralString: refferalString } }
       );
-      console.log("referral",req.session.ref)
+      console.log("referral", req.session.ref);
 
       if (req.session.ref) {
-        console.log("vdgh referene")
+        console.log("vdgh referene");
         const { ref } = req.session;
-        console.log('refff',ref)
+        console.log("refff", ref);
         const refernceValid = await userModel.findById({ _id: ref });
-        console.log('docm',refernceValid)
+        console.log("docm", refernceValid);
         if (refernceValid) {
           await userModel.findByIdAndUpdate(
             { _id: ref },
-            { $inc: { WalletBalance: 100 } } 
+            { $inc: { WalletBalance: 100 } }
           );
         }
       }
@@ -198,6 +183,7 @@ const load_userhome = async (req, res) => {
 
     const productAvailable = await productModel
       .find({ is_active: true })
+      .sort({created_at:-1})         
       .limit(4);
 
     res.render("user/userhome", { categoryAvailable, productAvailable });
@@ -208,7 +194,7 @@ const load_userhome = async (req, res) => {
 const load_usershop = async (req, res) => {
   try {
     const product = await productModel
-      .find({ is_active: true })
+      .find({ is_active: true })          
       .populate("category");
     const filtered = product.filter((data) => {
       if (data.category.status === true) {
@@ -224,8 +210,6 @@ const load_usershop = async (req, res) => {
 const load_productdetail = async (req, res) => {
   const { id } = req.query;
   const product = await productModel.findById({ _id: id }).populate("category");
-  console.log("catName", product.category.name);
-  // const relatedProducts= await productModel.find({category:product.category._id})
   const relatedProducts = await productModel.aggregate([
     {
       $match: {

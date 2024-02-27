@@ -2,7 +2,7 @@
 async function blockcategory(userid){
     try{
         console.log("entered blockcategory")
-        url = `http://localhost:3000/admin/categories/block-cat?id=${userid}`;
+        url = `/admin/categories/block-cat?id=${userid}`;
         const response=await fetch(url)
         if(response.ok){
           Swal.fire({
@@ -25,7 +25,7 @@ async function blockcategory(userid){
 async function unblockcategory(userid){
     try{
         console.log("entered unblockcategory")
-        url = `http://localhost:3000/admin/categories/unblock-cat?id=${userid}`;
+        url = `/admin/categories/unblock-cat?id=${userid}`;
         const response=await fetch(url)
         if(response.ok){
            Swal.fire({
