@@ -22,7 +22,7 @@ const adminlogin = async (req, res) => {
         res.render("admin/adminlogin", {
           not_authorized: "You are not authorized",
         });
-      }
+      }  
     } else {
       res.render("admin/adminlogin", { invalid: "Invalid Credentials" });
     }

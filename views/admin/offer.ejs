@@ -273,7 +273,7 @@
                     <td><%=offer.productid.name%></td>
 
                     <% } else {%>
-                    <td><%=offer.categoryid.name%></td>
+                    <td><%= offer.categoryid ? offer.categoryid.name : "Nil" %></td>
 
                     <% }%>
 

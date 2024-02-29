@@ -13,7 +13,7 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paid" }],
+        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -25,7 +25,7 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paid" }],
+        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -37,7 +37,7 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paid" }],
+        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -49,7 +49,7 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paid" }],
+        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -107,7 +107,7 @@ const monthlyreport = async (req, res) => {
         $match: {
           $or: [
             { "products.status": "delivery" },
-            { "products.status": "paid" },
+            { "products.status": "paymentSuccess" },
           ],
         },
       },
@@ -139,7 +139,7 @@ const salesData = async (req, res) => {
           $match: {
             $or: [
               { "products.status": "delivery" },
-              { "products.status": "paid" },
+              { "products.status": "paymentSuccess" },
             ],
           },
         },
@@ -171,7 +171,7 @@ const salesData = async (req, res) => {
           $match: {
             $or: [
               { "products.status": "delivery" },
-              { "products.status": "paid" },
+              { "products.status": "paymentSuccess" },
             ],
           },
         },

@@ -125,12 +125,12 @@ function injectData(orders){
   
   // date cell
   const dateCell=document.createElement('td')
-  dateCell.innerHTML=orders.createdAt
+  dateCell.innerHTML=orders.createdAt.split('T')[0]
   row.appendChild(dateCell)
   
   // totalCell cell
   const totalCell=document.createElement('td')
-  totalCell.innerHTML=orders.totalprice
+  totalCell.innerHTML='₹'+orders.totalprice
   row.appendChild(totalCell)
   
   
@@ -138,7 +138,41 @@ function injectData(orders){
   // payment status
   const paymentCell=document.createElement('td')
   const status=document.createElement('span')
-  status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+  if(orders.products.status === 'paymentSuccess'){
+    status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+  }
+  else if(orders.products.status === 'canceled'){
+    status.classList.add('badge', 'badge-pill', 'bg-danger')
+
+  }
+  else if(orders.products.status === 'delivered'){
+    status.classList.add('badge', 'badge-pill', 'bg-success')
+
+  }
+  else if(orders.products.status ==='processing'){
+    status.classList.add('badge', 'badge-pill', 'bg-primary')
+
+  }
+  else if(orders.products.status ==='dispatched'){
+    status.classList.add('badge', 'badge-pill', 'bg-light','text-dark')
+    
+  }
+  else if(orders.products.status ==='refund'){
+    status.classList.add('badge', 'badge-pill', 'bg-dark')
+    
+  }
+  else if(orders.products.status ==='returnRequested'){
+    status.classList.add('badge', 'badge-pill', 'bg-warning','text-dark')
+    
+  }
+  else if(orders.products.status ==='returned'){
+    status.classList.add('badge', 'badge-pill', 'alert','alert-danger')
+    
+  }
+  else {
+    status.classList.add('badge', 'badge-pill', 'alert-warning')
+
+  }
   status.innerHTML=orders.products.status
   paymentCell.appendChild(status)
   row.appendChild(paymentCell)
@@ -148,53 +182,13 @@ function injectData(orders){
   paymentMethodCell.innerHTML=orders.paymentMethod
   
   row.appendChild(paymentMethodCell)
-  // // button cell
-  
-  const viewDetailCell=document.createElement('a')
-  viewDetailCell.classList.add('btn', 'btn-xs')
-  viewDetailCell.innerHTML='View Detail'
-  row.appendChild(viewDetailCell)
+
   
   orderBody.appendChild(row)
   
   }
 
-// document.getElementById("month").addEventListener("click",monthlydata)
-
-async function monthlydata(){
-//   url='/admin/monthly-report'
-//   const res=await fetch(url)
-//   console.log(res)
-//   const detail = await res.json() 
-//   console.log(detail)
-//   console.log(detail[1].filteredOrders)
-//   // let label=[]
-//   // for(i=0;i<12;i++){
-//   // const labelstorage=  detail[0].
-
-//   // }
-  
-//   const monthNameLabel=detail[0].filtered_Datedata.map(month=>month.monthName)
-//    const data=detail[1].filteredOrders.map(totalorder =>totalorder.length > 0 ? totalorder[0].orderTotal : 0)
-  
-// console.log("labels",monthNameLabel)
-// console.log(data)
 
 
-// const chart = new Chart(
-//     document.getElementById('myChart2'),
-//     {
-//       type: 'doughnut',
-//       data: {
-//         labels: monthNameLabel,
-//         datasets: [
-//           {
-//             label: 'Total Orders per Month',
-//             data: data
-//           }
-//         ]
-//       }
-//     }
-//   );
-}
+
 

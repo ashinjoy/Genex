@@ -80,10 +80,9 @@
                            <% if(ProductDetail[0].products.status !== 'delivery' && ProductDetail[0].products.status !== 'canceled'){%>
                                 <option value="processing">Processing</option>
                                 <option value="dispatched">dispatched</option>
-                                <option value="shipped">Shipped</option>
                                 <option value="refund">refunded</option>
-                                <option value="paid">paid</option>
-                                <option value="delivery">Delivered</option>
+                                <option value="paymentSuccess">paid</option>
+                                <option value="delivered">Delivered</option>
                                 <option value="canceled">canceled</option>
                            <%}%>
                             

@@ -30,7 +30,7 @@ const cancelorder = async (req, res) => {
     console.log(oid);
     const cancellationDetails = await orderModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(oid) } },
-      { $unwind: "$products" },
+      { $unwind: "$products" }, 
       { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
     ]);
     console.log(cancellationDetails);
@@ -190,7 +190,7 @@ const verifyPayment = async (req, res) => {
       console.log(req.body.order.receipt);
       const changeStatus = await orderModel.findByIdAndUpdate(
         { _id: req.body.order.receipt },
-        { $set: { "products.$[].status": "paid" } }
+        { $set: { "products.$[].status": "paymentSuccess" } }
       );
       if (req.session.couponid) {
         const isCouponUsed = await userModel.findByIdAndUpdate(
@@ -284,7 +284,7 @@ const returnRequest=async(req,res)=>{
     const { userid } = req.session;
      const { oid, pid } = req.query;
 
-    const returnreq=await orderModel.findOneAndUpdate({_id:oid,'products.productid':pid},{$set:{'products.$.status':'returnrequested'}})
+    const returnreq=await orderModel.findOneAndUpdate({_id:oid,'products.productid':pid},{$set:{'products.$.status':'returnRequested'}})
     res.status(200).json({request:"sucess"})
   } catch (error) {
     console.error(error)

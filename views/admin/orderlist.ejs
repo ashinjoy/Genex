@@ -262,12 +262,26 @@ function injectData(orders){
   if(orderStatus.every(status => status == 'canceled')){
     status.innerHTML='canceled'
   }
-  else if(orderStatus.every(status =>status == 'delivery')){
-    status.innerHTML='delivery'
+  else if(orderStatus.every(status =>status == 'delivered')){
+    status.innerHTML='delivered'
+  }
+  else if(orderStatus.every(status =>status =='paymentSuccess')){
+    status.innerHTML='paymentSuccess'
+  }
+  else if(orderStatus.every(status => status =='returned')){
+    status.innerHTML='returned'
+  }
+  else if(orderStatus.every(status => status =='returnRequested')){
+    status.innerHTML='returnRequested'
+
+  }
+  else if(orderStatus.every(status => status =='returndeclined')){
+    status.innerHTML='returndeclined'
   }
   else{
     status.innerHTML='processing'
   }
+  
   paymentCell.appendChild(status)
   row.appendChild(paymentCell)
   // payment method
@@ -277,11 +291,7 @@ function injectData(orders){
   
   row.appendChild(paymentMethodCell)
   // // button cell
-  
-//   const viewDetailCell=document.createElement('a')
-//   viewDetailCell.classList.add('btn', 'btn-xs')
-//   viewDetailCell.innerHTML='View Detail'
-//   row.appendChild(viewDetailCell)
+
 const divEnd=document.createElement('div')
 divEnd.classList.add('text-end')
 const anchor = document.createElement('a');

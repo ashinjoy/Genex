@@ -55,7 +55,7 @@ const postCheckout = async (req, res) => {
         ...orders,
         products: orders.products.map((product) => ({
           ...product,
-          status: "paid",
+          status: "paymentSuccess",
         })),
       };
       ordersave = await orderModel.create(walpayment);
