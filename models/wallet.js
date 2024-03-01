@@ -5,7 +5,7 @@ const walletSchema = new mongoose.Schema({
 
   date: { type: Date, default: Date.now },
 
-  orderId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  orderId: { type: mongoose.Schema.Types.ObjectId, ref:"order"},
 
   paymentMethod: { type: String, required: true },
   userid: { type: mongoose.Schema.Types.ObjectId, required: true },

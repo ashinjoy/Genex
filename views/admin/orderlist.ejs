@@ -103,55 +103,7 @@
                             </tr>
                         </thead>
                         <tbody id="ordtableBody">
-                            <!-- <%if(locals.orders){%>
-                               <% orders.forEach((order)=>{%>
-                               
-                                    <%for(let i=0;i<order.products.length;i++){%>
-                                        <tr>
-                                            <td><%=order._id%></td>
-                                            <td><b><%=order.userid.uname%></b></td>
-                                            <td><%=order.userid.email%></td>
-                                            <td><%=order.totalprice%></td>
-                                            <%if(order.products[i].status === "delivery"){%>
-                                        <td><span class="badge rounded-pill alert-warning">delivery</span></td>
-                                            <%} else if(order.products[i].status === "shipped"){%>
-                                                <td><span class="badge rounded-pill alert-warning">Shipped</span></td>
-
-                                            <%} else if (order.products[i].status === "dispatched") {%>
-                                                <td><span class="badge rounded-pill alert-warning">dispatched</span></td>
-
-                                            <%}  else if (order.products[i].status === "canceled"){%>
-                                                <td><span class="badge rounded-pill alert-warning">Canceled</span></td>
-                                            <%}  else if (order.products[i].status === "paid"){%>
-                                                    <td><span class="badge rounded-pill alert-warning">paid</span></td>
-                                            <%}  else if (order.products[i].status === "refund"){%>
-                                                        <td><span class="badge rounded-pill alert-warning">refunded</span></td>
-                                            <%}  else if (order.products[i].status === "pending"){%>
-                                                            <td><span class="badge rounded-pill alert-warning">pending</span></td>
-                                            <%}else {%>
-                                                <td><span class="badge rounded-pill alert-warning">processing</span></td>
-
-                                            
-                                            <%}%>
-                                        
-                                        <td><%=order.createdAt%></td>
-                                        <td class="text-end">
-                                            <a href="/admin/ordersummary?oid=<%=order._id%>&pid=<%=order.products[i].productid._id%>" class="btn btn-md rounded font-sm">Detail</a>
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item" href="#">Edit info</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>  dropdown //end -->
-                                        <!-- </td>
-                                    <%}%>
-                                    
-                               <%})%>
-                                
-
-                            <%}%> -->
+                           
                             
                              
                            
@@ -233,7 +185,7 @@ function injectData(orders){
   const orderlink=document.createElement('a')
   orderlink.classList.add('fw-bold')
   orderlink.id='orderid'
-  orderlink.innerHTML=orders._id
+  orderlink.innerHTML=orders.oid
   orderIdCell.appendChild(orderlink)
   row.appendChild(orderIdCell)
   
@@ -257,28 +209,39 @@ function injectData(orders){
   // payment status
   const paymentCell=document.createElement('td')
   const status=document.createElement('span')
-  status.classList.add('badge', 'badge-pill', 'badge-soft-success')
   const orderStatus=orders.products.map((product)=>product.status) 
   if(orderStatus.every(status => status == 'canceled')){
+    status.classList.add('badge', 'badge-pill', 'bg-danger')
+
     status.innerHTML='canceled'
   }
   else if(orderStatus.every(status =>status == 'delivered')){
+    status.classList.add('badge', 'badge-pill', 'bg-success')
+
     status.innerHTML='delivered'
   }
   else if(orderStatus.every(status =>status =='paymentSuccess')){
+    status.classList.add('badge', 'badge-pill', 'badge-soft-success')
+
     status.innerHTML='paymentSuccess'
   }
   else if(orderStatus.every(status => status =='returned')){
+    status.classList.add('badge', 'badge-pill', 'alert-danger')
+
     status.innerHTML='returned'
   }
   else if(orderStatus.every(status => status =='returnRequested')){
+    status.classList.add('badge', 'badge-pill', 'bg-warning','text-dark')
+
     status.innerHTML='returnRequested'
 
   }
   else if(orderStatus.every(status => status =='returndeclined')){
+    status.classList.add('badge', 'badge-pill', 'badge-soft-warning')
     status.innerHTML='returndeclined'
   }
   else{
+    status.classList.add('badge', 'badge-pill', 'bg-primary')
     status.innerHTML='processing'
   }
   

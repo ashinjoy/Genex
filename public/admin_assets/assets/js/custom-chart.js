@@ -114,7 +114,7 @@ function injectData(orders){
   const orderlink=document.createElement('a')
   orderlink.classList.add('fw-bold')
   orderlink.id='orderid'
-  orderlink.innerHTML=orders._id
+  orderlink.innerHTML=orders.oid
   orderIdCell.appendChild(orderlink)
   row.appendChild(orderIdCell)
   
@@ -166,9 +166,14 @@ function injectData(orders){
     
   }
   else if(orders.products.status ==='returned'){
-    status.classList.add('badge', 'badge-pill', 'alert','alert-danger')
+    status.classList.add('badge', 'badge-pill', 'alert-danger')
     
   }
+  else if(orders.products.status ==='returndeclined'){
+    status.classList.add('badge', 'badge-pill', 'badge-soft-warning')
+    
+  }
+  
   else {
     status.classList.add('badge', 'badge-pill', 'alert-warning')
 

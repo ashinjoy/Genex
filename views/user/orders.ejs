@@ -5,7 +5,7 @@
         <% orders.forEach((order)=>{%>
             <div class="card text-left my-4">
                 <div class="card-header">
-                  <h4><b>OrderId:<%=order._id%></b></h4>
+                  <h4><b>OrderId:<%=order.oid%></b></h4>
                  <a href="/ordersummary?id=<%=order._id%>"><button type="button" class="btn btn-outline-info float-end" >View Summary</button></a> 
                 </div>
                 <div class="card-body">
@@ -18,7 +18,7 @@
                             <th scope="col">Quantity</th>
                             <th scope="col">Unit price</th>
                             <th scope="col">Status</th>  
-                            <th scope="col">Total/SubTotal</th>
+                            <th scope="col">SubTotal</th>
                             <th scope="col">Action</th>          
                           </tr>
                         </thead>
@@ -36,10 +36,10 @@
                                         
                                        
                                        <td><%=order.products[i].qty*order.products[i].productid.salesprice%></td> 
-                                       <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivery' && order.products[i].status != 'returnrequested' && order.products[i].status != 'pending' && order.products[i].status != 'returned' && order.products[i].status != 'returndeclined' ){%>
+                                       <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivered' && order.products[i].status != 'returnRequested' && order.products[i].status != 'pending' && order.products[i].status != 'returned' && order.products[i].status != 'returndeclined' ){%>
                                 <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="cancelorder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Cancel</button></td>
                                        <%}%>
-                                       <%if(order.products[i].status == 'delivery'){%>
+                                       <%if(order.products[i].status == 'delivered'){%>
                                 <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="returnOrder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Requset Return</button></td>
                                       <%}%>
 

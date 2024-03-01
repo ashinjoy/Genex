@@ -7,7 +7,8 @@ const load_wallet = async (req, res) => {
   try {
     const { userid } = req.session;
 
-    const walletOrders = await walletModel.find({userid:userid});
+    const walletOrders = await walletModel.find({userid:userid}).populate('orderId');
+    console.log('walletpop', walletOrders)
     const WalletBalance = await userModel.findById(
       { _id: userid },
       { WalletBalance: 1, _id: 0 }
@@ -19,7 +20,7 @@ const load_wallet = async (req, res) => {
   }
 };
 const addMoney_wallet = async (req, res) => {
-  try {
+  try { 
     const { balance } = req.body;
     const { userid } = req.session;
     const walletOrder = await razorpay.generateOrder_Wallet(userid, balance);

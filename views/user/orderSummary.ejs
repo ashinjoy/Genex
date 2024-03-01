@@ -8,7 +8,7 @@
                 <button type="button" class="btn btn-info float-end" onclick="invoiceDownload('<%=orderDetail._id%>')">Download Invoice</button>
                     
                     <h3 class="fw-bold">ORDER SUMMARY</h3>
-                    <div class="ordercommon fw-normal"><h4>ORDER ID:M<%=locals.orderDetail._id%></h4>
+                    <div class="ordercommon fw-normal"><h4>ORDER ID:<%=locals.orderDetail.oid%></h4>
                     <h4>Rs.<%=locals.orderDetail.totalprice%></h4></div>
                 </div>
                 <%if(locals.orderDetail.products){%>

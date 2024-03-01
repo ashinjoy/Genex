@@ -21,7 +21,7 @@
         <% if(locals.walletOrders){%>
                <% walletOrders.forEach((wallet)=>{%>
                   <tr>
-                    <th scope="row"><%=wallet.orderId%></th>
+                    <th scope="row"><%=wallet.orderId.oid%></th>
                     <td><%=wallet.redeemedAmount%></td>
                     <td><%=wallet.refundedAmount%></td>
                     <td><%=wallet.paymentMethod%></td>

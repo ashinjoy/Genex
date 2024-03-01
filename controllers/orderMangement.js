@@ -254,7 +254,7 @@ const invoice = async (req, res) => {
       $lookup: {
         from: "addresses",
         localField: "addressid",
-        foreignField: "_id",
+        foreignField: "_id", 
         as: "addressDetail",
       },
     },
@@ -265,21 +265,19 @@ const invoice = async (req, res) => {
         foreignField: "_id",
         as: "productDetails",
       },
-    },
+    },     
   ]);
   console.log("userDetail", userDetail);
   console.log("orderDetail", orderDetail);
-
-  const invoiceCreate = await invoiceGenerator.generateInvoice(
-    userDetail,
-    orderDetail
-  );
+    
+  const invoiceCreate = await invoiceGenerator.generateInvoice(orderDetail);
+  console.log('returned invoice')
   console.log(invoiceCreate);
   res.status(200).json(invoiceCreate);
-};
+}; 
 
 
-const returnRequest=async(req,res)=>{
+const returnRequest=async(req,res)=>{ 
   try {
     const { userid } = req.session;
      const { oid, pid } = req.query;
