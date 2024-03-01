@@ -176,11 +176,12 @@
                 ></div>
               </div>
               <div class="mb-4" style="display:none" id="searchAllproduct">
+                <input type="text" placeholder="Search category" class="form-control" id="filteredPro" onchange="filterpro()">
                 <label class="form-label">selectProducts</label>
                 <select class="form-select" name="product" id="selPro">
                   <option value="" selected disabled></option>
                   <%if(locals.products){%> <% products.forEach((pro)=>{%>
-                  <option value="<%=pro._id%>"><%=pro.name%></option>
+                  <option value="<%=pro._id%>" class="proOptions"><%=pro.name%></option>
 
                   <%})%> <%}%>
                 </select>
@@ -192,12 +193,13 @@
               </div>
 
               <div class="mb-4" style="display: none" id="searchcatproduct">
+                <input type="text" placeholder="Search category" class="form-control" id="filteredcat" onchange="filtercatpro()">
                 <label class="form-label">select CatProducts</label>
                 <select class="form-select" name="category" id="selcat">
                   <% if(locals.category){%>
-                  <option selected disabled>selectProducts</option>
+                  <option selected disabled >selectProducts</option>
                   <%category.forEach((CatProd)=>{%>
-                  <option value="<%=CatProd._id%>"><%=CatProd.name%></option>
+                  <option value="<%=CatProd._id%>" class="cat"><%=CatProd.name%></option>
 
                   <%})%>
                   <%}%>
@@ -410,6 +412,39 @@
     }
     })
 
+    function filterpro(){
+    const searchResult=document.getElementById('filteredPro').value
+      const upperCaseSearch=searchResult.toUpperCase()
+      console.log(upperCaseSearch)
+      const searchPattern=new RegExp(upperCaseSearch)
+      console.log(document.querySelectorAll('proOptions'))
+      document.querySelectorAll(".proOptions").forEach((option)=>{
+        if((searchPattern.test(option.innerHTML))){
+          
+          option.style.display =""
+        }
+        else{
+          option.style.display="none"
+          
+        }
+      })
+    }
+
+    function filtercatpro(){
+    const searchResult=document.getElementById('filteredcat').value
+      const upperCaseSearch=searchResult.toUpperCase()
+      console.log(upperCaseSearch)
+      const searchPattern=new RegExp(upperCaseSearch)
+      document.querySelectorAll(".cat").forEach((option)=>{
+        if((searchPattern.test(option.innerHTML))){
+          option.style.display=""
+          
+        }
+        else{
+          option.style.display="none"
+        }
+      })
+    }
 
   </script>
   <%-include("./adminlayout/footer.ejs")%>

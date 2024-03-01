@@ -3,7 +3,7 @@ async function  generateInvoice (order){
 try {
     console.log("data in invoice",order)
     console.log(typeof(order[0].createdAt))
-
+         
     var data=  {
                 "images": {
                   "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
