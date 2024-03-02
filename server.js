@@ -9,10 +9,9 @@ const userRoute = require("./routes/userRoute");
 const adminRoute=require("./routes/adminRoute")
 const dbconnection = require("./config/userModelConfig"); 
 const secret=process.env.jwt_secret
-
 app.set("view engine", "ejs");
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}))   
 app.use("/public",express.static(path.join(__dirname,"/public")))
 app.use("/assets",express.static(path.join(__dirname,"/assets")))
 app.use(session({

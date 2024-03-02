@@ -193,15 +193,22 @@ const load_userhome = async (req, res) => {
 };
 const load_usershop = async (req, res) => {
   try {
+
+    const currentPage=req.query.page || 1 
+    const skipdoc=(parseInt(currentPage)-1) * 8
     const product = await productModel
-      .find({ is_active: true })          
+      .find({ is_active: true }).skip(skipdoc).limit(8)       
       .populate("category");
-    const filtered = product.filter((data) => {
+      const pagelimit=8
+      const totaldoc=await productModel.countDocuments({is_active:true})
+      const totalbtn=Math.ceil(totaldoc/pagelimit)
+    const filtered = product.filter((data) => {   
       if (data.category.status === true) {
         return data;
       }
     });
-    res.render("user/usershop", { filtered });
+
+    res.render("user/usershop", { filtered,totalbtn });
   } catch (err) {
     console.log(err);
   }

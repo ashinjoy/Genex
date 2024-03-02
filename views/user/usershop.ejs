@@ -169,22 +169,24 @@
           </div>
           <%})%>
 
-          <!-- <div class="shop_toolbar t_bottom">
+           <div class="shop_toolbar t_bottom">
             <div class="pagination">
               <ul>
-                <li class="current">1</li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
+               <% if(locals.totalbtn){%>
+                <%for(i=1;i<=totalbtn;i++){%>
+                  <a href="/usershop?page=<%=i%>"><li><%=i%></li></a>
+                <%}%>
+                <%}%>
                 <li class="next"><a href="#">next</a></li>
-                <li><a href="#">>></a></li>
+               
               </ul>
             </div>
-          </div> -->
+          </div> 
           <!--shop toolbar end-->
           <!--shop wrapper end-->
         </div>
       </div>
     </div>
   </div>
-  <%-include("./userlayout/footer.ejs")%>
 </div>
+<%-include("./userlayout/footer.ejs")%>

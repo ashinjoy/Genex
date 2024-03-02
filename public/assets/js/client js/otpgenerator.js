@@ -20,7 +20,7 @@ sendotp.addEventListener("click",async()=>{
     }
     
 })
-
+      
 
 async function sendmail(){
     try{

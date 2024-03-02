@@ -13,6 +13,7 @@ const changepassword=require("../controllers/changepassword")
 const wallet=require("../controllers/walletManagement")
 const coupon=require('../controllers/userCouponManagement')
 const search=require('../controllers/searchController')
+const pagination=require('../controllers/paginationController')
 
 
 
@@ -86,6 +87,7 @@ userRouter.get('/listcoupons',session.user_islogin,coupon.couponlist)
 
 
 userRouter.get('/search',search.searchProducts)
+
 
 
 module.exports=userRouter

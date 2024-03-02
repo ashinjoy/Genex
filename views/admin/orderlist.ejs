@@ -240,6 +240,10 @@ function injectData(orders){
     status.classList.add('badge', 'badge-pill', 'badge-soft-warning')
     status.innerHTML='returndeclined'
   }
+  else if(orderStatus.every(status => status =='pending')){
+    status.classList.add('badge','badge-pill','alert-warning')
+    status.innerHTML='pending'
+  }
   else{
     status.classList.add('badge', 'badge-pill', 'bg-primary')
     status.innerHTML='processing'

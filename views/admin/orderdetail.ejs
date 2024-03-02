@@ -151,7 +151,31 @@
                                         </td>
                                         <td><%=product.productsList[0].salesprice%> </td>
                                         <td><%=product.products.qty%> </td>
-                                        <td><span class="badge rounded-pill alert-success text-success"><%=product.products.status%></span></td>
+                                        <td>
+                                            <%if(product.products.status === 'pending'){%>
+                                                <span class="badge rounded-pill alert-warning"><%=product.products.status%></span>
+
+                                           <% } else if (product.products.status === 'canceled'){%>
+                                            <span class="badge rounded-pill bg-danger"><%=product.products.status%></span>
+
+                                           <%} else if(product.products.status === 'delivered'){%>
+                                            <span class="badge rounded-pill bg-success"><%=product.products.status%></span>
+
+                                           <%} else if(product.products.status === 'paymentSuccess'){%>
+                                            <span class="badge rounded-pill badge-soft-success"><%=product.products.status%></span>
+                                           <%} else if(product.products.status === "returned"){%>
+                                            <span class="badge rounded-pill alert-danger"><%=product.products.status%></span>
+
+                                           <%}else if(product.products.status === 'returnRequested'){%>
+                                            <span class="badge rounded-pill bg-warning text-dark"><%=product.products.status%></span>
+                                           <%} else if(product.products.status === 'returndeclined'){%>
+                                            <span class="badge rounded-pill badge-soft-warning"><%=product.products.status%></span>
+
+                                           <%} else {%>
+                                            <span class="badge rounded-pill bg-primary"><%=product.products.status%></span>
+
+                                            <%}%>
+                                        </td>
                                         <td ><%=product.productsList[0].salesprice*product.products.qty%> </td>
                                         <td class="text-end"><a href="/admin/order-changeStatus?oid=<%=product._id%>&pid=<%=product.products.productid%>">View Order</a> 
                                       <% if(product.products.status === 'returnRequested'){%>

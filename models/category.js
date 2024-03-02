@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema({
     required: true,
   },
   status:{
-    type: Boolean,
+    type: Boolean,  
     default: true,
   },
   description:{
