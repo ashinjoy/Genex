@@ -42,11 +42,7 @@ console.log(report)
 const monthlysales = await report.json() 
 console.log('monthlysales',monthlysales)
 console.log(monthlysales[1].filteredOrders)
-// let label=[]
-// for(i=0;i<12;i++){
-// const labelstorage=  detail[0].
 
-// }
 
 const monthNameLabel=monthlysales[0].filtered_Datedata.map(month=>month.monthName)
  const data2=monthlysales[1].filteredOrders.map(totalorder =>totalorder.length > 0 ? totalorder[0].orderTotal : 0)
@@ -122,16 +118,24 @@ function injectData(orders){
   const customerNameCell=document.createElement('td')
   customerNameCell.textContent=orders.userdetails[0].uname
   row.appendChild(customerNameCell)
+
   
+    
   // date cell
   const dateCell=document.createElement('td')
   dateCell.innerHTML=orders.createdAt.split('T')[0]
   row.appendChild(dateCell)
   
+  //itemmcell
+  const itemCell=document.createElement('td')
+  itemCell.innerHTML=orders.productdetails[0].name
+  row.appendChild(itemCell)
+
+
   // totalCell cell
-  const totalCell=document.createElement('td')
-  totalCell.innerHTML='₹'+orders.totalprice
-  row.appendChild(totalCell)
+  // const totalCell=document.createElement('td')
+  // totalCell.innerHTML='₹'+orders.totalprice
+  // row.appendChild(totalCell)
   
   
   

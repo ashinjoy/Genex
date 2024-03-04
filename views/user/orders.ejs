@@ -30,12 +30,12 @@
                                         <td><%=order.createdAt.toUTCString()%></td>
                                         <td><%=order.products[i].productid.name%></td>
                                        <td><%=order.products[i].qty%></td>
-                                       <td><%=order.products[i].productid.salesprice%></td>
+                                       <td><%=order.products[i].productid.offerPrice > 0 ? order.products[i].productid.offerPrice :order.products[i].productid.salesprice%></td>
                                        
                                        <td><span class="badge rounded-pill bg-success"><%=order.products[i].status%></span></td>
                                         
                                        
-                                       <td><%=order.products[i].qty*order.products[i].productid.salesprice%></td> 
+                                       <td><%=order.products[i].qty*order.products[i].productid.offerPrice > 0 ? order.products[i].productid.offerPrice :order.products[i].productid.salesprice%></td> 
                                        <%if(order.products[i].status != 'canceled' && order.products[i].status != 'delivered' && order.products[i].status != 'returnRequested' && order.products[i].status != 'pending' && order.products[i].status != 'returned' && order.products[i].status != 'returndeclined' ){%>
                                 <td><button type="button" class="btn btn-sm btn-danger rounded font-sm " onclick="cancelorder('<%=order.products[i].productid._id%>','<%=order._id%>')" >Cancel</button></td>
                                        <%}%>
@@ -62,7 +62,7 @@
         <%})%>
        
         <%} else{%>
-<h3 id="noorder">No Orders Yet</h3>
+      <h3 id="noorder">No Orders Yet</h3>
        <% } %>
 
           

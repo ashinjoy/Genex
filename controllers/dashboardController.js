@@ -10,10 +10,13 @@ const weeklyReport = async (req, res) => {
     {
       $match: { createdAt: { $gte: weeks.fourthWeek, $lte: weeks.fifthWeek } },
     },
-    { $unwind: "$products" },
+    // { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
+        $or: [
+          { "products.status": "delivered" },
+          { "products.status": "paymentSuccess" },
+        ],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -25,7 +28,10 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
+        $or: [
+          { "products.status": "delivered" },
+          { "products.status": "paymentSuccess" },
+        ],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -37,7 +43,10 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
+        $or: [
+          { "products.status": "delivered" },
+          { "products.status": "paymentSuccess" },
+        ],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -49,7 +58,10 @@ const weeklyReport = async (req, res) => {
     { $unwind: "$products" },
     {
       $match: {
-        $or: [{ "products.status": "delivery" }, { "products.status": "paymentSuccess" }],
+        $or: [
+          { "products.status": "delivered" },
+          { "products.status": "paymentSuccess" },
+        ],
       },
     },
     { $group: { _id: null, total: { $sum: "$totalprice" } } },
@@ -102,11 +114,11 @@ const monthlyreport = async (req, res) => {
           },
         },
       },
-      { $unwind: "$products" },
+      // { $unwind: "$products" },
       {
         $match: {
           $or: [
-            { "products.status": "delivery" },
+            { "products.status": "delivered" },
             { "products.status": "paymentSuccess" },
           ],
         },
@@ -135,15 +147,16 @@ const salesData = async (req, res) => {
             },
           },
         },
+        { $unwind: "$products" },
+
         {
           $match: {
             $or: [
-              { "products.status": "delivery" },
+              { "products.status": "delivered" },
               { "products.status": "paymentSuccess" },
             ],
           },
         },
-        { $unwind: "$products" },
         {
           $lookup: {
             from: "users",
@@ -167,15 +180,15 @@ const salesData = async (req, res) => {
             },
           },
         },
+        { $unwind: "$products" },
         {
           $match: {
             $or: [
-              { "products.status": "delivery" },
+              { "products.status": "delivered" },
               { "products.status": "paymentSuccess" },
             ],
           },
         },
-        { $unwind: "$products" },
         {
           $lookup: {
             from: "users",
@@ -187,7 +200,39 @@ const salesData = async (req, res) => {
       ]);
       console.log(monthlySalesreport);
       res.json(monthlySalesreport);
+    } else {
+      const dailyData = new Date();
+      const startingTime = new Date(dailyData);
+       startingTime.setUTCHours(0)
+      startingTime.setUTCMinutes(0)
+        startingTime.setUTCSeconds(0)
+      console.log('startingTime',startingTime)
+      const dailyReport= await orderModel.aggregate([
+        { $match: { createdAt: { $gte: startingTime, $lte: Date.now } } },
+        { $unwind: "$products" },
+        {
+          $match: {
+            $or: [
+              { "products.status": "delivered" },
+              { "products.status": "paymentSuccess" },
+            ],
+          },
+        },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "userid",
+            foreignField: "_id",
+            as: "userdetails",
+          },
+        },
+      ]);
+      console.log('dialyrrepory',dailyReport)
+      res.json(dailyReport);
     }
+   
+
   } catch (error) {
     console.error(error);
   }

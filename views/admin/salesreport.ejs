@@ -60,7 +60,7 @@
         
         <div class="card mb-4">
             <header class="card-header">
-                <h4 class="card-title">Latest orders</h4>
+                <h4 class="card-title">Sales Report</h4>
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                         
@@ -73,7 +73,7 @@
                                 <option>All</option>
                                 <option value="yearly">yearly</option>
                                 <option value="monthly">monthly</option>
-                                <!-- <option value="weekly">weekly</option> -->
+                                <option value="daily">Daily</option>
                             </select>
                         </div>
                     </div>
@@ -120,6 +120,17 @@
     </section> <!-- content-main end// -->
     
 <script>
+    window.onload =async function(){
+        console.log('enterd onload')
+        const url=`/admin/default-salesreport?filter=yearly`
+        const response=await fetch(url)
+        const data=await response.json()
+        console.log(data)
+        orderBody.innerHTML= ''
+        data.forEach((order)=>{
+        injectData(order)
+})
+    }
  
 async function filterReport(){
 let orderBody=document.getElementById('orderBody')
@@ -210,36 +221,11 @@ const paymentMethodCell=document.createElement('td')
 paymentMethodCell.innerHTML=orders.paymentMethod
 
 row.appendChild(paymentMethodCell)
-// // button cell
 
-// const viewDetailCell=document.createElement('a')
-// viewDetailCell.classList.add('btn', 'btn-xs')
-// viewDetailCell.innerHTML='View Detail'
-// row.appendChild(viewDetailCell)
-
-//  orderBody=document.getElementById('ordtableBody')
 orderBody.appendChild(row)
 
 }
-// async function filterReport(){
-// console.log("jbnchbdshcv")
-// const  filter= document.getElementById('report').value
-// let url
-// if(filter == 'yearly'){
-//  url=`/admin/filter-report?filter=${filter}`
-// }
-// else if(filter == 'monthly'){
-//  url=`/admin/filter-report?filter=${filter}`
 
-// }
-// else {
-//     url=`/admin/filter-report?filter=${filter}`
-
-// }
-
-// const res=await fetch(url)
-// const data=await res.json()
-// }
 
 </script>
 

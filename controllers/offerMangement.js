@@ -11,7 +11,7 @@ const load_offerPage = async (req, res) => {
       .find({})
       .populate("productid")
       .populate("categoryid");
-      console.log('offerspopulated',offers)
+    console.log("offerspopulated", offers);
     res.render("admin/offer", { products, category, offers });
   } catch (error) {
     console.error(error);
@@ -206,30 +206,149 @@ const createOffer = async (req, res) => {
   }
 };
 
-const deleteOffer=async(req,res)=>{
+const deleteOffer = async (req, res) => {
   try {
-    const {id} =req.query
-    const offerdata=await offerModel.findById({_id:id})
-    if(offerdata.offertype === "category"){
-      const productofferUpdate=await productModel.updateMany({category:offerdata.categoryid},{$set:{offerPrice:0}})
-      const updatecategoryOffer=await categoryModel.updateOne({_id:offerdata.categoryid},{$unset:{offer:1}})
-      const updateoffer =await offerModel.findByIdAndDelete({_id:id})
+    const { id } = req.query;
+    const offerdata = await offerModel.findById({ _id: id });
+    if (offerdata.offertype === "category") {
+      const productofferUpdate = await productModel.updateMany(
+        { category: offerdata.categoryid },
+        { $set: { offerPrice: 0 } }
+      );
+      const updatecategoryOffer = await categoryModel.updateOne(
+        { _id: offerdata.categoryid },
+        { $unset: { offer: 1 } }
+      );
+      const updateoffer = await offerModel.findByIdAndDelete({ _id: id });
+    } else {
+      console.log("pid", offerdata.productid);
+      const productofferUpdate = await productModel.findByIdAndUpdate(
+        { _id: offerdata.productid },
+        { $set: { offerPrice: 0 } }
+      );
+      const updateproductOffer = await productModel.updateOne(
+        { _id: offerdata.productid },
+        { $unset: { offer: 1 } }
+      );
+      const updateoffer = await offerModel.findByIdAndDelete({ _id: id });
     }
-    else{
-      console.log('pid',offerdata.productid)
-      const productofferUpdate=await productModel.findByIdAndUpdate({_id:offerdata.productid},{$set:{offerPrice:0}})
-      const updateproductOffer=await productModel.updateOne({_id:offerdata.productid},{$unset:{offer:1}})
-      const updateoffer =await offerModel.findByIdAndDelete({_id:id})
 
-
-    }
-   
-
-    
-    res.status(200).json({success:"deleted Successfully"})
+    res.status(200).json({ success: "deleted Successfully" });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
+// const load_editOffer = async (req, res) => {
+//   try {
+//     const { id } = req.query;
+//     const products = await productModel.find({ is_active: true });
+//     const category = await categoryModel.find({ status: true });
+//     const offerDetail = await offerModel
+//       .findById({ _id: id })
+//       .populate("productid")
+//       .populate("categoryid");
+//     console.log(offerDetail);
+//     res.render("admin/editOffer", { offerDetail });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-module.exports = { load_offerPage, createOffer ,deleteOffer};
+// const editOffer = async (req, res) => {
+//   try {
+//     const { offertype, product, category, discountRate } = req.body;
+//     let discountpercent = parseInt(discountRate);
+
+//     let offer;
+//     const productObjectId = new mongoose.Types.ObjectId(product);
+//     const categoryObjectId = new mongoose.Types.ObjectId(category);
+
+//     if (offertype === "product") {
+      // const product = await productModel.aggregate([
+      //   { $match: { _id: productObjectId } },
+      //   {
+      //     $lookup: {
+      //       from: "offers",
+      //       localField: "offer",
+      //       foreignField: "_id",
+      //       as: "offer",
+      //     },
+      //   },
+      // ]);
+
+      // offer = await offerModel.findByIdAndUpdate(
+      //   { _id: id },
+      //   {
+      //     $set: {
+      //       offertype: offertype,
+      //       productid: productObjectId,
+      //       discountPercentage: discountpercent,
+      //     },
+      //   }
+      // );
+      // updating offer inside productModel
+    //   const updateOffer = await productModel.findByIdAndUpdate(
+    //     { _id: productObjectId },
+    //     { $set: { offer: offer._id } }
+    //   );
+
+    //   console.log("updateofferssss", updateOffer);
+    //   console.log("ppid", productObjectId);
+    //   const update_Offerprice = await updateOfferprice(productObjectId);
+    // } else {
+      // const category = await categoryModel.aggregate([
+      //   { $match: { _id: categoryObjectId } },
+      //   {
+      //     $lookup: {
+      //       from: "offers",
+      //       localField: "offer",
+      //       foreignField: "_id",
+      //       as: "offer",
+      //     },
+      //   },
+      // ]);
+
+      // offer = await offerModel.findByIdAndUpdate(
+      //   { _id: id },
+      //   {
+      //     $set: {
+      //       offertype: offertype,
+      //       categoryid: categoryObjectId,
+      //       discountPercentage: discountpercent,
+      //     },
+      //   }
+      // );
+      // updating offer inside productModel
+      // const updateOffer = await categoryModel.updateOne(
+      //   { _id: categoryObjectId },
+      //   { $set: { offer: offer._id } }
+      // );
+
+      //calculate Dicount price
+  //     let products = [];
+  //     const categoryProducts = await productModel.aggregate([
+  //       { $match: { category: categoryObjectId } },
+  //     ]);
+  //     console.log("catpro", categoryProducts);
+  //     for (const product of categoryProducts) {
+  //       const productId = product._id;
+  //       products.push(productId);
+  //     }
+  //     console.log("catproid", products);
+  //     for (const productId of products) {
+  //       await updateOfferprice(productId);
+  //     }
+  //   }
+
+  //   res.redirect("/admin/offer");
+  // } catch (error) {
+  //   console.error;
+  // }
+// };
+
+module.exports = {
+  load_offerPage,
+  createOffer,
+  deleteOffer,
+ 
+};

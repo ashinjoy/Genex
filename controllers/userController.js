@@ -5,6 +5,8 @@ const otpgenerate = require("../utils/otp");
 const otpModel = require("../models/userOtp");
 const productModel = require("../models/productModel");
 const categoryModel = require("../models/category");
+const orderModel = require("../models/order");
+const walletModel=require('../models/wallet')
 const logredirect = async (req, res) => {
   try {
     res.redirect("/userhome");
@@ -128,6 +130,12 @@ const verifyotp = async (req, res) => {
             { $inc: { WalletBalance: 100 } }
           );
         }
+        const referralHistory=await walletModel.create({
+          referralAmount:100,
+          paymentMethod:'Refferal money',
+          userid:req.session.userid
+
+        })
       }
       req.session.ref = null;
 

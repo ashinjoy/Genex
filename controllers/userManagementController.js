@@ -14,7 +14,7 @@ const load_admindashboard = async (req, res) => {
       {
         $match: {
           $or: [
-            { "products.status": "delivery" },
+            { "products.status": "delivered" },
             { "products.status": "paymentSuccess" },
           ],
         },
@@ -24,11 +24,11 @@ const load_admindashboard = async (req, res) => {
     console.log("ordersCount", ordersCount);
     const categoryCount = await categoryModel.countDocuments({ status: true });
     const revenue = await orderModel.aggregate([
-      { $unwind: "$products" },
+      // { $unwind: "$products" },
       {
         $match: {
           $or: [
-            { "products.status": "delivery" },
+            { "products.status": "delivered" },
             { "products.status": "paymentSuccess" },
           ],
         },
@@ -55,7 +55,7 @@ const load_admindashboard = async (req, res) => {
       {
         $match: {
           $or: [
-            { "products.status": "delivery" },
+            { "products.status": "delivered" },
             { "products.status": "paymentSuccess" },
           ],
         },

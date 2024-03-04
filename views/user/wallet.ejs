@@ -13,6 +13,7 @@
                 <th scope="col">#orderid</th>
                 <th scope="col">redeemedAmount</th>
                 <th scope="col">refundedAmount</th>
+                <th scope="col">referralAmount</th>
                 <th scope="col">paymentMethod</th>
 
               </tr>
@@ -21,9 +22,10 @@
         <% if(locals.walletOrders){%>
                <% walletOrders.forEach((wallet)=>{%>
                   <tr>
-                    <th scope="row"><%=wallet.orderId.oid%></th>
+                    <th scope="row"><%=wallet.orderId ? wallet.orderId.oid : 'REFERRAL'%></th>
                     <td><%=wallet.redeemedAmount%></td>
                     <td><%=wallet.refundedAmount%></td>
+                    <td><%=wallet.referralAmount%></td>
                     <td><%=wallet.paymentMethod%></td>
 
                   </tr>

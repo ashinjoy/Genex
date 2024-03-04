@@ -19,7 +19,7 @@ adminRouter.get("/",session.admin_islogout,adminAuthController.load_adminlogin)
 adminRouter.post("/",session.admin_islogout,adminAuthController.adminlogin)
 
 adminRouter.get("/logout",session.admin_islogin,adminAuthController.adminlogout)
-
+       
 adminRouter.get("/weekly-report",dashboardController.weeklyReport)
 adminRouter.get("/monthly-report",dashboardController.monthlyreport)
 
@@ -37,8 +37,8 @@ adminRouter.get('/defaultproductlist-pagination',pagination.productPagination)
 adminRouter.get('/productlist-pagination',pagination.productPagination)
 
 
-
 adminRouter.get('/sales-report',session.admin_islogin,dashboardController.load_salesreport)
+adminRouter.get('/default-salesreport',session.admin_islogin,dashboardController.salesData)
 adminRouter.get('/filter-report',session.admin_islogin,dashboardController.salesData)   
 
 
@@ -89,4 +89,10 @@ adminRouter.post('/offer',session.admin_islogin,offer.createOffer)
 adminRouter.get('/delete-offer',offer.deleteOffer)
 
 
+
+
+
+
 module.exports=adminRouter
+
+  

@@ -148,9 +148,10 @@
 <%latestUsers.forEach((users)=>{%>
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div class="d-flex align-items-center">
-            <img src="assets/imgs/people/avatar4.jpg" alt="" class="avatar">
+            <!-- <img src="/public/assets/imgs/people/avatar4.jpg" alt="" class="avatar"> -->
             <div>
                 <h6><%=users.uname%></h6>
+                <p><%=users.email%></p>
                 <p class="text-muted font-xs">
                    
                 </p>
@@ -234,7 +235,8 @@
                                     <th class="align-middle" scope="col">Order ID</th>
                                     <th class="align-middle" scope="col">Billing Name</th>
                                     <th class="align-middle" scope="col">Date</th>
-                                    <th class="align-middle" scope="col">Total Paid</th>
+                                    <th class="align-middle" scope="col">Item Name</th>
+                                    <!-- <th class="align-middle" scope="col">Total Paid</th> -->
                                     <th class="align-middle" scope="col">Payment Status</th>
                                     <th class="align-middle" scope="col">Payment Method</th>
                                     

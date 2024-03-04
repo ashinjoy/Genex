@@ -172,7 +172,18 @@
                                 </table>     
                             </div>
                             <div class="payment_method">
-                             <% if ( sum > 1000 ) { %>
+                             <% if ( sum >= 1000 ) { %>
+                                <div id="coddiv" class="panel-default">
+                                    <input id="payment" name="check_method" type="radio" data-bs-target="createp_account" value="cod" class="payment" disabled/>
+                                    <label for="payment" data-bs-toggle="collapse" data-bs-target="#method" aria-controls="method">COD</label>
+
+                                    <div id="method" class="collapse one" data-parent="#accordion">
+                                        <div class="card-body1">
+                                           <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                        </div>
+                                    </div>
+                                </div> 
+                            <%}else {%>
                                 <div id="coddiv" class="panel-default">
                                     <input id="payment" name="check_method" type="radio" data-bs-target="createp_account" value="cod" class="payment" />
                                     <label for="payment" data-bs-toggle="collapse" data-bs-target="#method" aria-controls="method">COD</label>
@@ -182,8 +193,8 @@
                                            <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
                                         </div>
                                     </div>
-                                </div> 
-                            <%}%>
+                                </div>
+                          <%  } %>
                     
                                    
                                   
@@ -235,7 +246,7 @@
    
    async function paymentProceed(event){ 
     try{
-console.log('entered')
+        console.log('entered')
         const stockValidate=await fetch(`/stockValidate`)
         const validate=await stockValidate.json()
       if(stockValidate.status == 400){
@@ -400,17 +411,23 @@ async function applyCoupon(){
       const total=document.getElementById('ordertotal').innerHTML
       const parsedTotal=parseFloat(total)
       const totalAfterCoupon=parsedTotal-reduction
-      console.log("totalAfterCoupon",totalAfterCoupon)
+      console.log("totalAfterCoupon",totalAfterCoupon) 
       
       document.querySelectorAll('.ordersum').forEach((orderTotal)=>{
         orderTotal.innerHTML=totalAfterCoupon 
       })
         document.getElementById('sum').value = totalAfterCoupon
-        if(document.getElementById('sum').value <= 1000){
-         document.getElementById('coddiv')? document.getElementById('coddiv').style.display="none": console.log('no div')
+        if(document.getElementById('sum').value > 1000){
+        
+         document.getElementById('payment').disabled = true
+        
         } 
         else{
-            document.getElementById('coddiv').style.display="block"
+            console.log('entered disabled Mode')
+            document.getElementById('payment').disabled =false
+            console.log(document.getElementById('coddiv'))
+
+           
 
         }
     
@@ -448,13 +465,15 @@ async function removeCoupon(){
      })
      document.getElementById('sum').value = removedCouponamount
      if(document.getElementById('sum').value > 1000){
-         document.getElementById('coddiv').style.display="block"
+        document.getElementById('payment').disabled = true
+        
+        // document.getElementById('coddiv').removeAttribute('disabled')
+
   
      }
      else{
-        if(document.getElementById('coddiv')){
-            document.getElementById('coddiv').style.display="none"
-        }
+        document.getElementById('payment').disabled = false
+        
      }
      const couponbtn=document.createElement('button')
      couponbtn.innerHTML="Apply Coupon"

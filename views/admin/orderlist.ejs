@@ -93,12 +93,13 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>#ID</th>
+                                <th>#ORDERID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Date</th>
+                                <th scope="col">Payment Method</th>
                                 <th scope="col" class="text-end"> Action </th>
                             </tr>
                         </thead>
@@ -182,7 +183,7 @@ function injectData(orders){
   
   // orderid cell
   const orderIdCell=document.createElement('td')
-  const orderlink=document.createElement('a')
+  const orderlink=document.createElement('a')   
   orderlink.classList.add('fw-bold')
   orderlink.id='orderid'
   orderlink.innerHTML=orders.oid
@@ -193,15 +194,21 @@ function injectData(orders){
   const customerNameCell=document.createElement('td')
   customerNameCell.textContent=orders.userdetails[0].uname
   row.appendChild(customerNameCell)
+
+  //email
+
+  const customerEmailCell=document.createElement('td')
+  customerEmailCell.textContent=orders.userdetails[0].email
+  row.appendChild(customerEmailCell)
   
   // date cell
   const dateCell=document.createElement('td')
-  dateCell.innerHTML=orders.createdAt
+  dateCell.innerHTML=orders.createdAt.split('T')[0]
   row.appendChild(dateCell)
   
   // totalCell cell
   const totalCell=document.createElement('td')
-  totalCell.innerHTML=orders.totalprice
+  totalCell.innerHTML='₹'+orders.totalprice
   row.appendChild(totalCell)
   
   

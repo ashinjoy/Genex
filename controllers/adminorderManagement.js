@@ -217,7 +217,7 @@ const accceptReturn = async (req, res) => {
       {
         $match: {
           _id: new mongoose.Types.ObjectId(pid),
-          "products.status": "delivery",
+          "products.status": "delivered",
         },
       },
     ]);
