@@ -27,7 +27,7 @@
           <div class="table_desc">
             <div class="cart_page table-responsive">
               <%if(locals.carts) {%> <%if(locals.carts.length>0){%>
-              <table>
+              <table id="tab1">
                 <thead>
                   <tr>
                     <th class="product_thumb">Image</th>
@@ -95,12 +95,50 @@
                   <% })%>
                 </tbody>
               </table>
+              <!-- <table id="tab2" style="display: none;">
+                <%if(locals.carts && locals.carts.length > 0){  locals.carts.forEach((product,index)=>{%>
+                  <tr><th>Image</th><td class="product_thumb"><a href="#"
+                    ><img
+                      src="/assets/<%=product.productid.img[0]%>"
+                      alt=""
+                  /></a></td></tr>
+                  <tr><th>Product</th><td><a href="#"><%=product.productid.name%></a></td></tr>
+                  <tr><th>Price</th><td><%=product.productid.offerPrice%>
+                  </td></tr>
+                  <tr><th>Quantity</th><td> <input
+                    min="1"
+                    max=""
+                    type="number"
+                    value="<%=product.qty%>"
+                    id="qty<%=index%>"
+                    onchange="changeTotal('<%=index%>','<%=product._id%>','<%=product.productid._id%>')"
+                    onkeydown="return onlyUpDownArrows(event);"
+                  /></td></tr>
+                  <tr><th>Total</th><%  if(product.productid.offerPrice > 0){%>
+                    <td class="product_total" id="totalprice<%=index%>">
+                      <%=product.qty*product.productid.offerPrice%>
+                    </td>
+                 <% } else {%>
+                    <td class="product_total" id="totalprice<%=index%>">
+                      <%=product.qty*product.productid.salesprice%>
+                    </td>
+                  <%}%></tr>
+                  <tr><th>Delete</th><td>  <button
+                    type="button"
+                    onclick="deleteitem('<%=product._id%>')"
+                  >
+                    <i class="fa fa-trash-o"></i>
+                  </button></td></tr>
+
+                  <% }) }%>
+              </table> -->
             </div>
             
           </div>
         </div>
       </div>
       <!--coupon code area start-->
+
       <div class="coupon_area">
         <div class="row">
           <div class="col-lg-6 col-md-6">

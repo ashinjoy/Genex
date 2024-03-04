@@ -203,7 +203,7 @@ const load_usershop = async (req, res) => {
   try {
 
     const currentPage=req.query.page || 1 
-    const skipdoc=(parseInt(currentPage)-1) * 8
+    const skipdoc=(parseInt(currentPage)-1) * 8 
     const product = await productModel
       .find({ is_active: true }).skip(skipdoc).limit(8)       
       .populate("category");
@@ -215,10 +215,8 @@ const load_usershop = async (req, res) => {
         return data;
       }
     });
-
-    
-
-    res.render("user/usershop", { filtered,totalbtn });
+    const category=await categoryModel.find({status:true})
+    res.render("user/usershop", { filtered,totalbtn,category });
   } catch (err) {
     console.log(err);
   }

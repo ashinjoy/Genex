@@ -9,7 +9,7 @@
                  <a href="/ordersummary?id=<%=order._id%>"><button type="button" class="btn btn-outline-info float-end" >View Summary</button></a> 
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table table1">
                         <thead>
                           <tr>
                             <th></th>
@@ -24,7 +24,7 @@
                         </thead>
                         <tbody>
                                 
-                              <% for(i=0;i<order.products.length;i++){ %>
+                              <% for(i=0;i<order.products.length;i++) { %>
                                     <tr>
                                         <td><img src="/assets/<%=order.products[i].productid.img[0]%>" alt="" width="80px" height="80px"></td>
                                         <td><%=order.createdAt.toUTCString()%></td>
@@ -52,6 +52,7 @@
                                 
                           </tbody>
                           </table>
+
                 </div>
                 <div class="card-footer text-muted">
                   <h4>Total Amount:<%=order.totalprice%></h4>

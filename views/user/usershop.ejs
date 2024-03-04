@@ -32,27 +32,40 @@
           </div>
           <div class="niceselect_option">
             <!-- <form class="select_option" action="#"> -->
-              <select name="orderby" id="short" onchange="filterProducts()">
-                <option selected value="allProducts" >All Products</option>
-                <option value="low">Filter by price: low to high</option>
-                <option value="high">Filter by price: high to low</option>
-                for(i=0;)
-              </select>
+            <select
+              class="selectbtn"
+              name="orderby"
+              id="short"
+              onchange="filterProducts()"
+            >
+              <option selected value="allProducts">All Products</option>
+              <option value="low">Filter by price: low to high</option>
+              <option value="high">Filter by price: high to low</option>
+              <% for(i=0; i < category.length ; i++){%>
+              <option value="<%=category[i]._id%>,<%=category[i].name%>">
+                Filter by category: <%=category[i].name%>
+              </option>
+
+              <%}%>
+            </select>
             <!-- </form> -->
           </div>
           <div class="page_amount">
-           <% if(filtered){%>
-              <p>Showing 1–<%=filtered.length%> of <%=filtered.length%>  results</p>
+            <% if(filtered){%>
+            <p>
+              Showing 1–<%=filtered.length%> of <%=filtered.length%> results
+            </p>
 
-           <% }%>
+            <% }%>
           </div>
         </div>
         <!--shop toolbar end-->
+        <!-- <div class="row shop_wrapper"> -->
         <div class="row shop_wrapper" id="mainbody">
           <% filtered.forEach((data)=>{%>
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="single_product">
-              <div class="product_thumb" style="aspect-ratio: 1/1;">
+              <div class="product_thumb" style="aspect-ratio: 1/1">
                 <a class="primary_img" href="/productdetail?id=<%=data._id%>"
                   ><img
                     src="/assets/<%=data.img[0]%>"
@@ -98,24 +111,27 @@
                     <!-- old_price -->
                   </h4>
                   <div class="price_box">
-                   
                     <!-- <span ><b>Rs:<%=data.offerPrice%></b></span> -->
 
-                <%if(data.offerPrice == 0){%>
-                  <span class="current_price"><b>Rs:<%=data.salesprice%></b></span>
-                <%}  else {%>
-                
-                  <span class="old_price"><b>Rs:<%=data.salesprice%></b></span>
+                    <%if(data.offerPrice == 0){%>
+                    <span class="current_price"
+                      ><b>Rs:<%=data.salesprice%></b></span
+                    >
+                    <%} else {%>
 
-                  <span class="current_price"><b>Rs:<%=data.offerPrice%></b></span>
+                    <span class="old_price"
+                      ><b>Rs:<%=data.salesprice%></b></span
+                    >
 
-                <%}%>
+                    <span class="current_price"
+                      ><b>Rs:<%=data.offerPrice%></b></span
+                    >
+
+                    <%}%>
                   </div>
                 </div>
                 <div class="add_to_cart">
-                  <a href="/productdetail?id=<%=data._id%>" 
-                    >Product View</a
-                  >
+                  <a href="/productdetail?id=<%=data._id%>">Product View</a>
                 </div>
               </div>
               <div class="product_content list_content">
@@ -126,15 +142,18 @@
                   <span class="old_price"><%=data.regularprice%></span>
 
                   <%if(data.offerPrice == 0){%>
-                    <span class="current_price"><b>Rs:<%=data.salesprice%></b></span>
-                  <%}  else {%>
-                  
-                    <span class="old_price"><b>Rs:<%=data.salesprice%></b></span>
-  
-                    <span class="current_price"><b>Rs:<%=data.offerPrice%></b></span>
-  
+                  <span class="current_price"
+                    ><b>Rs:<%=data.salesprice%></b></span
+                  >
+                  <%} else {%>
+
+                  <span class="old_price"><b>Rs:<%=data.salesprice%></b></span>
+                  <span class="current_price"
+                    ><b>Rs:<%=data.offerPrice%></b></span
+                  >
+
                   <%}%>
-                  
+
                   <!-- <span class="current_price"><%=data.salesprice%></span> -->
                 </div>
                 <div class="product_rating">
@@ -166,117 +185,105 @@
             </div>
           </div>
           <%})%>
-
-           <div class="shop_toolbar t_bottom">
+          <div class="shop_toolbar t_bottom">
             <div class="pagination">
               <ul>
-               <% if(locals.totalbtn){%>
-                <%for(i=1;i<=totalbtn;i++){%>
-                  <a href="/usershop?page=<%=i%>"><li><%=i%></li></a>
-                <%}%>
-                <%}%>
+                <% if(locals.totalbtn){%> <%for(i=1;i<=totalbtn;i++){%>
+                <a href="/usershop?page=<%=i%>"><li><%=i%></li></a>
+                <%}%> <%}%>
                 <li class="next"><a href="#">next</a></li>
-               
               </ul>
             </div>
-          </div> 
+          </div>
+          
           <!--shop toolbar end-->
           <!--shop wrapper end-->
         </div>
+        
+      <!-- </div> -->
       </div>
     </div>
   </div>
 </div>
 <script>
-      async function search(){
-try {
-  console.log('eneterd DSearch')
-    const searchinp=document.getElementById('searchinp').value
-    const isfilter=document.getElementById('short').value
-    console.log(isfilter)
-    const url=`/search?search=${searchinp}&filter=${isfilter}`
-    const response=await fetch(url)
-    const data =await response.json()
-    console.log(data)
-  document.getElementById('mainbody').innerHTML=""
 
-    data.forEach((el)=>{
-        injectData(el) 
-    })
-    
 
-} catch (error) {
-    console.error(error)
-}
+  async function search() {
+    try {
+      console.log("eneterd DSearch");
+      const searchinp = document.getElementById("searchinp").value;
+      const isfilter = document.getElementById("short").value;
+      console.log(isfilter);
+      const url = `/search?search=${searchinp}&filter=${isfilter}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      document.getElementById("mainbody").innerHTML = "";
+
+      data.forEach((el) => {
+        injectData(el);
+      });
+    } catch (error) {
+      console.error(error);
     }
-  async function filterProducts(){
-    console.log('hi')
-  const selectedFilter = document.getElementById('short').value
-  const url =`/filter-product?filter=${selectedFilter}`
-  const res =await fetch(url)
-  const data = await res.json()
+  }
+  async function filterProducts() {
+    console.log("hi");
+    const selectedFilter = document.getElementById("short").value;
+    const url = `/filter-product?filter=${selectedFilter}`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-  console.log(data)
-  document.getElementById('mainbody').innerHTML=""
-  data.forEach(el => {
-    injectData(el)
-  });
-  
+    console.log(data);
+    document.getElementById("mainbody").innerHTML = "";
+    data.forEach((el) => {
+      injectData(el);
+    });
+    // console.log('before')
+    // injectPagination(data)
+    
   }
 
-  function injectData(data){
-    // Assuming you have an array of data objects named `productData`
-// You can replace this with your actual data array
+  function injectData(data) {
+    const containerDiv = document.createElement("div");
+    containerDiv.classList.add("col-lg-3", "col-md-4", "col-sm-6", "col-12");
 
+    const singleProductDiv = document.createElement("div");
+    singleProductDiv.classList.add("single_product");
 
-    // Create the main container div
-    const containerDiv = document.createElement('div');
-    containerDiv.classList.add('col-lg-3', 'col-md-4', 'col-sm-6', 'col-12');
+    const productThumbDiv = document.createElement("div");
+    productThumbDiv.classList.add("product_thumb");
+    productThumbDiv.style.aspectRatio = "1/1";
 
-    // Create the single_product div
-    const singleProductDiv = document.createElement('div');
-    singleProductDiv.classList.add('single_product');
-
-    // Create the product_thumb div
-    const productThumbDiv = document.createElement('div');
-    productThumbDiv.classList.add('product_thumb');
-    productThumbDiv.style.aspectRatio = '1/1';
-
-    // Create the primary_img anchor
-    const primaryImgAnchor = document.createElement('a');
-    primaryImgAnchor.classList.add('primary_img');
+    const primaryImgAnchor = document.createElement("a");
+    primaryImgAnchor.classList.add("primary_img");
     primaryImgAnchor.href = `/productdetail?id=${data._id}`;
 
-    // Create the img element for primary_img
-    const imgElement = document.createElement('img');
+    const imgElement = document.createElement("img");
     imgElement.src = `/assets/${data.img[0]}`;
-    imgElement.alt = '';
-    imgElement.classList.add('img_product');
+    imgElement.alt = "";
+    imgElement.classList.add("img_product");
 
-    // Append imgElement to primaryImgAnchor
     primaryImgAnchor.appendChild(imgElement);
 
-    // Create the secondary_img anchor
-    const secondaryImgAnchor = document.createElement('a');
-    secondaryImgAnchor.classList.add('secondary_img');
+    const secondaryImgAnchor = document.createElement("a");
+    secondaryImgAnchor.classList.add("secondary_img");
     secondaryImgAnchor.href = `/productdetail?id=${data._id}`;
 
     // Create the img element for secondary_img
-    const secondaryImgElement = document.createElement('img');
+    const secondaryImgElement = document.createElement("img");
     secondaryImgElement.src = `/assets/${data.img[1]}`;
-    secondaryImgElement.alt = '';
+    secondaryImgElement.alt = "";
 
-    // Append secondaryImgElement to secondaryImgAnchor
     secondaryImgAnchor.appendChild(secondaryImgElement);
 
-    // Create the label_product div
-    const labelProductDiv = document.createElement('div');
-    labelProductDiv.classList.add('label_product');
+    const labelProductDiv = document.createElement("div");
+    labelProductDiv.classList.add("label_product");
 
     // Create the span element for label_sale
-    const labelSaleSpan = document.createElement('span');
-    labelSaleSpan.classList.add('label_sale');
-    labelSaleSpan.textContent = 'Sale';
+    const labelSaleSpan = document.createElement("span");
+    labelSaleSpan.classList.add("label_sale");
+    labelSaleSpan.textContent = "Sale";
 
     // Append labelSaleSpan to labelProductDiv
     labelProductDiv.appendChild(labelSaleSpan);
@@ -287,26 +294,26 @@ try {
     productThumbDiv.appendChild(labelProductDiv);
 
     // Create the action_links div
-    const actionLinksDiv = document.createElement('div');
-    actionLinksDiv.classList.add('action_links');
+    const actionLinksDiv = document.createElement("div");
+    actionLinksDiv.classList.add("action_links");
 
     // Create the ul element
-    const ulElement = document.createElement('ul');
+    const ulElement = document.createElement("ul");
 
     // Create the li element for quick_button
-    const quickButtonLi = document.createElement('li');
-    quickButtonLi.classList.add('quick_button');
+    const quickButtonLi = document.createElement("li");
+    quickButtonLi.classList.add("quick_button");
 
     // Create the anchor element for quick_button
-    const quickButtonAnchor = document.createElement('a');
-    quickButtonAnchor.href = '#';
-    quickButtonAnchor.setAttribute('data-bs-toggle', 'modal');
-    quickButtonAnchor.setAttribute('data-bs-target', '#modal_box');
-    quickButtonAnchor.title = 'quick view';
+    const quickButtonAnchor = document.createElement("a");
+    quickButtonAnchor.href = "#";
+    quickButtonAnchor.setAttribute("data-bs-toggle", "modal");
+    quickButtonAnchor.setAttribute("data-bs-target", "#modal_box");
+    quickButtonAnchor.title = "quick view";
 
     // Create the span element for pe-7s-search
-    const spanElement = document.createElement('span');
-    spanElement.classList.add('pe-7s-search');
+    const spanElement = document.createElement("span");
+    spanElement.classList.add("pe-7s-search");
 
     // Append spanElement to quickButtonAnchor
     quickButtonAnchor.appendChild(spanElement);
@@ -315,17 +322,17 @@ try {
     quickButtonLi.appendChild(quickButtonAnchor);
 
     // Create the li element for compare
-    const compareLi = document.createElement('li');
-    compareLi.classList.add('compare');
+    const compareLi = document.createElement("li");
+    compareLi.classList.add("compare");
 
     // Create the anchor element for compare
-    const compareAnchor = document.createElement('a');
-    compareAnchor.href = '#';
-    compareAnchor.title = 'Add to Compare';
+    const compareAnchor = document.createElement("a");
+    compareAnchor.href = "#";
+    compareAnchor.title = "Add to Compare";
 
     // Create the span element for pe-7s-edit
-    const spanElement2 = document.createElement('span');
-    spanElement2.classList.add('pe-7s-edit');
+    const spanElement2 = document.createElement("span");
+    spanElement2.classList.add("pe-7s-edit");
 
     // Append spanElement2 to compareAnchor
     compareAnchor.appendChild(spanElement2);
@@ -345,23 +352,23 @@ try {
     singleProductDiv.appendChild(actionLinksDiv);
 
     // Create the product_content div
-    const productContentDiv = document.createElement('div');
-    productContentDiv.classList.add('product_content', 'grid_content');
+    const productContentDiv = document.createElement("div");
+    productContentDiv.classList.add("product_content", "grid_content");
 
     // Create the product_content_inner div
-    const productContentInnerDiv = document.createElement('div');
-    productContentInnerDiv.classList.add('product_content_inner');
+    const productContentInnerDiv = document.createElement("div");
+    productContentInnerDiv.classList.add("product_content_inner");
 
     // Create the h4 element for product_name
-    const h4Element = document.createElement('h4');
-    h4Element.classList.add('product_name');
+    const h4Element = document.createElement("h4");
+    h4Element.classList.add("product_name");
 
     // Create the anchor element for product_name
-    const productAnchor = document.createElement('a');
-    productAnchor.href = 'product-details.html';
+    const productAnchor = document.createElement("a");
+    productAnchor.href = "product-details.html";
 
     // Create the b element for data.name
-    const bElement = document.createElement('b');
+    const bElement = document.createElement("b");
     bElement.textContent = data.name;
 
     // Append bElement to productAnchor
@@ -374,26 +381,26 @@ try {
     productContentInnerDiv.appendChild(h4Element);
 
     // Create the div element for price_box
-    const priceBoxDiv = document.createElement('div');
-    priceBoxDiv.classList.add('price_box');
+    const priceBoxDiv = document.createElement("div");
+    priceBoxDiv.classList.add("price_box");
 
     // Create the span element for old_price or current_price based on condition
     let priceSpan;
     if (data.offerPrice === 0) {
-        priceSpan = document.createElement('span');
-        priceSpan.classList.add('current_price');
-        priceSpan.innerHTML = `<b>Rs:${data.salesprice} </b>`;
+      priceSpan = document.createElement("span");
+      priceSpan.classList.add("current_price");
+      priceSpan.innerHTML = `<b>Rs:${data.salesprice} </b>`;
     } else {
-        priceSpan = document.createElement('span');
-        priceSpan.classList.add('old_price');
-        priceSpan.innerHTML = `<b>Rs:${data.salesprice} </b>`;
+      priceSpan = document.createElement("span");
+      priceSpan.classList.add("old_price");
+      priceSpan.innerHTML = `<b>Rs:${data.salesprice}</b>`;
 
-        const currentPriceSpan = document.createElement('span');
-        currentPriceSpan.classList.add('current_price');
-        currentPriceSpan.innerHTML = `<b>Rs:${data.offerPrice}</b>`;
+      const currentPriceSpan = document.createElement("span");
+      currentPriceSpan.classList.add("current_price");
+      currentPriceSpan.innerHTML = `<b>Rs:${data.offerPrice}</b>`;
 
-        // Append currentPriceSpan to priceBoxDiv
-        priceBoxDiv.appendChild(currentPriceSpan);
+      // Append currentPriceSpan to priceBoxDiv
+      priceBoxDiv.appendChild(currentPriceSpan);
     }
 
     // Append priceSpan to priceBoxDiv
@@ -406,13 +413,13 @@ try {
     productContentDiv.appendChild(productContentInnerDiv);
 
     // Create the div element for add_to_cart
-    const addToCartDiv = document.createElement('div');
-    addToCartDiv.classList.add('add_to_cart');
+    const addToCartDiv = document.createElement("div");
+    addToCartDiv.classList.add("add_to_cart");
 
     // Create the anchor element for add_to_cart
-    const addToCartAnchor = document.createElement('a');
+    const addToCartAnchor = document.createElement("a");
     addToCartAnchor.href = `/productdetail?id=${data._id}`;
-    addToCartAnchor.textContent = 'Product View';
+    addToCartAnchor.textContent = "Product View";
 
     // Append addToCartAnchor to addToCartDiv
     addToCartDiv.appendChild(addToCartAnchor);
@@ -427,10 +434,54 @@ try {
     containerDiv.appendChild(singleProductDiv);
 
     // Append containerDiv to the parent element
-    document.getElementById('mainbody').appendChild(containerDiv);
-
-
+    document.getElementById("mainbody").appendChild(containerDiv);
   }
+  // function injectPagination(data) {
+  //   console.log('hi')
+  //   const filter= document.getElementById('short').value
+  //   const limit=8
+  //   const pagelength=Math.ceil(data.length/8)
+  //   for(i=1;i<=pagelength;i++){
+  //     const paginationdiv = document.createElement("div");
+  //   paginationdiv.classList.add("shop_toolbar","t_bottom");
+
+  //   const childPaginationdiv = document.createElement("div");
+  //   childPaginationdiv.classList.add("pagination");
+
+  //   const unlist = document.createElement("ul");
+  //   const anch = document.createElement("a");
+  //   anch.setAttribute('href',`#`)
+  //   anch.classList.add('paginate')
+  //   // anch.onclick = paginate
+  //   // anch.href = `/usershop?page=`;
+  //   const listNo = document.createElement("li");
+  //   listNo.innerHTML = i
+  //   anch.appendChild(listNo);
+  //   unlist.appendChild(anch);
+  //   childPaginationdiv.appendChild(unlist);
+  //   paginationdiv.appendChild(childPaginationdiv);
+  //  return document.getElementById("mainbody").appendChild(paginationdiv);
+  //   }
+  //   console.log('entred pagination')
+
+  //     document.querySelectorAll('.paginate').forEach((el)=>{
+  //       console.log('hi')
+  //      el.addEventListener('click',async()=>{
+  //       const filter=document.getElementById('short').value
+  //       const page=el.textContent
+  //       const url=`/usershop-filter?page=${page}&filter=${filter}`
+  //       const res=await fetch(url)
+  //       const products=await res.json()
+  //       document.getElementById("mainbody").innerHTML = "";
+  //       products.forEach((el)=>{
+  //       injectData(el)
+
+  //      })
+  //      injectPagination(products)
+  //      })
+        
+  //     })
+  //   }
 
 </script>
 <%-include("./userlayout/footer.ejs")%>

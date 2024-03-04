@@ -21,7 +21,7 @@
         <div class="container">
              <div class="row">
                 <div class="col-12">
-                     <div class="user-actions">
+                     <!-- <div class="user-actions">
                          <h3> 
                              <i class="fa fa-file-o" aria-hidden="true"></i>
                              Returning customer?
@@ -51,7 +51,7 @@
                                  </form>          
                              </div>
                          </div>    
-                     </div>
+                     </div> -->
                      <div class="user-actions">
                          <h3> 
                              <i class="fa fa-file-o" aria-hidden="true"></i>
@@ -78,22 +78,22 @@
                        
                              <% if(userAddress.length > 0){%>
                               <%  userAddress.forEach((address,index)=>{%>
-                                <div class="row">
-                                    <div class="card w-75">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="card w-75 mb-4 py-4">
                                         <div class="card-body">
                                             <label class="radio-container"></label>
                                             <input type="radio" name="address" class="addressRadio" value="<%=address._id%>" <%if(index == 0){%> checked<%}%>>
                                             <span class="checkmark"></span>
                                             </label>
                                     
-                                            <h5 class="card-title"><%= address.name %></h5>
-                                            <span><strong><%= address.phone %></strong></span>
+                                            <h5 class="card-title mt-4 fw-bold"><%= address.name %></h5>
+                                            <span><%= address.phone %></span>
                                             <p class="card-text"><%= address.houseno %> <%= address.landmark %> <%= address.city %> <%= address.state %> <%= address.pincode %></p>
 
                                         </div>
-                                        <p>
-                                            <a href="/add-address?page=checkout">add addresss</a>
-                                            <a href="/edit-address/?id=<%=address._id%>&page=checkout">edit addresss</a>
+                                        <p class="btnsadd">
+                                            <a class="addressbtns" href="/add-address?page=checkout">add addresss</a>
+                                            <a class="addressbtns" href="/edit-address/?id=<%=address._id%>&page=checkout">edit addresss</a>
 
                                             
                                         </p>
@@ -332,6 +332,7 @@ else{
     }
    }
    function generatePayment(order){
+    console.log(order)
     console.log("hi")
     var options = {
     "key": "rzp_test_aykCH4paLrlr2m", 

@@ -18,7 +18,7 @@ const pagination=require('../controllers/paginationController')
 
 
 
-userRouter.get("/",userController.logredirect)
+userRouter.get("/",userController.logredirect)    
 userRouter.get("/userhome",userController.load_userhome)
 
 userRouter.get("/login",session.user_islogout,userController.Loadlogin)
@@ -83,11 +83,13 @@ userRouter.post("/verify-walletPayment",wallet.verifypayment)
 userRouter.post('/applyCoupon',coupon.applyCoupon)
 userRouter.get('/removeCoupon',coupon.removeCoupon)
 userRouter.get('/listcoupons',session.user_islogin,coupon.couponlist)
-  
+   
 
-
+ 
 userRouter.get('/search',search.searchProducts)
 userRouter.get('/filter-product',search.filterProduct)
+userRouter.get('/usershop-filter',search.filterProduct)
+
 
 
 
