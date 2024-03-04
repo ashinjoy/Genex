@@ -31,16 +31,14 @@
             ></button>
           </div>
           <div class="niceselect_option">
-            <!-- <form class="select_option" action="#">
-              <select name="orderby" id="short">
-                <option selected value="1">Sort by average rating</option>
-                <option value="2">Sort by popularity</option>
-                <option value="3">Sort by newness</option>
-                <option value="4">Sort by price: low to high</option>
-                <option value="5">Sort by price: high to low</option>
-                <option value="6">Product Name: Z</option>
+            <!-- <form class="select_option" action="#"> -->
+              <select name="orderby" id="short" onchange="filterProducts()">
+                <option selected value="allProducts" >All Products</option>
+                <option value="low">Filter by price: low to high</option>
+                <option value="high">Filter by price: high to low</option>
+                for(i=0;)
               </select>
-            </form> -->
+            <!-- </form> -->
           </div>
           <div class="page_amount">
            <% if(filtered){%>
@@ -50,7 +48,7 @@
           </div>
         </div>
         <!--shop toolbar end-->
-        <div class="row shop_wrapper">
+        <div class="row shop_wrapper" id="mainbody">
           <% filtered.forEach((data)=>{%>
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="single_product">
@@ -189,4 +187,250 @@
     </div>
   </div>
 </div>
+<script>
+      async function search(){
+try {
+  console.log('eneterd DSearch')
+    const searchinp=document.getElementById('searchinp').value
+    const isfilter=document.getElementById('short').value
+    console.log(isfilter)
+    const url=`/search?search=${searchinp}&filter=${isfilter}`
+    const response=await fetch(url)
+    const data =await response.json()
+    console.log(data)
+  document.getElementById('mainbody').innerHTML=""
+
+    data.forEach((el)=>{
+        injectData(el) 
+    })
+    
+
+} catch (error) {
+    console.error(error)
+}
+    }
+  async function filterProducts(){
+    console.log('hi')
+  const selectedFilter = document.getElementById('short').value
+  const url =`/filter-product?filter=${selectedFilter}`
+  const res =await fetch(url)
+  const data = await res.json()
+
+  console.log(data)
+  document.getElementById('mainbody').innerHTML=""
+  data.forEach(el => {
+    injectData(el)
+  });
+  
+  }
+
+  function injectData(data){
+    // Assuming you have an array of data objects named `productData`
+// You can replace this with your actual data array
+
+
+    // Create the main container div
+    const containerDiv = document.createElement('div');
+    containerDiv.classList.add('col-lg-3', 'col-md-4', 'col-sm-6', 'col-12');
+
+    // Create the single_product div
+    const singleProductDiv = document.createElement('div');
+    singleProductDiv.classList.add('single_product');
+
+    // Create the product_thumb div
+    const productThumbDiv = document.createElement('div');
+    productThumbDiv.classList.add('product_thumb');
+    productThumbDiv.style.aspectRatio = '1/1';
+
+    // Create the primary_img anchor
+    const primaryImgAnchor = document.createElement('a');
+    primaryImgAnchor.classList.add('primary_img');
+    primaryImgAnchor.href = `/productdetail?id=${data._id}`;
+
+    // Create the img element for primary_img
+    const imgElement = document.createElement('img');
+    imgElement.src = `/assets/${data.img[0]}`;
+    imgElement.alt = '';
+    imgElement.classList.add('img_product');
+
+    // Append imgElement to primaryImgAnchor
+    primaryImgAnchor.appendChild(imgElement);
+
+    // Create the secondary_img anchor
+    const secondaryImgAnchor = document.createElement('a');
+    secondaryImgAnchor.classList.add('secondary_img');
+    secondaryImgAnchor.href = `/productdetail?id=${data._id}`;
+
+    // Create the img element for secondary_img
+    const secondaryImgElement = document.createElement('img');
+    secondaryImgElement.src = `/assets/${data.img[1]}`;
+    secondaryImgElement.alt = '';
+
+    // Append secondaryImgElement to secondaryImgAnchor
+    secondaryImgAnchor.appendChild(secondaryImgElement);
+
+    // Create the label_product div
+    const labelProductDiv = document.createElement('div');
+    labelProductDiv.classList.add('label_product');
+
+    // Create the span element for label_sale
+    const labelSaleSpan = document.createElement('span');
+    labelSaleSpan.classList.add('label_sale');
+    labelSaleSpan.textContent = 'Sale';
+
+    // Append labelSaleSpan to labelProductDiv
+    labelProductDiv.appendChild(labelSaleSpan);
+
+    // Append primaryImgAnchor, secondaryImgAnchor, labelProductDiv to productThumbDiv
+    productThumbDiv.appendChild(primaryImgAnchor);
+    productThumbDiv.appendChild(secondaryImgAnchor);
+    productThumbDiv.appendChild(labelProductDiv);
+
+    // Create the action_links div
+    const actionLinksDiv = document.createElement('div');
+    actionLinksDiv.classList.add('action_links');
+
+    // Create the ul element
+    const ulElement = document.createElement('ul');
+
+    // Create the li element for quick_button
+    const quickButtonLi = document.createElement('li');
+    quickButtonLi.classList.add('quick_button');
+
+    // Create the anchor element for quick_button
+    const quickButtonAnchor = document.createElement('a');
+    quickButtonAnchor.href = '#';
+    quickButtonAnchor.setAttribute('data-bs-toggle', 'modal');
+    quickButtonAnchor.setAttribute('data-bs-target', '#modal_box');
+    quickButtonAnchor.title = 'quick view';
+
+    // Create the span element for pe-7s-search
+    const spanElement = document.createElement('span');
+    spanElement.classList.add('pe-7s-search');
+
+    // Append spanElement to quickButtonAnchor
+    quickButtonAnchor.appendChild(spanElement);
+
+    // Append quickButtonAnchor to quickButtonLi
+    quickButtonLi.appendChild(quickButtonAnchor);
+
+    // Create the li element for compare
+    const compareLi = document.createElement('li');
+    compareLi.classList.add('compare');
+
+    // Create the anchor element for compare
+    const compareAnchor = document.createElement('a');
+    compareAnchor.href = '#';
+    compareAnchor.title = 'Add to Compare';
+
+    // Create the span element for pe-7s-edit
+    const spanElement2 = document.createElement('span');
+    spanElement2.classList.add('pe-7s-edit');
+
+    // Append spanElement2 to compareAnchor
+    compareAnchor.appendChild(spanElement2);
+
+    // Append compareAnchor to compareLi
+    compareLi.appendChild(compareAnchor);
+
+    // Append quickButtonLi, compareLi to ulElement
+    ulElement.appendChild(quickButtonLi);
+    ulElement.appendChild(compareLi);
+
+    // Append ulElement to actionLinksDiv
+    actionLinksDiv.appendChild(ulElement);
+
+    // Append productThumbDiv, actionLinksDiv to singleProductDiv
+    singleProductDiv.appendChild(productThumbDiv);
+    singleProductDiv.appendChild(actionLinksDiv);
+
+    // Create the product_content div
+    const productContentDiv = document.createElement('div');
+    productContentDiv.classList.add('product_content', 'grid_content');
+
+    // Create the product_content_inner div
+    const productContentInnerDiv = document.createElement('div');
+    productContentInnerDiv.classList.add('product_content_inner');
+
+    // Create the h4 element for product_name
+    const h4Element = document.createElement('h4');
+    h4Element.classList.add('product_name');
+
+    // Create the anchor element for product_name
+    const productAnchor = document.createElement('a');
+    productAnchor.href = 'product-details.html';
+
+    // Create the b element for data.name
+    const bElement = document.createElement('b');
+    bElement.textContent = data.name;
+
+    // Append bElement to productAnchor
+    productAnchor.appendChild(bElement);
+
+    // Append productAnchor to h4Element
+    h4Element.appendChild(productAnchor);
+
+    // Append h4Element to productContentInnerDiv
+    productContentInnerDiv.appendChild(h4Element);
+
+    // Create the div element for price_box
+    const priceBoxDiv = document.createElement('div');
+    priceBoxDiv.classList.add('price_box');
+
+    // Create the span element for old_price or current_price based on condition
+    let priceSpan;
+    if (data.offerPrice === 0) {
+        priceSpan = document.createElement('span');
+        priceSpan.classList.add('current_price');
+        priceSpan.innerHTML = `<b>Rs:${data.salesprice} </b>`;
+    } else {
+        priceSpan = document.createElement('span');
+        priceSpan.classList.add('old_price');
+        priceSpan.innerHTML = `<b>Rs:${data.salesprice} </b>`;
+
+        const currentPriceSpan = document.createElement('span');
+        currentPriceSpan.classList.add('current_price');
+        currentPriceSpan.innerHTML = `<b>Rs:${data.offerPrice}</b>`;
+
+        // Append currentPriceSpan to priceBoxDiv
+        priceBoxDiv.appendChild(currentPriceSpan);
+    }
+
+    // Append priceSpan to priceBoxDiv
+    priceBoxDiv.appendChild(priceSpan);
+
+    // Append priceBoxDiv to productContentInnerDiv
+    productContentInnerDiv.appendChild(priceBoxDiv);
+
+    // Append productContentInnerDiv to productContentDiv
+    productContentDiv.appendChild(productContentInnerDiv);
+
+    // Create the div element for add_to_cart
+    const addToCartDiv = document.createElement('div');
+    addToCartDiv.classList.add('add_to_cart');
+
+    // Create the anchor element for add_to_cart
+    const addToCartAnchor = document.createElement('a');
+    addToCartAnchor.href = `/productdetail?id=${data._id}`;
+    addToCartAnchor.textContent = 'Product View';
+
+    // Append addToCartAnchor to addToCartDiv
+    addToCartDiv.appendChild(addToCartAnchor);
+
+    // Append addToCartDiv to productContentDiv
+    productContentDiv.appendChild(addToCartDiv);
+
+    // Append productContentDiv to singleProductDiv
+    singleProductDiv.appendChild(productContentDiv);
+
+    // Append singleProductDiv to containerDiv
+    containerDiv.appendChild(singleProductDiv);
+
+    // Append containerDiv to the parent element
+    document.getElementById('mainbody').appendChild(containerDiv);
+
+
+  }
+
+</script>
 <%-include("./userlayout/footer.ejs")%>

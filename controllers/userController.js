@@ -216,6 +216,8 @@ const load_usershop = async (req, res) => {
       }
     });
 
+    
+
     res.render("user/usershop", { filtered,totalbtn });
   } catch (err) {
     console.log(err);

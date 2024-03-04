@@ -78,15 +78,16 @@ userRouter.post("/reset-password",changepassword.resetPassword)
  
 userRouter.get("/wallet",session.user_islogin,wallet.load_wallet)
 userRouter.post("/addMoney-wallet",wallet.addMoney_wallet)
-userRouter.post("/verify-walletPayment",wallet.verifypayment)
+userRouter.post("/verify-walletPayment",wallet.verifypayment)         
 
 userRouter.post('/applyCoupon',coupon.applyCoupon)
 userRouter.get('/removeCoupon',coupon.removeCoupon)
 userRouter.get('/listcoupons',session.user_islogin,coupon.couponlist)
-
+  
 
 
 userRouter.get('/search',search.searchProducts)
+userRouter.get('/filter-product',search.filterProduct)
 
 
 

@@ -84,9 +84,9 @@
                         <div class="header_account_list search_list">
                             <a href="javascript:void(0)"><span class="pe-7s-search"></span></a>
                             <div class="dropdown_search">
-                                <form action="/search?id=name">
-                                    <input placeholder="Search entire store here ..." type="text" name="search">
-                                    <button type="submit"><span class="pe-7s-search"></span></button>
+                                <form >
+                                    <input placeholder="Search entire store here ..." type="text" name="search" id="searchinp">
+                                    <button type="button" ><span class="pe-7s-search" onclick="search()"></span></button>
                                 </form>
                             </div>
                         </div>
@@ -126,6 +126,12 @@
         document.getElementById('shoplink').classList.remove('active')
         document.getElementById('couponlink').classList.add('active')
     }
+
+
+
+
+    
+    
      
 
    
