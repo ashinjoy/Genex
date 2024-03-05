@@ -60,7 +60,7 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Order detail</h2>
-                <p>Details for Order ID:#<%=orderDetail[0]._id%> </p>
+                <p>Details for Order ID:#<%=orderDetail[0].oid%> </p>
             </div>
         </div>
         <div class="card">
@@ -68,7 +68,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
                         <span>
-                            <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            <i class="material-icons md-calendar_today"></i> <b><%=orderDetail[0].createdAt.toLocaleString()%></b>
                         </span> <br>
                         <small class="text-muted">Order ID: #<%=orderDetail[0].oid%></small>
                     </div>
@@ -121,7 +121,7 @@
                     </div> <!-- col// -->
                 </div> <!-- row // -->
                 <div class="row">
-                    <div class="col-lg-7">
+                    <div class="col-lg-12">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -149,7 +149,7 @@
                                                 <div class="info"> <%=product.productsList[0].name%></div>
                                             </a>
                                         </td>
-                                        <td><%=product.productsList[0].salesprice%> </td>
+                                        <td><%=product.productsList[0].offerPrice > 0 ? product.productsList[0].offerPrice : product.productsList[0].salesprice %> </td>
                                         <td><%=product.products.qty%> </td>
                                         <td>
                                             <%if(product.products.status === 'pending'){%>
@@ -176,7 +176,7 @@
 
                                             <%}%>
                                         </td>
-                                        <td ><%=product.productsList[0].salesprice*product.products.qty%> </td>
+                                        <td ><%=(product.productsList[0].offerPrice > 0 ? product.productsList[0].offerPrice : product.productsList[0].salesprice) * product.products.qty%> </td>
                                         <td class="text-end"><a href="/admin/order-changeStatus?oid=<%=product._id%>&pid=<%=product.products.productid%>">View Order</a> 
                                       <% if(product.products.status === 'returnRequested'){%>
                                         <div class="dropdown">
@@ -224,29 +224,29 @@
                                 
                             </table>
                         </div> <!-- table-responsive// -->
-                        <a class="btn btn-primary" href="page-orders-tracking.html">View Order Tracking</a>
+                        <!-- <a class="btn btn-primary" href="page-orders-tracking.html">View Order Tracking</a> -->
                     </div> <!-- col// -->
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-4">
-                        <div class="box shadow-sm bg-light">
+                    <!-- <div class="col-lg-1"></div> -->
+                    <!-- <div class="col-lg-4"> -->
+                        <!-- <div class="box shadow-sm bg-light">
                             <h6 class="mb-15">Payment info</h6>
                             <p>
                                 <img src="assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
                                 Business name: Grand Market LLC <br>
                                 Phone: +1 (800) 555-154-52
                             </p>
-                        </div>
+                        </div> -->
    <%}%>
 
                     
-                        <div class="h-25 pt-4">
+                        <!-- <div class="h-25 pt-4">
                             <div class="mb-3">
                                 <label>Notes</label>
                                 <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
                             </div>
                             <button class="btn btn-primary">Save note</button>
-                        </div>
-                    </div> <!-- col// -->
+                        </div> -->
+                    <!-- </div> col// -->
                 </div>
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->

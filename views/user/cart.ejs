@@ -95,43 +95,7 @@
                   <% })%>
                 </tbody>
               </table>
-              <!-- <table id="tab2" style="display: none;">
-                <%if(locals.carts && locals.carts.length > 0){  locals.carts.forEach((product,index)=>{%>
-                  <tr><th>Image</th><td class="product_thumb"><a href="#"
-                    ><img
-                      src="/assets/<%=product.productid.img[0]%>"
-                      alt=""
-                  /></a></td></tr>
-                  <tr><th>Product</th><td><a href="#"><%=product.productid.name%></a></td></tr>
-                  <tr><th>Price</th><td><%=product.productid.offerPrice%>
-                  </td></tr>
-                  <tr><th>Quantity</th><td> <input
-                    min="1"
-                    max=""
-                    type="number"
-                    value="<%=product.qty%>"
-                    id="qty<%=index%>"
-                    onchange="changeTotal('<%=index%>','<%=product._id%>','<%=product.productid._id%>')"
-                    onkeydown="return onlyUpDownArrows(event);"
-                  /></td></tr>
-                  <tr><th>Total</th><%  if(product.productid.offerPrice > 0){%>
-                    <td class="product_total" id="totalprice<%=index%>">
-                      <%=product.qty*product.productid.offerPrice%>
-                    </td>
-                 <% } else {%>
-                    <td class="product_total" id="totalprice<%=index%>">
-                      <%=product.qty*product.productid.salesprice%>
-                    </td>
-                  <%}%></tr>
-                  <tr><th>Delete</th><td>  <button
-                    type="button"
-                    onclick="deleteitem('<%=product._id%>')"
-                  >
-                    <i class="fa fa-trash-o"></i>
-                  </button></td></tr>
 
-                  <% }) }%>
-              </table> -->
             </div>
             
           </div>
@@ -213,12 +177,15 @@
     let totalArray = array.map((el) => {
       return parseFloat(el.innerHTML);
     });
+    let newsubtotal =document.getElementById('subtotal')
     let totalamount = document.getElementById("maintotal");
     let newarr = totalArray.reduce((acc, el) => {
       return (acc += el);
     }, 0);
     let newtotal = newarr;
-    totalamount.innerHTML = newtotal;
+    totalamount.innerHTML = "₹"+newtotal;
+    newsubtotal.innerHTML="₹"+newtotal
+
   }
   function onlyUpDownArrows(event) {
     
@@ -252,7 +219,7 @@
 
     if (!changeqty.ok) {
       console.log("eneterd ok function");
-      document
+      document 
         .getElementById("checkout_link")
         .addEventListener("click", async (event) => {
           event.preventDefault();

@@ -174,7 +174,7 @@
                 // blockButton.setAttribute('type', 'button');
                
                 // blockButton.textContent = 'Remove Offer';
-               
+                    
                 //  if(product.offerPrice > 0){
                 //  row.appendChild(AddOffer)
                 // }
@@ -189,14 +189,14 @@
             // Append article to the document body or any other desired parent element
             
             productBody.appendChild(article);
-            
+             
                     }
             
 
 async function blockproduct(productid){
     try{
         console.log('enetered the function blovk')
-        url=`http://localhost:3000/admin/products/blockproduct?id=${productid}`
+        url=`/admin/products/blockproduct?id=${productid}`
         const response=await fetch(url)
         if(response.ok){
             const data=await response.json()
@@ -206,7 +206,7 @@ async function blockproduct(productid){
             
                 window.location.reload()
 
-        } else {
+        } else {   
           console.error(`Error:${response.status}`);
         }
     }
@@ -219,7 +219,7 @@ console.error(err);
 
 async function unblockproduct(productid){
     try{
-        url=`http://localhost:3000/admin/products/unblockproduct?id=${productid}`
+        url=`/admin/products/unblockproduct?id=${productid}`
         const response=await fetch(url)
         if(response.ok){
            

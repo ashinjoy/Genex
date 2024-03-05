@@ -26,14 +26,15 @@ async function sendMail(otp,email){
  }
 
 }
-async function sendLink(link,mail){
+async function sendLink(link,mail){ 
 try {
-  const options={
+  // const encodedLink = encodeURIComponent(link);
+  const options={ 
     from:process.env.mail,
     to:mail,
     subject:"Password Assistance",
-    html:`<a href=${link}>click to change password</a>`
-
+    html:`<a href="${link}">click to change password</a>`   
+      
   }
   const passwordchange=await transport.sendMail(options)
   if(passwordchange){

@@ -3,10 +3,10 @@
     <header class="main-header navbar">
         <div class="col-search">
             <form class="searchform">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <input list="search_terms" type="text" class="form-control" placeholder="Search term">
                     <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                </div>
+                </div> -->
                 <datalist id="search_terms">
                     <option value="Products">
                     <option value="New orders">
@@ -198,7 +198,7 @@ row.appendChild(customerNameCell)
 
 // date cell
 const dateCell=document.createElement('td')
-dateCell.innerHTML=orders.createdAt
+dateCell.innerHTML=orders.createdAt.split('T')[0]
 row.appendChild(dateCell)
 
 // totalCell cell

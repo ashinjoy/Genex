@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const orderModel = require("../models/order");
 const walletModel = require("../models/wallet");
 const userModel = require("../models/userModel");
+const productModel = require("../models/productModel");
 
 const load_orderslist = async (req, res) => {
   try {
@@ -89,28 +90,57 @@ const changestatus = async (req, res) => {
     );
     console.log("updatedStatus", updateStatus);
     const paymentMethod = updateStatus.paymentMethod;
-    const orderStatus = updateStatus.products[0].status;
+    const statusChangedProduct = await orderModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+      { $unwind: "$products" },
+      { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
+    ]);
+    console.log(statusChangedProduct, "productstsatuschanged");
+    const orderStatus = statusChangedProduct[0].products.status;
+    // const orderStatus = updateStatus.products[0].status;
     const orderDetail = await orderModel.findById({ _id: oid });
     const uncanceledProducts = await orderModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(oid) } },
       { $unwind: "$products" },
-      { $match: { "products.status": { $ne: "canceled" } } },
+      {
+        $match: {
+          "products.status": {
+            $nin: ["canceled", "returned", "returndeclined"],
+          },
+        },
+      },
       { $count: "nonConceledProducts" },
     ]);
     console.log("uncanceledProducts", uncanceledProducts);
     if (orderStatus === "canceled") {
+      const cancelOrderDetails = await orderModel.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+        { $unwind: "$products" },
+        { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
+      ]);
+  
+      const stockupdate = await productModel.findOneAndUpdate(
+        { _id: pid, "size.label": cancelOrderDetails[0].products.size },
+        { $inc: { "size.$.quantity": cancelOrderDetails[0].products.qty } }
+      );
       if (uncanceledProducts.length == 0) {
         const totalAfterCancel = await orderModel.findOneAndUpdate(
           { _id: oid, "products.productid": pid },
           { $inc: { totalprice: -orderDetail.totalprice } }
         );
         if (paymentMethod == "wallet") {
-          const walletRefund = await wallet.findOneAndUpdate(
-            { orderId: oid },
-            { $inc: { refundedAmount: orderDetail.totalprice } }
-          );
+          // const walletRefund = await wallet.findOneAndUpdate(
+          //   { orderId: oid },
+          //   { $inc: { refundedAmount: orderDetail.totalprice } }
+          // );
+          const walletRefund = await walletModel.create({
+            refundedAmount: orderDetail.totalprice,
+            orderId: oid,
+            paymentMethod: "wallet",
+            userid: uid,
+          });
           const updatewalletBalance = await userModel.findByIdAndUpdate(
-            { _id: userid },
+            { _id: uid },
             { $inc: { WalletBalance: orderDetail.totalprice } }
           );
         } else if (paymentMethod == "razorpay") {
@@ -122,6 +152,10 @@ const changestatus = async (req, res) => {
             paymentMethod: "razorpay",
           };
           const walletcreate = await walletModel.create(wallet);
+          const updatewalletBalance = await userModel.findByIdAndUpdate(
+            { _id: uid },
+            { $inc: { WalletBalance: orderDetail.totalprice } }
+          );
         }
       } else {
         const totalAfterCancel = await orderModel.findOneAndUpdate(
@@ -129,12 +163,18 @@ const changestatus = async (req, res) => {
           { $inc: { totalprice: -priceReduction } }
         );
         if (paymentMethod == "wallet") {
-          const walletRefund = await wallet.findOneAndUpdate(
-            { orderId: oid },
-            { $inc: { refundedAmount: priceReduction } }
-          );
+          // const walletRefund = await wallet.findOneAndUpdate(
+          //   { orderId: oid },
+          //   { $inc: { refundedAmount: priceReduction } }
+          // );
+          const walletRefund = await walletModel.create({
+            refundedAmount: priceReduction,
+            orderId: oid,
+            paymentMethod: "wallet",
+            userid: uid,
+          });
           const updatewalletBalance = await userModel.findByIdAndUpdate(
-            { _id: userid },
+            { _id: uid },
             { $inc: { WalletBalance: priceReduction } }
           );
         } else if (paymentMethod == "razorpay") {
@@ -146,6 +186,10 @@ const changestatus = async (req, res) => {
             paymentMethod: "razorpay",
           };
           const walletcreate = await walletModel.create(wallet);
+          const updatewalletBalance = await userModel.findByIdAndUpdate(
+            { _id: uid },
+            { $inc: { WalletBalance: priceReduction } }
+          );
         }
       }
     }
@@ -174,16 +218,26 @@ const accceptReturn = async (req, res) => {
     const { oid, pid, uid } = req.query;
     let priceReduction;
     const returnOrder = await orderModel.findOneAndUpdate(
-      { _id: oid, "products.productid": pid },
+      { _id: oid, "products.productid": pid }, 
       { $set: { "products.$.status": "returned" } }
     );
 
+    const returnOrderDetails = await orderModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+      { $unwind: "$products" },
+      { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
+    ]);
+
+    const stockupdate = await productModel.findOneAndUpdate(
+      { _id: pid, "size.label": returnOrderDetails[0].products.size },
+      { $inc: { "size.$.quantity": returnOrderDetails[0].products.qty } }
+    );
     const product = await orderModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(oid) } },
       { $unwind: "$products" },
       { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
       { $project: { _id: 0, products: 1 } },
-      {  
+      {
         $lookup: {
           from: "products",
           localField: "products.productid",
@@ -207,7 +261,13 @@ const accceptReturn = async (req, res) => {
     const unreturnedProducts = await orderModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(oid) } },
       { $unwind: "$products" },
-      { $match: { "products.status": { $ne: "returned" } } },
+      {
+        $match: {
+          "products.status": {
+            $nin: ["canceled", "returned", "returndeclined"],
+          },
+        },
+      },
       { $count: "nonReturnedProducts" },
     ]);
     console.log("unreturnedProducts", unreturnedProducts);
@@ -222,16 +282,26 @@ const accceptReturn = async (req, res) => {
       },
     ]);
     console.log(codStatus);
+    console.log(unreturnedProducts.length, "unreturnedlength");
+
+    console.log(order.totalprice, "ordertotal");
     if (unreturnedProducts.length == 0) {
       const totalAfterCancel = await orderModel.findOneAndUpdate(
         { _id: oid, "products.productid": pid },
         { $inc: { totalprice: -order.totalprice } }
       );
       if (paymentMethod == "wallet") {
-        const walletRefund = await wallet.findOneAndUpdate(
-          { orderId: oid },
-          { $inc: { refundedAmount: order.totalprice } }
-        );
+        // const walletRefund = await wallet.findOneAndUpdate(
+        //   { orderId: oid },
+        //   { $inc: { refundedAmount: order.totalprice } }
+        // );
+
+        const walletRefund = await walletModel.create({
+          refundedAmount: order.totalprice,
+          orderId: oid,
+          paymentMethod: "wallet",
+          userid: uid,
+        });
       } else if (paymentMethod == "razorpay") {
         const wallet = {
           redeemedAmount: 0,
@@ -247,7 +317,7 @@ const accceptReturn = async (req, res) => {
           refundedAmount: order.totalprice,
           orderId: oid,
           userid: uid,
-          paymentMethod: "razorpay",
+          paymentMethod: "cod",
         };
         const walletcreate = await walletModel.create(wallet);
       }
@@ -261,16 +331,22 @@ const accceptReturn = async (req, res) => {
         { $inc: { totalprice: -priceReduction } }
       );
       if (paymentMethod == "wallet") {
-        const walletRefund = await wallet.findOneAndUpdate(
-          { orderId: oid },
-          { $inc: { refundedAmount: priceReduction } }
-        );
+        // const walletRefund = await wallet.findOneAndUpdate(
+        //   { orderId: oid },
+        //   { $inc: { refundedAmount: priceReduction } }
+        // );
+        const walletRefund = await walletModel.create({
+          refundedAmount: priceReduction,
+          orderId: oid,
+          paymentMethod: "wallet",
+          userid: uid,
+        });
       } else if (paymentMethod == "razorpay") {
         const wallet = {
           redeemedAmount: 0,
           refundedAmount: priceReduction,
           orderId: oid,
-          userid: req.session.userid,
+          userid: uid,
           paymentMethod: "razorpay",
         };
         const walletcreate = await walletModel.create(wallet);
@@ -279,7 +355,7 @@ const accceptReturn = async (req, res) => {
           redeemedAmount: 0,
           refundedAmount: priceReduction,
           orderId: oid,
-          userid: req.session.userid,
+          userid: uid,
           paymentMethod: "razorpay",
         };
         const walletcreate = await walletModel.create(wallet);
@@ -290,6 +366,7 @@ const accceptReturn = async (req, res) => {
         { $inc: { WalletBalance: priceReduction } }
       );
     }
+    console.log("prceReduction", priceReduction);
 
     res.status(200).json({ data: "success" });
   } catch (error) {
@@ -302,7 +379,7 @@ const rejejctReturn = async (req, res) => {
     const reject = await orderModel.findOneAndUpdate(
       { _id: oid, "products.productid": pid },
       { $set: { "products.$.status": "returndeclined" } }
-    );  
+    );
   } catch (error) {
     console.error(error);
   }

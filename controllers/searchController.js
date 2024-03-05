@@ -7,16 +7,16 @@ const orderModel = require("../models/order");
 const searchProducts = async (req, res) => {
   try {
     const { search, filter } = req.query;
-    console.log(filter);
+    console.log(filter);           
     if (filter.split(",")[1] != undefined) {
       const catId = filter.split(",")[0];
-      const categoryObjectId = new mongoose.Types.ObjectId(catId);
+      const categoryObjectId = new mongoose.Types.ObjectId(catId); 
 
       const searchResult = search.toUpperCase();
       console.log(searchResult);
       const searchitems = new RegExp(search, "i");
       const searchResults = await productModel.aggregate([
-        { $match: { category: categoryObjectId } },
+        { $match: { category: categoryObjectId, is_active: true } },
         { $match: { name: { $regex: searchitems } } },
       ]);
       console.log(searchResults);
@@ -29,8 +29,8 @@ const searchProducts = async (req, res) => {
       const searchResults = await product
         .find({
           name: { $regex: searchitems },
+          is_active: true,
         })
-        .skip()
         .limit(8);
       console.log(searchResults);
       res.status(200).json(searchResults);
@@ -41,6 +41,7 @@ const searchProducts = async (req, res) => {
       const searchResults = await product
         .find({
           name: { $regex: searchitems },
+          is_active: true,
         })
         .sort({ salesprice: 1 });
       console.log(searchResults);
@@ -52,6 +53,7 @@ const searchProducts = async (req, res) => {
       const searchResults = await product
         .find({
           name: { $regex: searchitems },
+          is_active: true,
         })
         .sort({ salesprice: -1 });
       console.log(searchResults);

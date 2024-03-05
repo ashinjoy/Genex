@@ -26,11 +26,11 @@ const cancelorder = async (req, res) => {
     const { userid } = req.session;
     console.log("entered cannceled order");
     const { oid, pid } = req.query;
-    let priceReduction
+    let priceReduction;
     console.log(oid);
     const cancellationDetails = await orderModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(oid) } },
-      { $unwind: "$products" }, 
+      { $unwind: "$products" },
       { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
     ]);
     console.log(cancellationDetails);
@@ -60,25 +60,23 @@ const cancelorder = async (req, res) => {
     ]);
 
     console.log("product", product);
-    if(product[0].productdetail[0].offerPrice > 0){
-       priceReduction =
-      product[0].productdetail[0].offerPrice * product[0].products.qty;
-      console.log('pricereduction',priceReduction)
-    } else{
-       priceReduction =
-      product[0].productdetail[0].salesprice * product[0].products.qty;
-      console.log('pricereduction',priceReduction)
+    if (product[0].productdetail[0].offerPrice > 0) {
+      priceReduction =
+        product[0].productdetail[0].offerPrice * product[0].products.qty;
+      console.log("pricereduction", priceReduction);
+    } else {
+      priceReduction =
+        product[0].productdetail[0].salesprice * product[0].products.qty;
+      console.log("pricereduction", priceReduction);
     }
-    console.log('pricereduction',priceReduction)
-    
-   
+    console.log("pricereduction", priceReduction);
 
     const order = await orderModel.findById({ _id: oid });
     const paymentMethod = order.paymentMethod;
-    const uncanceledProducts = await orderModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
+    const uncanceledProducts = await orderModel.aggregate([         
+      { $match: { _id: new mongoose.Types.ObjectId(oid) } }, 
       { $unwind: "$products" },
-      { $match: { "products.status": { $ne: "canceled" } } },
+      { $match: { "products.status": {$nin:['canceled','returned','returndeclined']}} },
       { $count: "nonConceledProducts" },
     ]);
     console.log("uncanceledProducts", uncanceledProducts);
@@ -93,17 +91,23 @@ const cancelorder = async (req, res) => {
       },
     ]);
     console.log(codStatus);
+    console.log(uncanceledProducts.length, "lengthof uncancledpro");
     if (uncanceledProducts.length == 0) {
       const totalAfterCancel = await orderModel.findOneAndUpdate(
         { _id: oid, "products.productid": pid },
-        { $inc: { totalprice: - order.totalprice } }
+        { $inc: { totalprice: -order.totalprice } }
       );
       if (paymentMethod == "wallet") {
-        const walletRefund = await wallet.findOneAndUpdate(
-          { orderId: oid },
-          { $inc: { refundedAmount: order.totalprice } }
-        );
-        
+        // const walletRefund = await wallet.findOneAndUpdate(
+        //   { orderId: oid },
+        //   { $inc: { refundedAmount: -order.totalprice } }
+        // );
+        const walletRefund = await wallet.create({
+          refundedAmount: order.totalprice,
+          orderId: oid,
+          paymentMethod: "wallet",
+          userid: userid,
+        });
       } else if (paymentMethod == "razorpay") {
         const wallet = {
           redeemedAmount: 0,
@@ -118,35 +122,41 @@ const cancelorder = async (req, res) => {
         { _id: userid },
         { $inc: { WalletBalance: order.totalprice } }
       );
-     } else {
-        const totalAfterCancel = await orderModel.findOneAndUpdate(
-          { _id: oid, "products.productid": pid },
-          { $inc: { totalprice: -priceReduction } }
-        );
-        if (paymentMethod == "wallet") {
-          const walletRefund = await wallet.findOneAndUpdate(
-            { orderId: oid },
-            { $inc: { refundedAmount: priceReduction } }
-          );
-          const updatewalletBalance = await userModel.findByIdAndUpdate(
-            { _id: userid },
-            { $inc: { WalletBalance: priceReduction } }
-          );
-        } else if (paymentMethod == "razorpay") {
-          const wallet = {
-            redeemedAmount: 0,
-            refundedAmount: priceReduction,
-            orderId: oid,
-            userid: req.session.userid,
-            paymentMethod: "razorpay",
-          };
-          const walletcreate = await walletModel.create(wallet);
-        }
-        const updatewalletBalance = await userModel.findByIdAndUpdate(
-          { _id: userid },
-          { $inc: { WalletBalance: priceReduction } }
-        );
+    } else {
+      const totalAfterCancel = await orderModel.findOneAndUpdate(
+        { _id: oid, "products.productid": pid },
+        { $inc: { totalprice: -priceReduction } }
+      );
+      if (paymentMethod == "wallet") {
+        // const walletRefund = await wallet.findOneAndUpdate(
+        //   { orderId: oid },
+        //   { $inc: { refundedAmount: priceReduction } }
+        // );
+        // const updatewalletBalance = await userModel.findByIdAndUpdate(
+        //   { _id: userid },
+        //   { $inc: { WalletBalance: priceReduction } }
+        // );
+        const walletRefund = await wallet.create({
+          refundedAmount: priceReduction,
+          orderId: oid,
+          paymentMethod: "wallet",
+          userid: userid,
+        });
+      } else if (paymentMethod == "razorpay") {
+        const wallet = {
+          redeemedAmount: 0,
+          refundedAmount: priceReduction,
+          orderId: oid,
+          userid: req.session.userid,
+          paymentMethod: "razorpay",
+        };
+        const walletcreate = await walletModel.create(wallet);
       }
+      const updatewalletBalance = await userModel.findByIdAndUpdate(
+        { _id: userid },
+        { $inc: { WalletBalance: priceReduction } }
+      );
+    }
     res.status(200).json({ data: "success" });
   } catch (error) {
     console.error(error);
@@ -254,7 +264,7 @@ const invoice = async (req, res) => {
       $lookup: {
         from: "addresses",
         localField: "addressid",
-        foreignField: "_id", 
+        foreignField: "_id",
         as: "addressDetail",
       },
     },
@@ -265,29 +275,31 @@ const invoice = async (req, res) => {
         foreignField: "_id",
         as: "productDetails",
       },
-    },     
+    },
   ]);
   console.log("userDetail", userDetail);
   console.log("orderDetail", orderDetail);
-    
+
   const invoiceCreate = await invoiceGenerator.generateInvoice(orderDetail);
-  console.log('returned invoice')
+  console.log("returned invoice");
   console.log(invoiceCreate);
   res.status(200).json(invoiceCreate);
-}; 
+};
 
-
-const returnRequest=async(req,res)=>{ 
+const returnRequest = async (req, res) => {
   try {
     const { userid } = req.session;
-     const { oid, pid } = req.query;
+    const { oid, pid } = req.query;
 
-    const returnreq=await orderModel.findOneAndUpdate({_id:oid,'products.productid':pid},{$set:{'products.$.status':'returnRequested'}})
-    res.status(200).json({request:"sucess"})
+    const returnreq = await orderModel.findOneAndUpdate(
+      { _id: oid, "products.productid": pid },
+      { $set: { "products.$.status": "returnRequested" } }
+    );
+    res.status(200).json({ request: "sucess" });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 module.exports = {
   load_orderpage,

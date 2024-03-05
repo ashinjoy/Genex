@@ -18,7 +18,7 @@
  const cityerror=document.getElementById("error5")
  const stateerror=document.getElementById("error6")
  const phoneerror=document.getElementById("error7")
- const emailerror=document.getElementById("error8")
+ const emailerror=document.getElementById("error8")  
  const countryerror=document.getElementById("error9")
 
 
@@ -26,7 +26,7 @@
 function namevalidate(){
 const name=nametag.value
 var namepattern=/^[A-Z a-z]+$/
-
+   
 if(name.trim() === ""){
   nameerror.style.display="block";
   nameerror.innerHTML="Please enter a valid name"
@@ -75,7 +75,7 @@ else {
 
 function landmarkvalidate(){
 const landmark=landmarktag.value
-var namepattern=/^[A-Z a-z]+$/
+var namepattern=/^[A-Z a-z]+$/    
 
 if(landmark.trim() === ""){
   landmarkerror.style.display="block";
@@ -198,10 +198,10 @@ function statevalidate(){
 const state=statetag.value
 var namepattern=/^[A-Z a-z]+$/
 
-if(state.trim() === ""){
+if(state.trim() === ""){ 
   stateerror.style.display="block";
   stateerror.innerHTML="Please enter a valid name"
-}
+}    
 else if(state.length<=1)
 {
   stateerror.style.display="block";
@@ -218,9 +218,9 @@ else {
 }
 
 }
-
+       
 function countryvalidate(){
-const country=countrytag.value
+const country=countrytag.value 
 var namepattern=/^[A-Z a-z]+$/
 
 if(country.trim() === ""){

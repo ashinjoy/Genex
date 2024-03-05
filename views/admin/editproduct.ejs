@@ -174,10 +174,10 @@
         <header class="main-header navbar">
             <div class="col-search">
                 <form class="searchform">
-                    <div class="input-group">
+                    <!-- <div class="input-group">
                         <input list="search_terms" type="text" class="form-control" placeholder="Search term">
                         <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
+                    </div> -->
                     <datalist id="search_terms">
                         <option value="Products">
                         <option value="New orders">
@@ -229,10 +229,10 @@
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
+                        <h2 class="content-title">Edit Product</h2>
                         <div>
-                            <form action="/admin/products/addproduct" method="post" enctype="multipart/form-data" id="prod_form">
-                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add product</button>
+                            <form action="/admin/products/editproduct" method="post" enctype="multipart/form-data" id="prod_form">
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit product</button>
                         </div>
                     </div>
                 </div>
@@ -302,10 +302,11 @@
                         </div>
                         <div class="card-body">
                             <div class="input-upload">
-                                <div class="image-previewconatiner" id="image-preview"></div>
+                                <div class="image-previewconatiner" id="image-preview">
                                 <% dataproduct.img.forEach((val)=>{%>
                                     <img src="/assets/<%=dataproduct.img[0]%>" alt="">
                                <%})%>
+                            </div>
                                 <input type='file'  accept='image/*' name='Images' id='fileInput' class="form-control" onchange="previewImage(event)" multiple/>
                             </div>
                             <div style="display: none;" id="error8"  class="alert alert-danger" > </div>
@@ -328,6 +329,7 @@
                                         <%})%>
     
                                     </select>
+                                    <input placeholder="$" type="hidden" class="form-control" name="pid" value="<%=dataproduct._id%>"> 
                                    
                                 </div>
                             </div> <!-- row.// -->
@@ -340,32 +342,36 @@
     <script src="/public/admin_assets/assets/js/client/editproductvalidation.js"></script>
     <script >
 
-function previewImage(e) { 
-  console.log("entered the fn")
-  const fileInput = document.getElementById("fileInput");
-  console.log(fileInput)
-  const imagePreview = document.getElementById("image-preview");
-  console.log(imagePreview)
-  const files = fileInput.files;
-  console.log(files)
-  imagePreview.innerHTML = "";
 
-for(const file of files){ 
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    let image = document.createElement("img");
-    console.log(image)
-    image.classList.add("image-preview");
+    function previewImage(event) {
+        const imagePreviewContainer = document.getElementById("image-preview");
+        imagePreviewContainer.innerHTML = ''; // Clear existing previews
 
-    image.src = e.target.result;
-    console.log(image.src)
-    imagePreview.appendChild(image);
-  };
-  reader.readAsDataURL(file)
+        const files = event.target.files; // Get selected files
 
-}
+        // Loop through selected files
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            // Create a new image element for preview
+            const img = document.createElement('img');
+            img.classList.add('preview-image');
+
+            // Read the image file as a data URL
+            reader.onload = function () {
+                img.src = reader.result;
+                imagePreviewContainer.appendChild(img); // Append preview to container
+            }
+
+            // Read the image file
+            reader.readAsDataURL(file);
+        }
+    }
+
+
   
-}
+
 
     </script>
     

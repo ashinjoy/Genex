@@ -28,8 +28,8 @@ const adminlogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-  }
-};
+  }   
+}; 
 
 const adminlogout = async (req, res) => {
   try {

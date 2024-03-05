@@ -3,10 +3,10 @@
     <header class="main-header navbar">
         <div class="col-search">
             <form class="searchform">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <input list="search_terms" type="text" class="form-control" placeholder="Search term">
                     <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                </div>
+                </div> -->
                 <datalist id="search_terms">
                     <option value="Products">
                     <option value="New orders">
@@ -49,14 +49,14 @@
     <section class="content-main">
         <div class="content-header">
             <div>
-                <h2 class="content-title card-title">Products List</h2>
+                <h2 class="content-title card-title">Coupon List</h2>
                
             </div>
-            <div>
+            <!-- <div>
                 <a href="#" class="btn btn-light rounded font-md">Export</a>
                 <a href="#" class="btn btn-light rounded  font-md">Import</a>
                 <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
-            </div>
+            </div> -->
         </div>
         <div class="card mb-4">
             <header class="card-header">
@@ -66,15 +66,15 @@
                             <input class="form-check-input" type="checkbox" value="">
                         </div>
                     </div>
-                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                    <!-- <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                         <select class="form-select">
                             <option selected>All category</option>
                             <option>Electronics</option>
                             <option>Clothes</option>
                             <option>Automobile</option>
                         </select>
-                    </div>
-                    <div class="col-md-2 col-6">
+                    </div> -->
+                    <!-- <div class="col-md-2 col-6">
                         <input type="date" value="02.05.2022" class="form-control">
                     </div>
                     <div class="col-md-2 col-6">
@@ -84,7 +84,7 @@
                             <option>Disabled</option>
                             <option>Show all</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
             </header> <!-- card-header end// -->
             <div class="card-body">
@@ -173,7 +173,7 @@
             const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
             const data=await res.json()
             if(res.status == 200){
-                await Swal.fire({icon:'success',title:"Coupon Deleted Suceessfully"})
+                await Swal.fire({icon:'success',title:"Coupon Deleted Successfully"})
                 window.location.href='/admin/listCoupon'
             }
             } catch (error) {
@@ -188,7 +188,7 @@
             const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(postdata)})
             const data=await res.json()
             if(res.status == 200){
-                await Swal.fire({icon:'success',title:"Status updated Suceessfully"})
+                await Swal.fire({icon:'success',title:"Coupon blocked Successfully"})
                 window.location.href='/admin/listCoupon'
             }
             } catch (error) {

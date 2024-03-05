@@ -4,8 +4,8 @@
         <div class="col-search">
             <form class="searchform">
                 <div class="input-group">
-                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    <!-- <input list="search_terms" type="text" class="form-control" placeholder="Search term"> -->
+                    <!-- <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button> -->
                 </div>
                 <datalist id="search_terms">
                     <option value="Products">
@@ -61,7 +61,7 @@
                     <h2 class="content-title">Edit Coupon</h2>
                     <div>
                         <form action="/admin/editCoupon" method="post" id="couponform">
-                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
+                        <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
                         <button class="btn btn-md rounded font-sm hover-up">Edit Coupon</button>
                     </div>
                 </div>
@@ -204,6 +204,8 @@
        function validateDiscount(){
             const discount = couponDiscount.value.trim() 
             const discountRate = parseFloat(discount);
+            couponLimit.value ? parseFloat(couponLimit.value.trim()) : 0
+
          if (discountRate < 0 ) {
            console.log("enetererereerer")
            discountError.style.display = "block";
@@ -211,7 +213,12 @@
          } else if (discount === "") {
            discountError.style.display = "block";
            discountError.innerHTML = "Please enter a price";
-         } else {
+         }
+         else if(discountRate >= couponLimit.value){
+            discountError.style.display = "block";
+            discountError.innerHTML = "Enter a valid discount.Discount is higher than coupon limit";
+        }
+          else {
            discountError.style.display = "none";
            discountError.innerHTML = "";
          }
