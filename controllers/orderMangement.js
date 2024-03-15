@@ -73,10 +73,16 @@ const cancelorder = async (req, res) => {
 
     const order = await orderModel.findById({ _id: oid });
     const paymentMethod = order.paymentMethod;
-    const uncanceledProducts = await orderModel.aggregate([         
-      { $match: { _id: new mongoose.Types.ObjectId(oid) } }, 
+    const uncanceledProducts = await orderModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(oid) } },
       { $unwind: "$products" },
-      { $match: { "products.status": {$nin:['canceled','returned','returndeclined']}} },
+      {
+        $match: {
+          "products.status": {
+            $nin: ["canceled", "returned", "returndeclined"],
+          },
+        },
+      },
       { $count: "nonConceledProducts" },
     ]);
     console.log("uncanceledProducts", uncanceledProducts);

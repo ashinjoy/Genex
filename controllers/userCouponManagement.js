@@ -24,18 +24,14 @@ const applyCoupon = async (req, res) => {
       console.log("userid", userid, "id", iscouponCodeValid._id);
       console.log(iscouponUsed);
       iscouponUsed
-        ? res
-            .status(403)
-            .json({
-              err: "Coupon Already Used Before",
-              msg: "You can only use a coupon single time",
-            })
-        : res
-            .status(200)
-            .json({
-              sucess: "coupon used succesfully",
-              reduction: iscouponCodeValid.reductionRate,
-            });
+        ? res.status(403).json({
+            err: "Coupon Already Used Before",
+            msg: "You can only use a coupon single time",
+          })
+        : res.status(200).json({
+            sucess: "coupon used succesfully",
+            reduction: iscouponCodeValid.reductionRate,
+          });
     } else {
       res.status(400).json({ data: "Invalid coupon code" });
     }
@@ -72,4 +68,3 @@ const couponlist = async (req, res) => {
   }
 };
 module.exports = { applyCoupon, removeCoupon, couponlist };
-          

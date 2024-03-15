@@ -264,91 +264,90 @@ const deleteOffer = async (req, res) => {
 //     const categoryObjectId = new mongoose.Types.ObjectId(category);
 
 //     if (offertype === "product") {
-      // const product = await productModel.aggregate([
-      //   { $match: { _id: productObjectId } },
-      //   {
-      //     $lookup: {
-      //       from: "offers",
-      //       localField: "offer",
-      //       foreignField: "_id",
-      //       as: "offer",
-      //     },
-      //   },
-      // ]);
+// const product = await productModel.aggregate([
+//   { $match: { _id: productObjectId } },
+//   {
+//     $lookup: {
+//       from: "offers",
+//       localField: "offer",
+//       foreignField: "_id",
+//       as: "offer",
+//     },
+//   },
+// ]);
 
-      // offer = await offerModel.findByIdAndUpdate(
-      //   { _id: id },
-      //   {
-      //     $set: {
-      //       offertype: offertype,
-      //       productid: productObjectId,
-      //       discountPercentage: discountpercent,
-      //     },
-      //   }
-      // );
-      // updating offer inside productModel
-    //   const updateOffer = await productModel.findByIdAndUpdate(
-    //     { _id: productObjectId },
-    //     { $set: { offer: offer._id } }
-    //   );
+// offer = await offerModel.findByIdAndUpdate(
+//   { _id: id },
+//   {
+//     $set: {
+//       offertype: offertype,
+//       productid: productObjectId,
+//       discountPercentage: discountpercent,
+//     },
+//   }
+// );
+// updating offer inside productModel
+//   const updateOffer = await productModel.findByIdAndUpdate(
+//     { _id: productObjectId },
+//     { $set: { offer: offer._id } }
+//   );
 
-    //   console.log("updateofferssss", updateOffer);
-    //   console.log("ppid", productObjectId);
-    //   const update_Offerprice = await updateOfferprice(productObjectId);
-    // } else {
-      // const category = await categoryModel.aggregate([
-      //   { $match: { _id: categoryObjectId } },
-      //   {
-      //     $lookup: {
-      //       from: "offers",
-      //       localField: "offer",
-      //       foreignField: "_id",
-      //       as: "offer",
-      //     },
-      //   },
-      // ]);
+//   console.log("updateofferssss", updateOffer);
+//   console.log("ppid", productObjectId);
+//   const update_Offerprice = await updateOfferprice(productObjectId);
+// } else {
+// const category = await categoryModel.aggregate([
+//   { $match: { _id: categoryObjectId } },
+//   {
+//     $lookup: {
+//       from: "offers",
+//       localField: "offer",
+//       foreignField: "_id",
+//       as: "offer",
+//     },
+//   },
+// ]);
 
-      // offer = await offerModel.findByIdAndUpdate(
-      //   { _id: id },
-      //   {
-      //     $set: {
-      //       offertype: offertype,
-      //       categoryid: categoryObjectId,
-      //       discountPercentage: discountpercent,
-      //     },
-      //   }
-      // );
-      // updating offer inside productModel
-      // const updateOffer = await categoryModel.updateOne(
-      //   { _id: categoryObjectId },
-      //   { $set: { offer: offer._id } }
-      // );
+// offer = await offerModel.findByIdAndUpdate(
+//   { _id: id },
+//   {
+//     $set: {
+//       offertype: offertype,
+//       categoryid: categoryObjectId,
+//       discountPercentage: discountpercent,
+//     },
+//   }
+// );
+// updating offer inside productModel
+// const updateOffer = await categoryModel.updateOne(
+//   { _id: categoryObjectId },
+//   { $set: { offer: offer._id } }
+// );
 
-      //calculate Dicount price
-  //     let products = [];
-  //     const categoryProducts = await productModel.aggregate([
-  //       { $match: { category: categoryObjectId } },
-  //     ]);
-  //     console.log("catpro", categoryProducts);
-  //     for (const product of categoryProducts) {
-  //       const productId = product._id;
-  //       products.push(productId);
-  //     }
-  //     console.log("catproid", products);
-  //     for (const productId of products) {
-  //       await updateOfferprice(productId);
-  //     }
-  //   }
+//calculate Dicount price
+//     let products = [];
+//     const categoryProducts = await productModel.aggregate([
+//       { $match: { category: categoryObjectId } },
+//     ]);
+//     console.log("catpro", categoryProducts);
+//     for (const product of categoryProducts) {
+//       const productId = product._id;
+//       products.push(productId);
+//     }
+//     console.log("catproid", products);
+//     for (const productId of products) {
+//       await updateOfferprice(productId);
+//     }
+//   }
 
-  //   res.redirect("/admin/offer");
-  // } catch (error) {
-  //   console.error;
-  // }
+//   res.redirect("/admin/offer");
+// } catch (error) {
+//   console.error;
+// }
 // };
 
 module.exports = {
   load_offerPage,
   createOffer,
   deleteOffer,
- 
 };

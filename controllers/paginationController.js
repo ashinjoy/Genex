@@ -13,17 +13,17 @@ const pagination = async (req, res) => {
       $lookup: {
         from: "users",
         localField: "userid",
-        foreignField: "_id",                              
+        foreignField: "_id",
         as: "userdetails",
       },
     },
     {
-      $lookup:{
-        from:'products',
-        localField:'products.productid',
-        foreignField:'_id',
-        as:'productdetails'
-      }
+      $lookup: {
+        from: "products",
+        localField: "products.productid",
+        foreignField: "_id",
+        as: "productdetails",
+      },
     },
     { $skip: docSkipped },
     { $limit: limit },
@@ -91,8 +91,5 @@ const productPagination = async (req, res) => {
     console.error(error);
   }
 };
-
-
-
 
 module.exports = { pagination, orderPagination, productPagination };

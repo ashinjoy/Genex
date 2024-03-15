@@ -8,7 +8,9 @@ const order = require("../models/order");
 const load_addproduct = async (req, res) => {
   try {
     console.log(req.originalUrl);
-    const catdetail = await categoryModel.find({ status: true }).sort({created_at:-1});
+    const catdetail = await categoryModel
+      .find({ status: true })
+      .sort({ created_at: -1 });
     res.render("admin/addproduct", { catdetail });
   } catch (error) {
     console.error(error);
@@ -120,15 +122,19 @@ const product_unblock = async (req, res) => {
   }
 };
 const load_editproduct = async (req, res) => {
-  try { 
+  try {
     const { id } = req.query;
-    const dataproduct = await productModel.findById({ _id: id }).populate('category');
-    const category = await categoryModel.find({_id:{$ne:dataproduct.category._id}});
+    const dataproduct = await productModel
+      .findById({ _id: id })
+      .populate("category");
+    const category = await categoryModel.find({
+      _id: { $ne: dataproduct.category._id },
+    });
     res.render("admin/editproduct", { dataproduct, category });
   } catch (err) {
     console.error(err);
   }
-};           
+};
 const editproduct = async (req, res) => {
   try {
     const {
@@ -186,7 +192,7 @@ const editproduct = async (req, res) => {
             img: imgfilename,
           },
         },
-        { new: true }     
+        { new: true }
       );
       console.log("edited" + editedproduct);
     }
@@ -200,6 +206,7 @@ const bestProducts = async (req, res) => {
   try {
     const bestTenProducts = await order.aggregate([
       { $unwind: "$products" },
+      { $match: { "products.status": "delivered" } },
       {
         $group: {
           _id: "$products.productid",
@@ -223,8 +230,6 @@ const bestProducts = async (req, res) => {
     console.error(error);
   }
 };
-
-
 
 module.exports = {
   load_addproduct,

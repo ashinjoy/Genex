@@ -83,7 +83,7 @@
                         </div>
                         <div class="header_account_list  mini_cart_wrapper">
                             <a href="javascript:void(0)"><span class="pe-7s-shopbag"></span>
-                                <span class="item_count">2</span>
+                                <span class="item_count"></span>
                             </a>
                             
                        </div>
@@ -109,17 +109,17 @@
       <p>
         <%if(locals.edituser){%>
             <label> Name <span>*</span></label>
-            <input type="text" name="name" value="<%=edituser.uname%>">    
+            <input type="text" name="name" value="<%=edituser.uname%>" id="inp_name">    
             <div id="error1"  style="display: none;" class="alert alert-danger"></div>
           </p>
           <p>
-            <label>Street Address</label>
-            <input  type="text" name="email" value="<%=edituser.email%>">     
+            <label>Email Address</label>
+            <input  type="text" name="email" value="<%=edituser.email%>" id="inp_email">     
             <div id="error2"  style="display: none;" class="alert alert-danger"></div>
           </p>
           <p>
-            <label>Landmark</label>
-            <input  type="text" name="phone"  value="<%=edituser.phone%>">     
+            <label>Phone Number</label>
+            <input  type="text" name="phone"  value="<%=edituser.phone%>" id="inp_phone">     
             <div id="error3"  style="display: none;" class="alert alert-danger"></div>
           </p>
           <p>
@@ -134,3 +134,93 @@
 </div>
 </div>
 </div>
+<script>
+ const nametag=document.getElementById("inp_name");
+ const emailtag=document.getElementById("inp_email");
+ const phonetag=document.getElementById("inp_phone");
+
+ const nameerror=document.getElementById("error1")
+ const emailerror=document.getElementById("error2")
+ const phoneerror=document.getElementById("error3")
+
+ const registerform=document.getElementById("regform")
+ function namevalidate(){
+const name=nametag.value
+const namepattern=/^[A-Z a-z]+$/
+
+if(name.trim() === ""){
+  nameerror.style.display="block";
+  nameerror.innerHTML="Please enter a valid name"
+}
+else if(name.length<=1)
+{
+  nameerror.style.display="block";
+  nameerror.innerHTML="name should contain more than a letter"
+}
+else if(!namepattern.test(name)){
+  nameerror.style.display="block"
+  nameerror.innerHTML="Name should only conatin Alphabets only"
+}
+
+else {
+  nameerror.style.display="none";
+  nameerror.innerHTML=""
+}
+
+}
+
+function emailvalidate(){
+  const emailpattern=/^[a-zA-Z0-9_]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/
+  const email=emailtag.value
+  if(!emailpattern.test(email)){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Enter valid email"
+
+  }
+  else if(email.trim()==""){
+    emailerror.style.display="block";
+    emailerror.innerHTML="Please enter your email"
+
+  }
+  else{
+    emailerror.style.display= "none";
+    emailerror.innerHTML=""
+    
+  }
+}
+function phonevalidate(){
+  const phone=phonetag.value;
+  const phonepattern=/\d/
+  if(phone.trim()==""){
+    phoneerror.style.display="block";
+    phoneerror.innerHTML="Please enter a valid phonenumber"
+
+  }
+  
+  else if(phone.length>10||phone.length<10||!phonepattern.test(phone))
+  {
+    phoneerror.style.display="block";
+    phoneerror.innerHTML="Please enter a valid phonenumber"
+
+  }
+  else {
+    phoneerror.style.display="none";
+    phoneerror.innerHTML=""
+
+  }
+}
+
+nametag.addEventListener("blur",namevalidate);
+emailtag.addEventListener("blur",emailvalidate);
+phonetag.addEventListener("blur",phonevalidate);
+
+registerform.addEventListener("submit",(event)=>{
+  namevalidate()
+  emailvalidate()
+  phonevalidate()
+
+  if(nameerror.innerHTML||emailerror.innerHTML||phoneerror.innerHTML){
+    event.preventDefault()
+  }
+})
+</script>

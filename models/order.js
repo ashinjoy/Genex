@@ -28,4 +28,3 @@ const orderSchema = new mongoose.Schema({
 });
 const orderModel = mongoose.model("order", orderSchema);
 module.exports = orderModel;
-    

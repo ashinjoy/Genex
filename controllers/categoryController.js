@@ -88,14 +88,14 @@ const load_updatecategory = async (req, res) => {
     res.render("admin/updatecategory", { updatedetail });
   } catch (err) {
     console.log(err);
-  } 
+  }
 };
 const updatecategory = async (req, res) => {
   try {
     console.log("entered updatecategory");
     console.log("req.files : ", req.file);
     const { catname, description, catid } = req.body;
-    if (req.file == undefined) {  
+    if (req.file == undefined) {
       const updated_data = await categoryModel.findByIdAndUpdate(
         { _id: catid },
         { $set: { name: catname, description: description } }

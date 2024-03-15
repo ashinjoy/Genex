@@ -203,11 +203,11 @@ const salesData = async (req, res) => {
     } else {
       const dailyData = new Date();
       const startingTime = new Date(dailyData);
-       startingTime.setUTCHours(0)
-      startingTime.setUTCMinutes(0)
-        startingTime.setUTCSeconds(0)
-      console.log('startingTime',startingTime)
-      const dailyReport= await orderModel.aggregate([
+      startingTime.setUTCHours(0);
+      startingTime.setUTCMinutes(0);
+      startingTime.setUTCSeconds(0);
+      console.log("startingTime", startingTime);
+      const dailyReport = await orderModel.aggregate([
         { $match: { createdAt: { $gte: startingTime, $lte: Date.now } } },
         { $unwind: "$products" },
         {
@@ -228,11 +228,9 @@ const salesData = async (req, res) => {
           },
         },
       ]);
-      console.log('dialyrrepory',dailyReport)
+      console.log("dialyrrepory", dailyReport);
       res.json(dailyReport);
     }
-   
-
   } catch (error) {
     console.error(error);
   }

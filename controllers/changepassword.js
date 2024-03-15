@@ -44,9 +44,9 @@ const load_forgotPassword = async (req, res) => {
   }
 };
 const forgotPassword = async (req, res) => {
-  try {     
+  try {
     const { email } = req.body;
-   
+
     const is_userRegistered = await userModel.findOne({ email: email });
     if (is_userRegistered) {
       const newSecret = process.env.jwt_secret + is_userRegistered.password;

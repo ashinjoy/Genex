@@ -4,11 +4,11 @@ const orderModel = require("../models/order");
 const productModel = require("../models/productModel");
 const wallet = require("../models/wallet");
 const razorpay = require("../utils/razorpay");
-const {nanoid}=require('nanoid')    
+const { nanoid } = require("nanoid");
 
 const { default: mongoose } = require("mongoose");
 const loadCheckout = async (req, res) => {
-  try {   
+  try {
     const { userid } = req.session;
     const cartdetail = await userModel
       .findById({ _id: userid }, { _id: 0, cart: 1 })
@@ -16,7 +16,7 @@ const loadCheckout = async (req, res) => {
     console.log(cartdetail);
     const productsInCart = cartdetail.cart;
     console.log(productsInCart);
-    const userAddress = await addressModel.find({ userid: userid });     
+    const userAddress = await addressModel.find({ userid: userid });
     console.log(userAddress);
     res.render("user/checkout", { productsInCart, userAddress });
   } catch (error) {
@@ -29,20 +29,20 @@ const postCheckout = async (req, res) => {
     const userAddresssAvailable = await addressModel.find({ userid });
     const cartProducts = await userModel.findById(userid, { cart: 1 });
     let ordersave;
-    const orderId=nanoid(6)
-    console.log('nanoid',orderId)
+    const orderId = nanoid(6);
+    console.log("nanoid", orderId);
     const { address, sum, check_method } = req.body;
     const orders = {
-      oid:orderId,
-      userid, 
-      addressid: address,  
+      oid: orderId,
+      userid,
+      addressid: address,
       products: cartProducts.cart.map((item) => ({
         productid: item.productid,
         size: item.size,
         qty: item.qty,
       })),
       totalprice: sum,
-      paymentMethod: check_method,  
+      paymentMethod: check_method,
     };
 
     if (check_method === "razorpay") {
@@ -156,8 +156,8 @@ const postCheckout = async (req, res) => {
 const stockValidate = async (req, res) => {
   try {
     const { userid } = req.session;
-    const userObjId=new mongoose.Types.ObjectId(userid)
-    
+    const userObjId = new mongoose.Types.ObjectId(userid);
+
     const validateCart = await userModel.aggregate([
       { $match: { _id: userObjId } },
       { $unwind: "$cart" },
@@ -169,42 +169,40 @@ const stockValidate = async (req, res) => {
           as: "productDetail",
         },
       },
-      { $unwind: "$productDetail" }, 
-      { $unwind: "$productDetail.size" }, 
+      { $unwind: "$productDetail" },
+      { $unwind: "$productDetail.size" },
 
       {
         $match: {
           $expr: {
-            $eq: ["$productDetail.size.label", "$cart.size"]
-          }
-        }
+            $eq: ["$productDetail.size.label", "$cart.size"],
+          },
+        },
       },
       {
         $match: {
           $expr: {
-            $lte: ["$cart.qty", "$productDetail.size.quantity"]
-          }
-        }
-      }
-     
+            $lte: ["$cart.qty", "$productDetail.size.quantity"],
+          },
+        },
+      },
     ]);
-    const cartLength=await userModel.findById({_id:userid},{cart:1,_id:0})
-    console.log('cartlength',cartLength)
-    const {cart}=cartLength
-    console.log('acrt',cart)
+    const cartLength = await userModel.findById(
+      { _id: userid },
+      { cart: 1, _id: 0 }
+    );
+    console.log("cartlength", cartLength);
+    const { cart } = cartLength;
+    console.log("acrt", cart);
 
-    if(validateCart.length == cart.length){
-      res.status(200).json("success")
+    if (validateCart.length == cart.length) {
+      res.status(200).json("success");
+    } else {
+      res.status(400).json("stock validation failed");
     }
-    else{
-      res.status(400).json("stock validation failed")
-    }
-    
- 
-   
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 };
 
-module.exports = { loadCheckout, postCheckout,stockValidate };
+module.exports = { loadCheckout, postCheckout, stockValidate };

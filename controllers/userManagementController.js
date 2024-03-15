@@ -61,20 +61,24 @@ const load_admindashboard = async (req, res) => {
         },
       },
       { $group: { _id: null, total: { $sum: "$totalprice" } } },
-    ]);  
-    const latestUsers=await userModel.aggregate([{$match:{is_admin:0}},{$sort:{createdAt:-1}},{$limit:3}])
-    console.log('latestUsers',latestUsers)
+    ]);
+    const latestUsers = await userModel.aggregate([
+      { $match: { is_admin: 0 } },
+      { $sort: { createdAt: -1 } },
+      { $limit: 3 },
+    ]);
+    console.log("latestUsers", latestUsers);
     console.log("monthlyrevwenue", monthlyrevenue);
     res.render("admin/admindashboard", {
-      productsCount, 
+      productsCount,
       ordersCount,
       categoryCount,
       totalPage,
       revenue,
       monthlyrevenue,
-      latestUsers
+      latestUsers,
     });
-  } catch (error) { 
+  } catch (error) {
     console.error(error);
   }
 };
@@ -95,7 +99,7 @@ const blockuser = async (req, res) => {
     await userModel.findByIdAndUpdate({ _id: id }, { $set: { is_active: 0 } });
     res.status(200).json({ data: "success" });
   } catch (err) {
-    console.error(err);    
+    console.error(err);
   }
 };
 const unblockuser = async (req, res) => {
@@ -115,4 +119,3 @@ module.exports = {
   blockuser,
   unblockuser,
 };
-    

@@ -118,7 +118,7 @@ const changestatus = async (req, res) => {
         { $unwind: "$products" },
         { $match: { "products.productid": new mongoose.Types.ObjectId(pid) } },
       ]);
-  
+
       const stockupdate = await productModel.findOneAndUpdate(
         { _id: pid, "size.label": cancelOrderDetails[0].products.size },
         { $inc: { "size.$.quantity": cancelOrderDetails[0].products.qty } }
@@ -218,7 +218,7 @@ const accceptReturn = async (req, res) => {
     const { oid, pid, uid } = req.query;
     let priceReduction;
     const returnOrder = await orderModel.findOneAndUpdate(
-      { _id: oid, "products.productid": pid }, 
+      { _id: oid, "products.productid": pid },
       { $set: { "products.$.status": "returned" } }
     );
 

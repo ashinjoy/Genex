@@ -17,19 +17,19 @@ const adminlogin = async (req, res) => {
       if (admin.is_admin === 1) {
         console.log("hi");
         req.session.adminid = admin._id;
-        res.redirect("/admin/home");  
+        res.redirect("/admin/home");
       } else {
         res.render("admin/adminlogin", {
           not_authorized: "You are not authorized",
         });
-      }  
+      }
     } else {
       res.render("admin/adminlogin", { invalid: "Invalid Credentials" });
     }
   } catch (error) {
     console.error(error);
-  }   
-}; 
+  }
+};
 
 const adminlogout = async (req, res) => {
   try {

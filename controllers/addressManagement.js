@@ -4,7 +4,7 @@ const load_addAddress = async (req, res) => {
   try {
     const { page } = req.query;
     res.render("user/addAddress", { page });
-  } catch (error) { 
+  } catch (error) {
     console.error(error);
   }
 };

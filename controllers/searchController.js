@@ -7,10 +7,10 @@ const orderModel = require("../models/order");
 const searchProducts = async (req, res) => {
   try {
     const { search, filter } = req.query;
-    console.log(filter);           
+    console.log(filter);
     if (filter.split(",")[1] != undefined) {
       const catId = filter.split(",")[0];
-      const categoryObjectId = new mongoose.Types.ObjectId(catId); 
+      const categoryObjectId = new mongoose.Types.ObjectId(catId);
 
       const searchResult = search.toUpperCase();
       console.log(searchResult);
