@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const mongooseConnection = mongoose.connect(
-  process.env.mongoString || process.env.db
+  process.env.mongoString 
 );
 mongooseConnection
   .then(() => {

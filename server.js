@@ -6,8 +6,8 @@ const nocache = require("nocache");
 
 const app = express();
 const userRoute = require("./routes/userRoute");
-const adminRoute = require("./routes/adminRoute");
-const dbconnection = require("./config/userModelConfig");
+const adminRoute = require("./routes/adminRoute"); 
+const dbconnection = require("./config/userModelConfig"); 
 const secret = process.env.jwt_secret;
 app.set("view engine", "ejs");
 app.use(express.json());

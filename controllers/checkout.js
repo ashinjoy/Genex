@@ -5,7 +5,7 @@ const productModel = require("../models/productModel");
 const wallet = require("../models/wallet");
 const razorpay = require("../utils/razorpay");
 const { nanoid } = require("nanoid");
-
+   
 const { default: mongoose } = require("mongoose");
 const loadCheckout = async (req, res) => {
   try {
@@ -32,6 +32,7 @@ const postCheckout = async (req, res) => {
     const orderId = nanoid(6);
     console.log("nanoid", orderId);
     const { address, sum, check_method } = req.body;
+    console.log(typeof sum ,'datatype');
     const orders = {
       oid: orderId,
       userid,
@@ -41,7 +42,7 @@ const postCheckout = async (req, res) => {
         size: item.size,
         qty: item.qty,
       })),
-      totalprice: sum,
+      totalprice: parseInt(sum),
       paymentMethod: check_method,
     };
 

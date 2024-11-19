@@ -130,7 +130,7 @@ const load_editproduct = async (req, res) => {
     const category = await categoryModel.find({
       _id: { $ne: dataproduct.category._id },
     });
-    res.render("admin/editproduct", { dataproduct, category });
+    res.render("admin/editproduct", { dataproduct, category })
   } catch (err) {
     console.error(err);
   }
@@ -241,3 +241,4 @@ module.exports = {
   editproduct,
   bestProducts,
 };
+ 

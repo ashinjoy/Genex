@@ -7,7 +7,7 @@ var instance = new Razorpay({
 
 function generate_razorpayOrder(orderId, total) {
   console.log("hh");
-  console.log(orderId, total);
+  console.log(orderId, total,typeof total ,'hellop');
   return new Promise((resolve, reject) => {
     instance.orders.create(
       {
@@ -21,7 +21,8 @@ function generate_razorpayOrder(orderId, total) {
       },
       function (err, order) {
         if (err) {
-          console.log(err);
+
+          console.log('razorpay error',err);
           reject(err);
         } else {
           console.log("New Order:", order);

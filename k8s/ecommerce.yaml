@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ecommerce-deployment
+  template:
+    metadata:
+      labels:
+        app: ecommerce-deployment
+    spec:
+      containers:
+      - name: ecommerce-container 
+        image: ashinjoy/ecommerce
+        env:
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: PORT
+        - name: mongoString
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: mongoString
+        - name: mail 
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: mail
+        - name: password 
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: password
+        - name: secret 
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: secret
+        - name: razorpay_keyid 
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: razorpay_keyid
+        - name: razorpay_key_secret 
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: razorpay_key_secret 
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        volumeMounts: 
+          - mountPath: /app/assets
+            name: assets-storage 
+      volumes:
+        - name: assets-storage
+          persistentVolumeClaim:
+            claimName: assets-claim 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce-service
+spec:
+  selector:
+    app: ecommerce-deployment
+  ports:
+  - port: 3000
+    targetPort: 3000

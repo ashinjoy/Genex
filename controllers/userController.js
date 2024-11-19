@@ -41,7 +41,7 @@ const signup = async (req, res) => {
         email: email,
         phone: phone,
         password: hashedpassword,
-      };
+      }
       const userDetails = await userModel.create(userData);
       const userid = userDetails._id;
       req.session.otp = userid;
@@ -69,6 +69,8 @@ const Load_otppage = async (req, res) => {
 const sendotp = async (req, res) => {
   try {
     const otp = otpgenerate.createotp();
+    console.log(otp);
+    
     const id = req.session.otp;
     if (!id) {
       console.log("invalid user_id");
